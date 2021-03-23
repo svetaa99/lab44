@@ -1,3 +1,4 @@
+//Vue component made for testing purposes, will be replaced with context of real index page.
 Vue.component('index-page', {
   data: function() {
     return {
