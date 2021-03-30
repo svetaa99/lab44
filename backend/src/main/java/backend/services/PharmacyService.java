@@ -15,7 +15,7 @@ public class PharmacyService {
 	private PharmacyRepository pharmacyRepository;
 	
 	public List<Pharmacy> findAll() {
-		return pharmacyRepository.findAll();
+		return pharmacyRepository.getPharmacies();
 	}
 	
 	public Pharmacy findById(Long id) {
