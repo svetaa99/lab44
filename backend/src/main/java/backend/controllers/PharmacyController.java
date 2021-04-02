@@ -23,13 +23,13 @@ import backend.services.PharmacyService;
 public class PharmacyController {
 
 	@Autowired
-	private PharmacyService labService;
+	private PharmacyService pharmacyService;
 	private static Gson g = new Gson();
 	
 	@GetMapping("/all")
 	private ResponseEntity<String> getAllLabs() {
 		System.out.println("AAAAAAAAAAAAAAAAAAA");
-		List<Pharmacy> pharmacies = labService.findAll();
+		List<Pharmacy> pharmacies = pharmacyService.findAll();
 		
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<PharmacyDTO>();
 		
