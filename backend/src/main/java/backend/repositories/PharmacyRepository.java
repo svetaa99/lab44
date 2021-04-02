@@ -9,6 +9,4 @@ import backend.models.Pharmacy;
 
 public interface PharmacyRepository extends JpaRepository<Pharmacy, Long> {
 	
-	@Query("select p from Pharmacy p")
-	public List<Pharmacy> getPharmacies();
 }
