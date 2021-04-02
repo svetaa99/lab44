@@ -41,7 +41,7 @@ public class PatientController {
 		return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
 	}
 	@GetMapping("/{name}")
-	public ResponseEntity<String> getStudent(@PathVariable String name){
+	public ResponseEntity<String> getPatientsByName(@PathVariable String name){
 		System.out.println("Returning patients searched by name...");
 		List<Patient> retVal = patientService.findAllByName(name);
 		

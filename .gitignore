@@ -1,4 +1,5 @@
 application.properties
+data-postgres.sql
 
 HELP.md
 target/
