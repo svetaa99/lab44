@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Pharmacies from '../views/Pharmacies.vue'
+import Patients from '../views/Patients.vue'
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,12 @@ const routes = [
     path: '/pharmacies',
     name: 'Pharmacies',
     component: Pharmacies
-  }
+  },
+  {
+    path: '/employee-patients',
+    name: 'Patients',
+    component: Patients
+  },
 ]
 
 const router = new VueRouter({
