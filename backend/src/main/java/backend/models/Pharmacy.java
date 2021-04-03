@@ -96,6 +96,14 @@ public class Pharmacy {
 	public void setMedicines(List<Medicine> medicines) {
 		this.medicines = medicines;
 	}
+	
+	public void addMedicine(Medicine m) {
+		this.medicines.add(m);
+	}
+	
+	public void removeMedicine(Medicine m) {
+		this.medicines.remove(m);
+	}
 
 	@Override
 	public int hashCode() {

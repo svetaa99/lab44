@@ -13,20 +13,20 @@ public class PharmacyDTO {
 	private Long addressId;
 	private String description;
 	private double rating;
-//	private List<Medicine> medicines;
+	private List<Medicine> medicines;
 	
 	public PharmacyDTO(Pharmacy p) {
-		this(p.getId(), p.getName(), p.getAddressId(), p.getDescription(), p.getRating());
+		this(p.getId(), p.getName(), p.getAddressId(), p.getDescription(), p.getRating(), p.getMedicines());
 	}
 
-	public PharmacyDTO(Long id, String name, Long addressId, String description, double rating) {
+	public PharmacyDTO(Long id, String name, Long addressId, String description, double rating, List<Medicine> medicines) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.addressId = addressId;
 		this.description = description;
 		this.rating = rating;
-//		this.medicines = medicines;
+		this.medicines = medicines;
 	}
 
 	public Long getId() {
@@ -69,19 +69,19 @@ public class PharmacyDTO {
 		this.rating = rating;
 	}
 
-//	public List<Medicine> getMedicines() {
-//		return medicines;
-//	}
-//
-//	public void setMedicines(List<Medicine> medicines) {
-//		this.medicines = medicines;
-//	}
+	public List<Medicine> getMedicines() {
+		return medicines;
+	}
 
-//	@Override
-//	public String toString() {
-//		return "PharmacyDTO [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
-//				+ ", rating=" + rating + ", medicines=" + medicines + "]";
-//	}
+	public void setMedicines(List<Medicine> medicines) {
+		this.medicines = medicines;
+	}
+
+	@Override
+	public String toString() {
+		return "PharmacyDTO [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
+				+ ", rating=" + rating + ", medicines=" + medicines + "]";
+	}
 	
 	
 }

@@ -11,6 +11,9 @@
 
 <script>
 import axios from 'axios'
+import { config } from '@/config.js'
+
+const API_URL = config.API_URL;
 
 export default {
   name: 'PharmaciesSearch',
@@ -24,14 +27,14 @@ export default {
       if(this.searchName == '')
 			{
 				axios
-				.get('http://localhost:8000/pharmacies/all')
-				.then(response => {this.pharmacies = response.data; console.log(this.pharmacies); this.$emit('clicked', this.pharmacies)})
+				.get(`${API_URL}/pharmacies/all`)
+				.then(response => {this.pharmacies = response.data; this.$emit('clicked', this.pharmacies)})
 			}
 			else
 			{
 				axios
-				.get(`http://localhost:8000/pharmacies/search/${this.searchName}`)
-				.then(response => {this.pharmacies = response.data; console.log(this.pharmacies); this.$emit('clicked', this.pharmacies)})
+				.get(`${API_URL}/pharmacies/search/${this.searchName}`)
+				.then(response => {this.pharmacies = response.data; this.$emit('clicked', this.pharmacies)})
 			}
     }
   }

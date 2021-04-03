@@ -9,7 +9,7 @@ import backend.models.Pharmacy;
 import backend.repositories.PharmacyRepository;
 
 @Service
-public class PharmacyService {
+public class PharmacyService implements ServiceInterface<Pharmacy> {
 	
 	@Autowired
 	private PharmacyRepository pharmacyRepository;
@@ -26,12 +26,12 @@ public class PharmacyService {
 		return pharmacyRepository.findAllByNameContainingIgnoreCase(name);
 	}
 	
-	public void save(Pharmacy lab) { 
-		pharmacyRepository.save(lab);
+	public void save(Pharmacy pharmacy) { 
+		pharmacyRepository.save(pharmacy);
 	}
 	
-	public void delete(Pharmacy lab) {
-		pharmacyRepository.delete(lab);
+	public void delete(Pharmacy pharmacy) {
+		pharmacyRepository.delete(pharmacy);
 	}
 
 }
