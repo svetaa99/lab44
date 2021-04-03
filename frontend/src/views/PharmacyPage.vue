@@ -1,20 +1,22 @@
 <template>
   <div>
     <h1>{{pharmacy.name}}</h1>
-    <ul v-for="m in pharmacy.medicines" :key="m.id">
-      <li>{{m.name}}</li>
-    </ul>
+    <MedicinesList v-bind:medicines="this.pharmacy.medicines"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { config } from '@/config.js'
+import MedicinesList from '@/components/MedicinesList'
 
 const API_URL = config.API_URL
 
 export default {
   name: 'PharmacyPage',
+  components: {
+    MedicinesList,
+  },
   data() {
     return {
       pharmacy: {},
@@ -25,7 +27,7 @@ export default {
     const id = arr[arr.length - 1];
     axios
       .get(`${API_URL}/pharmacies/${id}`)
-      .then(response => {this.pharmacy = response.data; console.log(this.pharmacy)})
+      .then(response => {this.pharmacy = response.data;})
   }
 }
 </script>
