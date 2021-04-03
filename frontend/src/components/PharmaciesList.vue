@@ -1,16 +1,6 @@
 <template>
   <div>
 		<h1>List of pharmacy</h1>
-
-		<div class="input-group">
-			<div class="form-outline">
-				<input type="search" id="form1" class="form-control" v-model="searchName"/>
-			</div>
-			<button type="button" class="btn btn-primary" v-on:click="searchPharmacy()">
-				<i class="fas fa-search">Pretrazi</i>
-			</button>
-		</div>
-
     <input type="checkbox" id="A" v-model="filter.type.A">
     <label for="A">A</label>
     <button class="btn btn-primary" v-on:click = "filterPharmacy()">Filtriraj</button>
@@ -37,14 +27,14 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
   name: 'PharmaciesList',
+  props: {
+    pharmacies: Array
+  },
   data () {
     return {
-      pharmacies: [],
-      searchName: '',
       filter: {
         type: {
             A: false,
@@ -56,27 +46,6 @@ export default {
       },
     }
   },
-  mounted () {
-    axios
-				.get('http://localhost:8000/pharmacies/all')
-				.then(response => {this.pharmacies = response.data; console.log(this.pharmacies)})
-  },
-  methods: {
-    searchPharmacy: function() {
-      if(this.searchName == "")
-			{
-				axios
-				.get('http://localhost:8000/pharmacies/all')
-				.then(response => {this.pharmacies = response.data; console.log(this.pharmacies)})
-			}
-			else
-			{
-				axios
-				.get(`http://localhost:8000/pharmacies/${this.searchName}`)
-				.then(response => {this.pharmacies = response.data; console.log(this.pharmacies);})
-			}
-    }
-  }
 }
 </script>
 

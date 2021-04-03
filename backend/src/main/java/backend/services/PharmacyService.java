@@ -22,6 +22,10 @@ public class PharmacyService {
 		return pharmacyRepository.findById(id).orElseGet(null);
 	}
 	
+	public List<Pharmacy> findAllByName(String name) {
+		return pharmacyRepository.findAllByNameContainingIgnoreCase(name);
+	}
+	
 	public void save(Pharmacy lab) { 
 		pharmacyRepository.save(lab);
 	}
