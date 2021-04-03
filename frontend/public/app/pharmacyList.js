@@ -22,15 +22,6 @@ Vue.component('pharmacy-list', {
 	`<div>
 		<h1>List of pharmacy</h1>
 
-		<div class="input-group">
-			<div class="form-outline">
-				<input type="search" id="form1" class="form-control" v-model="searchName"/>
-			</div>
-			<button type="button" class="btn btn-primary" v-on:click="searchPharmacy()">
-				<i class="fas fa-search"></i>
-			</button>
-		</div>
-
         <div class="input-group">
 			<div class="form-outline">
 				<input type="search" id="form1" class="form-control" v-model="searchName"/>
