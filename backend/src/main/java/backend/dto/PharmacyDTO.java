@@ -13,7 +13,6 @@ public class PharmacyDTO {
 	private Long addressId;
 	private String description;
 	private double rating;
-//	private List<Medicine> medicines;
 	
 	public PharmacyDTO(Pharmacy p) {
 		this(p.getId(), p.getName(), p.getAddressId(), p.getDescription(), p.getRating());
@@ -26,7 +25,6 @@ public class PharmacyDTO {
 		this.addressId = addressId;
 		this.description = description;
 		this.rating = rating;
-//		this.medicines = medicines;
 	}
 
 	public Long getId() {
@@ -69,19 +67,12 @@ public class PharmacyDTO {
 		this.rating = rating;
 	}
 
-//	public List<Medicine> getMedicines() {
-//		return medicines;
-//	}
-//
-//	public void setMedicines(List<Medicine> medicines) {
-//		this.medicines = medicines;
-//	}
 
-//	@Override
-//	public String toString() {
-//		return "PharmacyDTO [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
-//				+ ", rating=" + rating + ", medicines=" + medicines + "]";
-//	}
+	@Override
+	public String toString() {
+		return "PharmacyDTO [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
+				+ ", rating=" + rating + "]";
+	}
 	
 	
 }

@@ -1,6 +1,5 @@
 package backend.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import backend.enums.MedicineTypes;
 
@@ -28,8 +27,8 @@ public class Medicine {
 	@Column(name = "specification", nullable = false)
 	private String specification;
 	
-	@ManyToMany(mappedBy = "medicines")
-	private List<Pharmacy> pharmacies = new ArrayList<Pharmacy>();
+	@OneToMany(mappedBy = "medicine")
+	private List<PharmacyMedicines> pharmacyMedicines;
 	
 	public Medicine() {}
 

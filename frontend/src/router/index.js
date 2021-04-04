@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Pharmacies from '../views/Pharmacies.vue'
+import PharmacyPage from '../views/PharmacyPage.vue'
 import Patients from '../views/Patients.vue'
+import Medicines from '../views/MedicinesPage.vue'
 
 Vue.use(VueRouter)
 
@@ -26,9 +28,19 @@ const routes = [
     component: Pharmacies
   },
   {
+    path: '/pharmacies/:id',
+    name: 'PharmacyPage',
+    component: PharmacyPage
+  },
+  {
     path: '/employee-patients',
     name: 'Patients',
     component: Patients
+  },
+  {
+    path: '/medicines',
+    name: 'Medicines',
+    component: Medicines
   },
 ]
 

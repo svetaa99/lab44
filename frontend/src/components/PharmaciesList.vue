@@ -20,6 +20,13 @@
 					<td>{{pharmacy.address}}</td>
           <td>{{pharmacy.description}}</td>
           <td>{{pharmacy.rating}}</td>
+          <td>
+            <router-link
+              :to="`/pharmacies/${pharmacy.id}`"
+            >
+            Prikazi
+            </router-link>
+          </td>
 				</tr>
 			</tbody>
 		</table>
@@ -27,6 +34,9 @@
 </template>
 
 <script>
+import { config } from '@/config.js'
+
+const api_url = config.API_URL 
 
 export default {
   name: 'PharmaciesList',
@@ -35,6 +45,7 @@ export default {
   },
   data () {
     return {
+      API_URL: api_url,
       filter: {
         type: {
             A: false,
@@ -46,6 +57,11 @@ export default {
       },
     }
   },
+  methods: {
+    showPharmacy () {
+
+    }
+  }
 }
 </script>
 

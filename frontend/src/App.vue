@@ -3,8 +3,9 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
-      <router-link to="/pharmacies">Pharmacies</router-link>
-      <router-link to="/employee-patients">Patients</router-link>
+      <router-link to="/pharmacies">Pharmacies</router-link> |
+      <router-link to="/employee-patients">Patients</router-link> |
+      <router-link to="/medicines">Medicines</router-link>
     </div>
     <router-view/>
   </div>

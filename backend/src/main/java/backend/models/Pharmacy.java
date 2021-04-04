@@ -32,9 +32,12 @@ public class Pharmacy {
 	@Column(name = "rating", nullable = false)
 	private double rating;
 	
-	@ManyToMany
-	@JoinTable(name = "pharmacy_medicines", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
-	private List<Medicine> medicines = new ArrayList<Medicine>();
+//	@ManyToMany
+//	@JoinTable(name = "pharmacy_medicines", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
+//	private List<Medicine> medicines = new ArrayList<Medicine>();
+	
+	@OneToMany(mappedBy = "pharmacy")
+	private List<PharmacyMedicines> pharmacyMedicines;
 	
 	@ManyToMany
 	@JoinTable(name = "pharmacy_dermatologists", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id"))
@@ -47,14 +50,13 @@ public class Pharmacy {
 		
 	}
 
-	public Pharmacy(Long id, String name, Long addressId, String description, double rating, List<Medicine> medicines) {
+	public Pharmacy(Long id, String name, Long addressId, String description, double rating) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.addressId = addressId;
 		this.description = description;
 		this.rating = rating;
-		this.medicines = medicines;
 	}
 
 	public Long getId() {
@@ -97,14 +99,6 @@ public class Pharmacy {
 		this.rating = rating;
 	}
 
-	public List<Medicine> getMedicines() {
-		return medicines;
-	}
-
-	public void setMedicines(List<Medicine> medicines) {
-		this.medicines = medicines;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -133,7 +127,7 @@ public class Pharmacy {
 	@Override
 	public String toString() {
 		return "Pharmacy [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
-				+ ", rating=" + rating + ", medicines=" + medicines + "]";
+				+ ", rating=" + rating + "]";
 	}
 	
 	

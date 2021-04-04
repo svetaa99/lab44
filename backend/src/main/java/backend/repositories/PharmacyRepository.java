@@ -9,4 +9,5 @@ import backend.models.Pharmacy;
 
 public interface PharmacyRepository extends JpaRepository<Pharmacy, Long> {
 	public List<Pharmacy> findAllByNameContainingIgnoreCase(String name);
+	
 }
