@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{pharmacy.name}}</h1>
-    <MedicinesList v-bind:medicines="this.pharmacy.medicines"/>
+    <MedicinesList :medicines="this.pharmacy.medicines"/>
   </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
     const id = arr[arr.length - 1];
     axios
       .get(`${API_URL}/pharmacies/${id}`)
-      .then(response => {this.pharmacy = response.data;})
+      .then(response => this.pharmacy = response.data)
   }
 }
 </script>

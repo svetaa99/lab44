@@ -22,6 +22,7 @@ import backend.dto.PharmacyDTO;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.services.MedicineService;
+import backend.services.PharmacyMedicinesService;
 import backend.services.PharmacyService;
 
 @RestController
@@ -34,6 +35,9 @@ public class PharmacyController {
 	
 	@Autowired
 	private MedicineService	medicineService;
+	
+	@Autowired
+	private PharmacyMedicinesService pmService;
 	
 	private List<PharmacyDTO> createPharmacyDTOList(List<Pharmacy> pharmacies) {
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<PharmacyDTO>();
@@ -60,7 +64,7 @@ public class PharmacyController {
 		if (pharmacy.equals(null)) {
 			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
 		}
-		
+
 		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy);
 		
 		return new ResponseEntity<PharmacyDTO>(pharmacyDTO, HttpStatus.OK);
