@@ -10,7 +10,7 @@ public class PatientDTO {
 	
 	private String surname;
 
-	private String address;
+	private Long address;
 
 	private String category;
 	
@@ -22,7 +22,7 @@ public class PatientDTO {
 		this(p.getId(), p.getName(), p.getSurname(), p.getAddress(), p.getCategory());
 	}
 	
-	public PatientDTO(Long id, String name, String surname, String address, String category) {
+	public PatientDTO(Long id, String name, String surname, Long address, String category) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -55,11 +55,11 @@ public class PatientDTO {
 		this.surname = surname;
 	}
 
-	public String getAddress() {
+	public Long getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(Long address) {
 		this.address = address;
 	}
 

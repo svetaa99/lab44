@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Pharmacy {
@@ -34,6 +35,13 @@ public class Pharmacy {
 	@ManyToMany
 	@JoinTable(name = "pharmacy_medicines", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
 	private List<Medicine> medicines = new ArrayList<Medicine>();
+	
+	@ManyToMany
+	@JoinTable(name = "pharmacy_dermatologists", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id"))
+	private List<Dermatologist> dermatologists = new ArrayList<Dermatologist>();
+	
+	@OneToMany(mappedBy="pharmacy")
+	private List<Pharmacist> pharmacists = new ArrayList<Pharmacist>();
 	
 	public Pharmacy() {
 		

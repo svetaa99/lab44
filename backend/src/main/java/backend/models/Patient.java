@@ -5,23 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Patient {
+@Table(name="patient")
+public class Patient extends User{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name = "name", nullable = false)
-	private String name;
-	
-	@Column(name = "surname", nullable = false)
-	private String surname;
 
-	@Column(name = "address", nullable = false)
-	private String address;
-
+	@Column(name="points", unique=false, nullable=true)
+	private double points;
+	
 	@Column(name = "category", nullable = true)
 	private String category;
 	
@@ -29,11 +25,28 @@ public class Patient {
 		
 	}
 	
-	public Patient(String name, String surname, String address, String category) {
+	public Patient(String name, String surname, String email, String password, Long addressId, String phoneNum, double points, String category) {
 		super();
 		this.name = name;
 		this.surname = surname;
-		this.address = address;
+		this.email = email;
+		this.password = password;
+		this.addressId = addressId;
+		this.phoneNum = phoneNum;
+		this.points = points;
+		this.category = category;
+	}
+	
+	public Patient(Long id, String name, String surname, String email, String password, Long addressId, String phoneNum, double points, String category) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.password = password;
+		this.addressId = addressId;
+		this.phoneNum = phoneNum;
+		this.points = points;
 		this.category = category;
 	}
 
@@ -61,12 +74,28 @@ public class Patient {
 		this.surname = surname;
 	}
 
-	public String getAddress() {
-		return address;
+	public Long getAddress() {
+		return addressId;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAddress(Long addressId) {
+		this.addressId = addressId;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public double getPoints() {
+		return points;
+	}
+	
+	public void setPoints(double points) {
+		this.points = points;
 	}
 
 	public String getCategory() {
@@ -102,7 +131,7 @@ public class Patient {
 
 	@Override
 	public String toString() {
-		return "Patient [id=" + id + ", name=" + name + ", surname=" + surname + ", address=" + address + ", category="
+		return "Patient [id=" + id + ", name=" + name + ", surname=" + surname + ", address=" + addressId + ", category="
 				+ category + "]";
 	}
 	
