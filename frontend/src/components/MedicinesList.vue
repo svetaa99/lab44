@@ -10,7 +10,6 @@
     >
       <thead>
         <tr>
-          <th class="th-sm">Id</th>
           <th class="th-sm">Name</th>
           <th class="th-sm">Type</th>
           <th class="th-sm">Specification</th>
@@ -19,7 +18,6 @@
       </thead>
       <tbody>
         <tr v-for="m in this.medicines" :key="m.id">
-          <td>{{ m.id }}</td>
           <td>{{ m.name }}</td>
           <td>{{ m.type }}</td>
           <td>{{ m.specification }}</td>
