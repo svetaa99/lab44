@@ -18,6 +18,10 @@ public class MedicineService implements ServiceInterface<Medicine>{
 	public List<Medicine> findAll() {
 		return medicineRepository.findAll();
 	}
+	
+	public List<Medicine> findAllByName(String name) {
+		return medicineRepository.findAllByNameContainingIgnoreCase(name);
+	}
 
 	@Override
 	public Medicine findById(Long id) {
@@ -33,6 +37,7 @@ public class MedicineService implements ServiceInterface<Medicine>{
 	public void delete(Medicine obj) {
 		medicineRepository.delete(obj);
 	}
+	
 	
 	
 }

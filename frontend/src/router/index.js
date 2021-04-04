@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Pharmacies from '../views/Pharmacies.vue'
 import PharmacyPage from '../views/PharmacyPage.vue'
 import Patients from '../views/Patients.vue'
+import Medicines from '../views/MedicinesPage.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,11 @@ const routes = [
     path: '/employee-patients',
     name: 'Patients',
     component: Patients
+  },
+  {
+    path: '/medicines',
+    name: 'Medicines',
+    component: Medicines
   },
 ]
 
