@@ -74,47 +74,47 @@ public class PharmacyController {
 		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/{id}/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	private ResponseEntity<PharmacyDTO> addMedicine(@PathVariable("id") Long pharmacyId, @RequestBody Medicine medicine) {
-		Pharmacy pharmacy = pharmacyService.findById(pharmacyId);
-		if (pharmacy.equals(null)) {
-			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
-		}
-		if (medicine.equals(null)) {
-			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
-		}
-		if (pharmacy.getMedicines().contains(medicine)) {
-			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_ACCEPTABLE);	// 406 status code
-		}
-		
-		pharmacy.addMedicine(medicine);
-		pharmacyService.save(pharmacy);
-		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy);
-		
-		return new ResponseEntity<PharmacyDTO>(pharmacyDTO, HttpStatus.OK);
-	}
-	
-	@DeleteMapping(value = "/{pharmacyId}/delete-medicine/{medicineId}")
-	private ResponseEntity<PharmacyDTO> deleteMedicine(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("medicineId") Long medicineId) {
-		Pharmacy pharmacy = pharmacyService.findById(pharmacyId);
-		if (pharmacy.equals(null)) {
-			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
-		}
-		
-		Medicine medicine = medicineService.findById(medicineId);
-		if (medicine.equals(null)) {
-			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
-		}
-		
-		if (!pharmacy.getMedicines().contains(medicine)) {
-			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
-		}
-		
-		pharmacy.getMedicines().remove(medicine);
-		pharmacyService.save(pharmacy);
-		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy);
-		
-		return new ResponseEntity<PharmacyDTO>(pharmacyDTO, HttpStatus.OK);
-	}
+//	@PostMapping(value = "/{id}/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//	private ResponseEntity<PharmacyDTO> addMedicine(@PathVariable("id") Long pharmacyId, @RequestBody Medicine medicine) {
+//		Pharmacy pharmacy = pharmacyService.findById(pharmacyId);
+//		if (pharmacy.equals(null)) {
+//			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
+//		}
+//		if (medicine.equals(null)) {
+//			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
+//		}
+//		if (pharmacy.getMedicines().contains(medicine)) {
+//			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_ACCEPTABLE);	// 406 status code
+//		}
+//		
+//		pharmacy.addMedicine(medicine);
+//		pharmacyService.save(pharmacy);
+//		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy);
+//		
+//		return new ResponseEntity<PharmacyDTO>(pharmacyDTO, HttpStatus.OK);
+//	}
+//	
+//	@DeleteMapping(value = "/{pharmacyId}/delete-medicine/{medicineId}")
+//	private ResponseEntity<PharmacyDTO> deleteMedicine(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("medicineId") Long medicineId) {
+//		Pharmacy pharmacy = pharmacyService.findById(pharmacyId);
+//		if (pharmacy.equals(null)) {
+//			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
+//		}
+//		
+//		Medicine medicine = medicineService.findById(medicineId);
+//		if (medicine.equals(null)) {
+//			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
+//		}
+//		
+//		if (!pharmacy.getMedicines().contains(medicine)) {
+//			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
+//		}
+//		
+//		pharmacy.getMedicines().remove(medicine);
+//		pharmacyService.save(pharmacy);
+//		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy);
+//		
+//		return new ResponseEntity<PharmacyDTO>(pharmacyDTO, HttpStatus.OK);
+//	}
 	
 }
