@@ -21,6 +21,13 @@
           <td>{{ m.name }}</td>
           <td>{{ m.type }}</td>
           <td>{{ m.specification }}</td>
+          <td>
+            <router-link
+              :to="`/medicines/${m.id}`"
+            >
+            Odaberi
+            </router-link>
+          </td>
         </tr>
       </tbody>
     </table>

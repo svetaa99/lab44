@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.MedicineDTO;
+import backend.dto.PharmacyDTO;
 import backend.models.Medicine;
+import backend.models.Pharmacy;
 import backend.services.MedicineService;
 
 @RestController
@@ -49,6 +51,18 @@ public class MedicineController {
 		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
 		
 		return new ResponseEntity<List<MedicineDTO>>(medicinesDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	private ResponseEntity<MedicineDTO> getById(@PathVariable Long id) {
+		Medicine medicine = medicineService.findById(id);
+		if (medicine.equals(null)) {
+			return new ResponseEntity<MedicineDTO>(HttpStatus.NOT_FOUND);
+		}
+		
+		MedicineDTO medicineDTO = new MedicineDTO(medicine);
+		
+		return new ResponseEntity<MedicineDTO>(medicineDTO, HttpStatus.OK);
 	}
 	
 }

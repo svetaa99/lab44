@@ -5,6 +5,7 @@ import Pharmacies from '../views/Pharmacies.vue'
 import PharmacyPage from '../views/PharmacyPage.vue'
 import Patients from '../views/Patients.vue'
 import Medicines from '../views/MedicinesPage.vue'
+import MedicinePage from '../views/MedicinePage.vue'
 
 Vue.use(VueRouter)
 
@@ -39,8 +40,13 @@ const routes = [
   },
   {
     path: '/medicines',
-    name: 'Medicines',
+    name: 'Medicine',
     component: Medicines
+  },
+  {
+    path: '/medicines/:id',
+    name: 'MedicinesPage',
+    component: MedicinePage
   },
 ]
 
