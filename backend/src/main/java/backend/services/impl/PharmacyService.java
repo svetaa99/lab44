@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import backend.models.Pharmacy;
 import backend.repositories.PharmacyRepository;
 import backend.services.IPharmacyService;
-import backend.services.IService;
 
 @Service
 public class PharmacyService implements IPharmacyService {
@@ -39,6 +38,11 @@ public class PharmacyService implements IPharmacyService {
 	@Override
 	public void delete(Pharmacy pharmacy) {
 		pharmacyRepository.delete(pharmacy);
+	}
+
+	@Override
+	public List<Pharmacy> findAllByRating(double rating) {
+		return pharmacyRepository.findAllByRating(rating);
 	}
 
 }

@@ -83,6 +83,14 @@ public class PharmacyController {
 		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
 	}
 	
+	@GetMapping("/filter/{rating}")
+	private ResponseEntity<List<PharmacyDTO>> getAllByRate(@PathVariable double rating) {
+		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.findAllByRating(rating);
+		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
+		
+		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<PharmacyMedicines> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
 		Pharmacy pharmacy = pharmacyService.findById(obj.getPharmacyId());
