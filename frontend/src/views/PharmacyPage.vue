@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>{{pharmacy.name}}</h1>
-    <MedicinesList :medicines="this.pharmacy.medicines"/>
+    <MedicinesList :medicines="this.medicines"/>
   </div>
 </template>
 
@@ -20,6 +20,7 @@ export default {
   data() {
     return {
       pharmacy: {},
+      medicines: [],
     }
   },
   mounted() {
@@ -28,6 +29,10 @@ export default {
     axios
       .get(`${API_URL}/pharmacies/${id}`)
       .then(response => this.pharmacy = response.data)
+
+    axios
+      .get(`${API_URL}/pharmacy-medicines/get-medicines/${id}`)
+      .then(response => this.medicines = response.data)
   }
 }
 </script>

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.models.DoctorTerms;
-import backend.services.DoctorTermsService;
+import backend.services.impl.DoctorTermsService;
 
 @RestController
 @RequestMapping(value = "doctorterms")

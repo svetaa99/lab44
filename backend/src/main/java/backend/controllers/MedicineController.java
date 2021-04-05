@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.MedicineDTO;
+import backend.dto.PharmacyDTO;
 import backend.models.Medicine;
-import backend.services.MedicineService;
+import backend.models.Pharmacy;
+import backend.services.IMedicineService;
+import backend.services.impl.MedicineService;
 
 @RestController
 @RequestMapping(value = "medicines")
@@ -22,7 +25,7 @@ import backend.services.MedicineService;
 public class MedicineController {
 	
 	@Autowired
-	private MedicineService medicineService;
+	private IMedicineService medicineService;
 	
 	private List<MedicineDTO> createMedicineDTOList(List<Medicine> medicines) {
 		List<MedicineDTO> medicinesDTO = new ArrayList<MedicineDTO>();
@@ -49,6 +52,18 @@ public class MedicineController {
 		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
 		
 		return new ResponseEntity<List<MedicineDTO>>(medicinesDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	private ResponseEntity<MedicineDTO> getById(@PathVariable Long id) {
+		Medicine medicine = medicineService.findById(id);
+		if (medicine.equals(null)) {
+			return new ResponseEntity<MedicineDTO>(HttpStatus.NOT_FOUND);
+		}
+		
+		MedicineDTO medicineDTO = new MedicineDTO(medicine);
+		
+		return new ResponseEntity<MedicineDTO>(medicineDTO, HttpStatus.OK);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.impl;
 
 import java.util.List;
 
@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 
 import backend.models.DoctorTerms;
 import backend.repositories.DoctorTermsRepository;
+import backend.services.IService;
 
 @Service
-public class DoctorTermsService implements ServiceInterface<DoctorTerms>{
+public class DoctorTermsService implements IService<DoctorTerms>{
 
 	@Autowired
 	private DoctorTermsRepository doctorTermsRepository;
@@ -29,8 +30,8 @@ public class DoctorTermsService implements ServiceInterface<DoctorTerms>{
 	}
 
 	@Override
-	public void save(DoctorTerms obj) {
-		doctorTermsRepository.save(obj);
+	public DoctorTerms save(DoctorTerms obj) {
+		return doctorTermsRepository.save(obj);
 	}
 
 	@Override

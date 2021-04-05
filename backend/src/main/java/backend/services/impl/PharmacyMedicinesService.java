@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,11 @@ import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.repositories.PharmacyMedicinesRepository;
+import backend.services.IPharmacyMedicinesService;
+import backend.services.IService;
 
 @Service
-public class PharmacyMedicinesService implements ServiceInterface<PharmacyMedicines> {
+public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 
 	@Autowired
 	private PharmacyMedicinesRepository pharmacyMedicineRepository;
@@ -29,8 +31,8 @@ public class PharmacyMedicinesService implements ServiceInterface<PharmacyMedici
 	}
 
 	@Override
-	public void save(PharmacyMedicines obj) {
-		pharmacyMedicineRepository.save(obj);
+	public PharmacyMedicines save(PharmacyMedicines obj) {
+		return pharmacyMedicineRepository.save(obj);
 	}
 
 	@Override
@@ -38,6 +40,7 @@ public class PharmacyMedicinesService implements ServiceInterface<PharmacyMedici
 		pharmacyMedicineRepository.delete(obj);
 	}
 	
+	@Override
 	public List<Medicine> findAllMedicinesInPharmacy(Long pharmacyId) {
 		List<PharmacyMedicines> pmList = pharmacyMedicineRepository.findByPharmacyIdEquals(pharmacyId);
 		if (pmList.size() == 0) {
@@ -53,6 +56,7 @@ public class PharmacyMedicinesService implements ServiceInterface<PharmacyMedici
 		return medicines;
 	}
 	
+	@Override
 	public List<Pharmacy> findAllPharmaciesWithMedicine(Long medicineId) {
 		List<PharmacyMedicines> pmList = pharmacyMedicineRepository.findByMedicineIdEquals(medicineId);
 		if (pmList.size() == 0) {

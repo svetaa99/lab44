@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.models.Visit;
-import backend.services.VisitService;
+import backend.services.impl.VisitService;
 
 @RestController
 @RequestMapping(value = "appointments")

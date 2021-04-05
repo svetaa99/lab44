@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.impl;
 
 import java.util.List;
 
@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 
 import backend.models.Visit;
 import backend.repositories.VisitRepository;
+import backend.services.IService;
 
 @Service
-public class VisitService implements ServiceInterface<Visit>{
+public class VisitService implements IService<Visit>{
 
 	@Autowired
 	private VisitRepository visitRepository;
@@ -27,8 +28,8 @@ public class VisitService implements ServiceInterface<Visit>{
 	}
 
 	@Override
-	public void save(Visit obj) {
-		visitRepository.save(obj);
+	public Visit save(Visit obj) {
+		return visitRepository.save(obj);
 	}
 
 	@Override

@@ -1,10 +1,5 @@
 <template>
   <div>
-		<h1>List of pharmacy</h1>
-    <input type="checkbox" id="A" v-model="filter.type.A">
-    <label for="A">A</label>
-    <button class="btn btn-primary" v-on:click = "filterPharmacy()">Filtriraj</button>
-
 		<table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
       <thead>
         <tr>

@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.impl;
 
 import java.util.List;
 
@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 
 import backend.models.Patient;
 import backend.repositories.PatientRepository;
+import backend.services.IService;
 
 @Service
-public class PatientService implements ServiceInterface<Patient>{ 
+public class PatientService implements IService<Patient>{ 
 
 	@Autowired
 	private PatientRepository patientRepository;
@@ -29,8 +30,8 @@ public class PatientService implements ServiceInterface<Patient>{
 	}
 
 	@Override
-	public void save(Patient obj) {
-		patientRepository.save(obj);
+	public Patient save(Patient obj) {
+		return patientRepository.save(obj);
 	}
 
 	@Override
