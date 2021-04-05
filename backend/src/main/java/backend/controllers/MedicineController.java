@@ -16,7 +16,8 @@ import backend.dto.MedicineDTO;
 import backend.dto.PharmacyDTO;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
-import backend.services.MedicineService;
+import backend.services.IMedicineService;
+import backend.services.impl.MedicineService;
 
 @RestController
 @RequestMapping(value = "medicines")
@@ -24,7 +25,7 @@ import backend.services.MedicineService;
 public class MedicineController {
 	
 	@Autowired
-	private MedicineService medicineService;
+	private IMedicineService medicineService;
 	
 	private List<MedicineDTO> createMedicineDTOList(List<Medicine> medicines) {
 		List<MedicineDTO> medicinesDTO = new ArrayList<MedicineDTO>();

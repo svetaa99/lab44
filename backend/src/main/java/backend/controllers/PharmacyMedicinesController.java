@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backend.models.Medicine;
 import backend.models.Pharmacy;
-import backend.services.PharmacyMedicinesService;
+import backend.services.IPharmacyMedicinesService;
+import backend.services.impl.PharmacyMedicinesService;
 
 @RestController
 @RequestMapping(value = "pharmacy-medicines")
@@ -17,7 +18,7 @@ import backend.services.PharmacyMedicinesService;
 public class PharmacyMedicinesController {
 	
 	@Autowired
-	private PharmacyMedicinesService pharmacyMedicineService;
+	private IPharmacyMedicinesService pharmacyMedicineService;
 	
 	public List<Medicine> getMedicinesFromPharmacy(Long pharmacyId) {
 		return pharmacyMedicineService.findAllMedicinesInPharmacy(pharmacyId);

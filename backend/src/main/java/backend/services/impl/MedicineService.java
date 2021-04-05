@@ -1,4 +1,4 @@
-package backend.services;
+package backend.services.impl;
 
 import java.util.List;
 
@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import backend.models.Medicine;
 import backend.repositories.MedicineRepository;
+import backend.services.IMedicineService;
+import backend.services.IService;
 
 @Service
-public class MedicineService implements ServiceInterface<Medicine>{
+public class MedicineService implements IMedicineService{
 
 	@Autowired
 	private MedicineRepository medicineRepository;
@@ -19,6 +21,7 @@ public class MedicineService implements ServiceInterface<Medicine>{
 		return medicineRepository.findAll();
 	}
 	
+	@Override
 	public List<Medicine> findAllByName(String name) {
 		return medicineRepository.findAllByNameContainingIgnoreCase(name);
 	}

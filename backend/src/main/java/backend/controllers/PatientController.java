@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 import backend.dto.PatientDTO;
 import backend.models.Patient;
-import backend.services.PatientService;
+import backend.services.impl.PatientService;
 
 @RestController
 @RequestMapping(value = "patients")

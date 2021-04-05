@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-public interface ServiceInterface<T> {
+public interface IService<T> {
 	
 	public List<T> findAll();
 	

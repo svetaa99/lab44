@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.dto.PharmacyDTO;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
-import backend.services.MedicineService;
-import backend.services.PharmacyMedicinesService;
-import backend.services.PharmacyService;
+import backend.services.IMedicineService;
+import backend.services.IPharmacyMedicinesService;
+import backend.services.IPharmacyService;
+import backend.services.impl.MedicineService;
+import backend.services.impl.PharmacyMedicinesService;
+import backend.services.impl.PharmacyService;
 
 @RestController
 @RequestMapping(value = "pharmacies")
@@ -31,13 +34,13 @@ import backend.services.PharmacyService;
 public class PharmacyController {
 
 	@Autowired
-	private PharmacyService pharmacyService;
+	private IPharmacyService pharmacyService;
 	
 	@Autowired
-	private MedicineService	medicineService;
+	private IMedicineService medicineService;
 	
 	@Autowired
-	private PharmacyMedicinesService pmService;
+	private IPharmacyMedicinesService pmService;
 	
 	private List<PharmacyDTO> createPharmacyDTOList(List<Pharmacy> pharmacies) {
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<PharmacyDTO>();
