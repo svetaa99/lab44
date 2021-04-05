@@ -10,15 +10,18 @@
     <div class="container">
       <div class="row">
         <div class="col-sm">
-          <select class="form-select" aria-label="Default select example">
-            <option selected>Odaberi apoteku</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+          <!-- <v-select :options="options"></v-select> -->
+          <!-- <select class="form-select" aria-label="Default select example">
+            <option selected v-for="option in options" v-bind:key="option.id">Odaberi apoteku</option>
+            <option v-for="option in options" v-bind:key="option.id">{{option.name}}</option>
+          </select> -->
+          <label for="pharmacy">Apoteka: </label>
+          <select v-model="reservation.pharmacy">
+            <option v-for="option in options" :key="option">{{option}}</option>
           </select>
         </div>
         <div class="col-sm">
-          <Datepicker placeholder="Datum" />
+          <Datepicker placeholder="Datum" v-model="reservation.date"/>
         </div>
         <div class="col-sm">
           <input
@@ -28,10 +31,11 @@
             id="quantity"
             name="quantity"
             min="1"
+            v-model="reservation.quantity"
           />
         </div>
         <div class="col-sm">
-          <button type="button" class="btn btn-primary">Rezervisi</button>
+          <button type="button" class="btn btn-primary" @click="reserve()">Rezervisi</button>
         </div>
       </div>
     </div>
@@ -42,6 +46,7 @@
 import axios from "axios";
 import { config } from "@/config.js";
 import Datepicker from "vuejs-datepicker";
+// import vSelect from "vue-select";
 
 const API_URL = config.API_URL;
 
@@ -49,12 +54,27 @@ export default {
   name: "MedicinePage",
   components: {
     Datepicker,
+    // "v-select": vSelect,
   },
   data() {
     return {
-      options: [],
+      options: [
+        "apoteka1",
+        "apoteka2",
+        "apoteka3",
+      ],
       medicine: {},
+      reservation: {
+        pharmacy: "",
+        date: "",
+        quantity: ""
+      }
     };
+  },
+  methods: {
+    reserve() {
+      console.log(this.reservation)
+    }
   },
   mounted() {
     const arr = window.location.href.split("/");
