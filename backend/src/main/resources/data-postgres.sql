@@ -37,3 +37,8 @@ insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,1)
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,2);
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (2,3);
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (2,1);
+
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-05-05 16:00:00', '2021-05-05 17:00:00');
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-05-05 18:00:00', '2021-05-05 18:30:00');
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (2, 1, '2021-05-05 16:00:00', '2021-05-05 17:00:00');
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 2, '2021-05-05 15:00:00', '2021-05-05 15:30:00');

@@ -31,7 +31,7 @@ public class PatientController {
 	public ResponseEntity<String> getPatients() {
 		System.out.println("Returning patients...");
 		
-		List<Patient> retVal = patientService.getAllPatients();
+		List<Patient> retVal = patientService.findAll();
 		
 		List<PatientDTO> patientsDTO = new ArrayList<>();
 		for (Patient p : retVal) {

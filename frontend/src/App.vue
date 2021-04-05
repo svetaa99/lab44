@@ -5,7 +5,8 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/pharmacies">Pharmacies</router-link> |
       <router-link to="/employee-patients">Patients</router-link> |
-      <router-link to="/medicines">Medicines</router-link>
+      <router-link to="/medicines">Medicines</router-link> | 
+      <router-link to="/employee-reservation">Reservation</router-link> | 
     </div>
     <router-view/>
   </div>

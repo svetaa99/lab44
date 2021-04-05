@@ -40,7 +40,7 @@ public class Pharmacy {
 	private List<PharmacyMedicines> pharmacyMedicines;
 	
 	@ManyToMany
-	@JoinTable(name = "pharmacy_dermatologists", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id"))
+	@JoinTable(name="pharmacy_dermatologists", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id"))
 	private List<Dermatologist> dermatologists = new ArrayList<Dermatologist>();
 	
 	@OneToMany(mappedBy="pharmacy")
@@ -97,6 +97,22 @@ public class Pharmacy {
 
 	public void setRating(double rating) {
 		this.rating = rating;
+	}
+
+	public List<Dermatologist> getDermatologists() {
+		return dermatologists;
+	}
+
+	public void setDermatologists(List<Dermatologist> dermatologists) {
+		this.dermatologists = dermatologists;
+	}
+
+	public List<Pharmacist> getPharmacists() {
+		return pharmacists;
+	}
+
+	public void setPharmacists(List<Pharmacist> pharmacists) {
+		this.pharmacists = pharmacists;
 	}
 
 	@Override
