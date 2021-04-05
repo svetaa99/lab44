@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,11 +22,13 @@ public class PharmacyMedicinesController {
 	@Autowired
 	private IPharmacyMedicinesService pharmacyMedicineService;
 	
-	public List<Medicine> getMedicinesFromPharmacy(Long pharmacyId) {
+	@GetMapping(value = "/get-medicines/{id}")
+	public List<Medicine> getMedicinesFromPharmacy(@PathVariable("id") Long pharmacyId) {
 		return pharmacyMedicineService.findAllMedicinesInPharmacy(pharmacyId);
 	}
 	
-	public List<Pharmacy> getPharmaciesWithMedicine(Long medicineId) {
+	@GetMapping(value = "/get-pharmacies/{id}")
+	public List<Pharmacy> getPharmaciesWithMedicine(@PathVariable Long medicineId) {
 		return pharmacyMedicineService.findAllPharmaciesWithMedicine(medicineId);
 	}
 	

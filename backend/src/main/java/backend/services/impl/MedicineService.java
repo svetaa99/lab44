@@ -32,8 +32,8 @@ public class MedicineService implements IMedicineService{
 	}
 
 	@Override
-	public void save(Medicine obj) {
-		medicineRepository.save(obj);
+	public Medicine save(Medicine obj) {
+		return medicineRepository.save(obj);
 	}
 
 	@Override

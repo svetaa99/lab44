@@ -1,7 +1,7 @@
 <template>
   <div>
     <PharmaciesSearch v-model="pharmacies" @clicked="onSearchClick"/>
-    <PharmaciesList v-bind:pharmacies="this.pharmacies"/>
+    <PharmaciesList :pharmacies="this.pharmacies"/>
 
   </div>
 </template>
