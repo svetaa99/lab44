@@ -24,18 +24,23 @@ public class PharmacyMedicines {
 	@JoinColumn(name = "medicine_id")
 	Medicine medicine;
 	
+	@Column(name = "price")
+	double price;
+	
 	@Column(name = "quantity", columnDefinition = "Int default '0'")
 	int quantity;
+	
 	
 	public PharmacyMedicines() {
 		
 	}
 
-	public PharmacyMedicines(Long id, Pharmacy pharmacy, Medicine medicine, int quantity) {
+	public PharmacyMedicines(Long id, Pharmacy pharmacy, Medicine medicine, double price, int quantity) {
 		super();
 		this.id = id;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
+		this.price = price;
 		this.quantity = quantity;
 	}
 
@@ -61,6 +66,15 @@ public class PharmacyMedicines {
 
 	public void setMedicine(Medicine medicine) {
 		this.medicine = medicine;
+	}
+	
+	
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public int getQuantity() {

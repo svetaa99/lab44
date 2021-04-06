@@ -107,13 +107,13 @@ public class Pharmacy {
 		this.dermatologists = dermatologists;
 	}
 
-	public List<Pharmacist> getPharmacists() {
-		return pharmacists;
-	}
-
-	public void setPharmacists(List<Pharmacist> pharmacists) {
-		this.pharmacists = pharmacists;
-	}
+//	public List<Pharmacist> getPharmacists() {
+//		return pharmacists;
+//	}
+//
+//	public void setPharmacists(List<Pharmacist> pharmacists) {
+//		this.pharmacists = pharmacists;
+//	}
 
 	@Override
 	public int hashCode() {

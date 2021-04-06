@@ -4,16 +4,18 @@ public class PharmacyMedicineAddRemoveObject {
 	
 	private Long pharmacyId;
 	private Long medicineId;
+	private double price;
 	private int quantity;
 	
 	public PharmacyMedicineAddRemoveObject() {
 		
 	}
 
-	public PharmacyMedicineAddRemoveObject(Long pharmacyId, Long medicineId, int quantity) {
+	public PharmacyMedicineAddRemoveObject(Long pharmacyId, Long medicineId, double price, int quantity) {
 		super();
 		this.pharmacyId = pharmacyId;
 		this.medicineId = medicineId;
+		this.price = price;
 		this.quantity = quantity;
 	}
 	
@@ -21,6 +23,23 @@ public class PharmacyMedicineAddRemoveObject {
 		super();
 		this.pharmacyId = pharmacyId;
 		this.medicineId = medicineId;
+		this.price = 0;
+		this.quantity = 0;
+	}
+	
+	public PharmacyMedicineAddRemoveObject(Long pharmacyId, Long medicineId, int quantity) {
+		super();
+		this.pharmacyId = pharmacyId;
+		this.medicineId = medicineId;
+		this.price = 0;
+		this.quantity = quantity;
+	}
+	
+	public PharmacyMedicineAddRemoveObject(Long pharmacyId, Long medicineId, double price) {
+		super();
+		this.pharmacyId = pharmacyId;
+		this.medicineId = medicineId;
+		this.price = price;
 		this.quantity = 0;
 	}
 
@@ -38,6 +57,14 @@ public class PharmacyMedicineAddRemoveObject {
 
 	public void setMedicineId(Long medicineId) {
 		this.medicineId = medicineId;
+	}
+	
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public int getQuantity() {
