@@ -11,4 +11,6 @@ public interface PharmacyMedicinesRepository extends JpaRepository<PharmacyMedic
 	List<PharmacyMedicines> findByPharmacyIdEquals(Long pharmacyId);
 	
 	List<PharmacyMedicines> findByMedicineIdEquals(Long medicineId);
+	
+	PharmacyMedicines findByPharmacyIdEqualsAndMedicineIdEquals(Long pharmacyId, Long medicineId);
 }

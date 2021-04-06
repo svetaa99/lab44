@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.PharmacyDTO;
+import backend.dto.PharmacyMedicinesDTO;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicineAddRemoveObject;
@@ -92,15 +93,15 @@ public class PharmacyController {
 	}
 	
 	@PostMapping(value = "/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	private ResponseEntity<PharmacyMedicines> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
+	private ResponseEntity<PharmacyMedicinesDTO> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
 		Pharmacy pharmacy = pharmacyService.findById(obj.getPharmacyId());
 		if (pharmacy.equals(null)) {
-			return new ResponseEntity<PharmacyMedicines>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.NOT_FOUND);
 		}
 		
 		Medicine medicine = medicineService.findById(obj.getMedicineId());
 		if (medicine.equals(null)) {
-			return new ResponseEntity<PharmacyMedicines>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.NOT_FOUND);
 		}
 		int quantity = obj.getQuantity();
 		
@@ -110,19 +111,24 @@ public class PharmacyController {
 		pm.setQuantity(quantity);
 		
 		pm = pmService.save(pm);
-		return new ResponseEntity<PharmacyMedicines>(pm, HttpStatus.CREATED);
+		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping(value = "/delete-medicine")
-	private ResponseEntity<PharmacyMedicines> deleteMedicineFromPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {	
+	private ResponseEntity<PharmacyMedicinesDTO> deleteMedicineFromPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {	
+		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
+		pmService.delete(pm);
 		
-		for (PharmacyMedicines pm : pmService.findAll()) {
-			if ((pm.getPharmacy().getId() == obj.getPharmacyId()) && (pm.getMedicine().getId() == obj.getMedicineId())) {
-				pmService.delete(pm);				
-			}
-		}
+		return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/update-quantity")
+	private ResponseEntity<PharmacyMedicinesDTO> updateMedicineQuantityInPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
+		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
+		pm.setQuantity(obj.getQuantity());
 		
-		return new ResponseEntity<PharmacyMedicines>(HttpStatus.OK);
+		pm = pmService.save(pm);
+		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);
 	}
 	
 }
