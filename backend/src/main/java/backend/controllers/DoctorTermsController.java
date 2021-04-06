@@ -2,6 +2,7 @@ package backend.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.models.DoctorTerms;
+import backend.models.SearchDateTime;
 import backend.services.impl.DoctorTermsService;
 
 @RestController
@@ -57,6 +59,26 @@ public class DoctorTermsController {
 		return new ResponseEntity<String>(g.toJson(doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId())), HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/search-date-time", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE )
+	public ResponseEntity<String> searchDateTime(@RequestBody SearchDateTime newDateTime){
+		//get doctors id from session for now hardcode to 1
+		Long doctorId = (long) 1;
+		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId);
+		
+		System.out.println("Termina ukupno: " + retVal.size());
+		System.out.println("Datum dobijen = " + newDateTime.getSearchDate());
+		
+		if(newDateTime.getSearchDate() != null)
+			retVal = retVal.stream().filter(t -> t.getStart().toLocalDate().equals(newDateTime.getSearchDate())).collect(Collectors.toList());
+		
+		if(newDateTime.getSearchTime() != null)
+			retVal = retVal.stream().filter(t -> t.getStart().getHour() == (newDateTime.getSearchTime().getHour())).collect(Collectors.toList());
+		
+		System.out.println("Pretragom nadjeno: " + retVal.size());
+		
+		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
+	}
+	
 	private  boolean checkIfTakenTerm(DoctorTerms newTerm) {
 		List<DoctorTerms> doctorsTakenTerms = doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId());
 		LocalDateTime startTime = newTerm.getStart();
@@ -69,7 +91,7 @@ public class DoctorTermsController {
 			else if(startTime.isBefore(doctorTerms.getStart()) && finishTime.isAfter(doctorTerms.getFinish()))
 				return false;
 		}
-		//List<Visit> patientTakenTerms = 
+		//check if working hours match the term 
 		return true;
 	}
 }

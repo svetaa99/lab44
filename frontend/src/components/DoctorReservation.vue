@@ -36,10 +36,10 @@
                   <div class="row">
                     <div class="input-group">
                     <input type="search" class="form-control rounded" placeholder="Date" aria-label="Search"
-                        aria-describedby="search-addon" />
+                        aria-describedby="search-addon" v-model="searchDateTimeObject.searchDate"/>
                     <input type="search" class="form-control rounded" placeholder="Time" aria-label="Search"
-                        aria-describedby="search-addon" />
-                    <button type="button" class="btn btn-outline-primary">Search</button>
+                        aria-describedby="search-addon" v-model="searchDateTimeObject.searchTime"/>
+                    <button type="button" class="btn btn-outline-primary" v-on:click="searchDateTime()">Search</button>
                     </div>
                   </div>
                   <hr>
@@ -66,7 +66,7 @@
                 </div>
                 </div>
                 <div class="card mb-3">
-                    <div class="card-body" v-if="newTermShow">
+                    <div class="card-body" v-if="newTermShow" id="newTermDiv">
                         <b-form-datepicker id="datepicker-lg" size="lg" locale="en" v-model="newStartDate"></b-form-datepicker>
                         <hr>
                         <div class="mob"> <label class="text-grey mr-1">From</label> <input class="ml-1" type="time" name="from" v-model="newStartTime"> </div>
@@ -98,9 +98,11 @@ export default {
             newStartDate: '',
             newStartTime: '', //these attributes will be selected by doctor
             newFinishTime: '',
-            searchDate: '',
-            searchTime: '',
             selectedTerm: null,
+            searchDateTimeObject : {
+              searchDate: '',
+              searchTime: '',
+            }
         }
     },
     computed: {
@@ -161,8 +163,14 @@ export default {
         var newReservation = {patientId: 1, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish)}
         axios
         .post('http://localhost:8000/appointments/make-appointment', newReservation)
-        .then(response => {alert("New appointment added to work calendar!"); console.log(response)})
+        .then(response => {response.data === "Patient unavailable" ? alert("Patient is unavailable in given term!") : alert("New appointment added to work calendar!");})
       },
+      searchDateTime: function(){
+        console.log(this.searchDateTimeObject.searchDate + " " + this.searchDateTimeObject.searchTime);
+        axios
+        .post('http://localhost:8000/doctorterms/search-date-time', this.searchDateTimeObject)
+        .then(response => {this.freeTerms = response.data})
+      }
     },
     mounted: function(){
         //TO DO: axios call to get all free terms for current DOCTOR

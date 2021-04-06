@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -43,11 +44,15 @@ public class VisitController {
 	public ResponseEntity<String> makeAppointment(@RequestBody Visit newReservation){
 		visitService.save(newReservation);
 		
+		if(!checkTermTaken(newReservation))
+			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
+		
 		String patientsEmail = "filip.kresa@gmail.com"; //hardcoded for now, once we have user in session we will have his e-mail
 		notifyPatientViaEmail(patientsEmail);
 		
 		return new ResponseEntity<String>(g.toJson(newReservation), HttpStatus.OK);
 	}
+
 	@GetMapping("/doctor/{doctorId}")
 	public ResponseEntity<String> getAppointmentsForDoctor(@PathVariable Long doctorId){
 		List<Visit> appointments = visitService.findByDoctorIdEquals(doctorId);
@@ -57,6 +62,21 @@ public class VisitController {
 	public ResponseEntity<String> getAppointmentsForPatient(@PathVariable Long patientId){
 		List<Visit> appointments = visitService.findByPatientIdEquals(patientId);
 		return new ResponseEntity<String>(g.toJson(appointments), HttpStatus.OK);
+	}
+	
+	private boolean checkTermTaken(Visit newReservation) {
+		List<Visit> patientsAppointments = visitService.findByPatientIdEquals(newReservation.getPatientId());
+		LocalDateTime startTime = newReservation.getStart();
+		LocalDateTime finishTime = newReservation.getFinish();
+		for (Visit visit : patientsAppointments) {
+			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
+				return false;
+		}
+		return true;
 	}
 	
 	public void notifyPatientViaEmail(String patientsEmail) {
