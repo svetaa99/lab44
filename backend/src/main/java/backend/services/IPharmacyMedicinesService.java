@@ -13,4 +13,7 @@ public interface IPharmacyMedicinesService extends IService<PharmacyMedicines> {
 	List<Pharmacy> findAllPharmaciesWithMedicine(Long medicineId);
 	
 	PharmacyMedicines findPharmacyMedicinesByIds(Long pharmacyId, Long medicineId);
+	
+	List<PharmacyMedicines> findAllByPharmacyId(Long pharmacyId);
+	
 }

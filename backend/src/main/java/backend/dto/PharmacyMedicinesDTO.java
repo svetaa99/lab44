@@ -8,22 +8,24 @@ public class PharmacyMedicinesDTO {
 	private Long id;
 	private Pharmacy pharmacy;
 	private Medicine medicine;
+	private double price;
 	private int quantity;
 	
 	public PharmacyMedicinesDTO() {
 		
 	}
 
-	public PharmacyMedicinesDTO(Long id, Pharmacy pharmacy, Medicine medicine, int quantity) {
+	public PharmacyMedicinesDTO(Long id, Pharmacy pharmacy, Medicine medicine, double price, int quantity) {
 		super();
 		this.id = id;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
+		this.price = price;
 		this.quantity = quantity;
 	}
 	
 	public PharmacyMedicinesDTO(PharmacyMedicines pm) {
-		this(pm.getId(), pm.getPharmacy(), pm.getMedicine(), pm.getQuantity());
+		this(pm.getId(), pm.getPharmacy(), pm.getMedicine(), pm.getPrice(), pm.getQuantity());
 	}
 
 	public Long getId() {
@@ -33,21 +35,29 @@ public class PharmacyMedicinesDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Pharmacy getPharmacyId() {
+	
+	public Pharmacy getPharmacy() {
 		return pharmacy;
 	}
 
-	public void setPharmacyId(Pharmacy pharmacy) {
+	public void setPharmacy(Pharmacy pharmacy) {
 		this.pharmacy = pharmacy;
 	}
 
-	public Medicine getMedicineId() {
+	public Medicine getMedicine() {
 		return medicine;
 	}
 
-	public void setMedicineId(Medicine medicine) {
+	public void setMedicine(Medicine medicine) {
 		this.medicine = medicine;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public int getQuantity() {

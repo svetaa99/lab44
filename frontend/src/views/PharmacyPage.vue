@@ -32,7 +32,7 @@ export default {
 
     axios
       .get(`${API_URL}/pharmacy-medicines/get-medicines/${id}`)
-      .then(response => this.medicines = response.data)
+      .then(response => {this.medicines = response.data; console.log(response.data)})
   }
 }
 </script>

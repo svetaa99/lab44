@@ -78,4 +78,11 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 		return pharmacyMedicineRepository.findByPharmacyIdEqualsAndMedicineIdEquals(pharmacyId, medicineId);
 	}
 
+	@Override
+	public List<PharmacyMedicines> findAllByPharmacyId(Long pharmacyId) {
+		return pharmacyMedicineRepository.findByPharmacyIdEquals(pharmacyId);
+	}
+	
+	
+
 }
