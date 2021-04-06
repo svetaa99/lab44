@@ -26,7 +26,15 @@ public class VisitService implements IService<Visit>{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public List<Visit> findByDoctorIdEquals(Long doctorId){
+		return visitRepository.findByDoctorIdEquals(doctorId);
+	}
+	
+	public List<Visit> findByPatientIdEquals(Long patientId){
+		return visitRepository.findByPatientIdEquals(patientId);
+	}
+	
 	@Override
 	public Visit save(Visit obj) {
 		return visitRepository.save(obj);
