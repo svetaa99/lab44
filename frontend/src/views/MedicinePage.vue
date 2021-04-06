@@ -65,6 +65,7 @@ export default {
       ],
       medicine: {},
       reservation: {
+        medicine: this.medicine,
         pharmacy: "",
         date: "",
         quantity: ""
