@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,32 @@ public class DoctorTermsController {
 	@PostMapping(value = "/createnew", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm){
 		System.out.println("We got : " + newTerm + "\n\n from client...");
-		doctorTermsService.save(newTerm);
-		System.out.println("Object saved to db...");
+		
+		if(checkIfTakenTerm(newTerm)) {
+			doctorTermsService.save(newTerm);
+			System.out.println("Object saved to db...");
+		}
+		else {
+			System.out.println("Taken term...");
+			return new ResponseEntity<String>("Taken term", HttpStatus.OK);
+		}
+			
 		return new ResponseEntity<String>(g.toJson(doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId())), HttpStatus.OK);
+	}
+	
+	private  boolean checkIfTakenTerm(DoctorTerms newTerm) {
+		List<DoctorTerms> doctorsTakenTerms = doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId());
+		LocalDateTime startTime = newTerm.getStart();
+		LocalDateTime finishTime = newTerm.getFinish();
+		for (DoctorTerms doctorTerms : doctorsTakenTerms) {
+			if(startTime.isAfter(doctorTerms.getStart()) && startTime.isBefore(doctorTerms.getFinish())) 
+				return false;
+			else if(finishTime.isAfter(doctorTerms.getStart()) && finishTime.isBefore(doctorTerms.getFinish())) 
+				return false;
+			else if(startTime.isBefore(doctorTerms.getStart()) && finishTime.isAfter(doctorTerms.getFinish()))
+				return false;
+		}
+		//List<Visit> patientTakenTerms = 
+		return true;
 	}
 }
