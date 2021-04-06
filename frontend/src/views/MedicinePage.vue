@@ -16,8 +16,8 @@
             <option v-for="option in options" v-bind:key="option.id">{{option.name}}</option>
           </select> -->
           <label for="pharmacy">Apoteka: </label>
-          <select v-model="reservation.pharmacy">
-            <option v-for="option in options" :key="option">{{option}}</option>
+          <select v-model="selectedPM">
+            <option v-for="option in options" :key="option.id" :value="option">{{option.pharmacy.name}}</option>
           </select>
         </div>
         <div class="col-sm">
@@ -31,6 +31,7 @@
             id="quantity"
             name="quantity"
             min="1"
+            :max="this.selectedPM.quantity"
             v-model="reservation.quantity"
           />
         </div>
@@ -58,11 +59,8 @@ export default {
   },
   data() {
     return {
-      options: [
-        "apoteka1",
-        "apoteka2",
-        "apoteka3",
-      ],
+      options: [],
+      selectedPM: {}, 
       medicine: {},
       reservation: {
         medicine: this.medicine,
@@ -74,7 +72,7 @@ export default {
   },
   methods: {
     reserve() {
-      console.log(this.reservation)
+      console.log(this.selectedPM)
     }
   },
   mounted() {
@@ -82,6 +80,14 @@ export default {
     const id = arr[arr.length - 1];
     axios.get(`${API_URL}/medicines/${id}`).then((response) => {
       this.medicine = response.data;
+
+      axios
+        .get(`${API_URL}/pharmacy-medicines/get-pharmacies/${this.medicine.id}`)
+        .then((response) => {
+          this.options = response.data;
+          console.log(this.options)
+        })
+
     });
   },
 };
