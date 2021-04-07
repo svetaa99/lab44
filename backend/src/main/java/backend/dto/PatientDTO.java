@@ -1,5 +1,7 @@
 package backend.dto;
 
+import java.time.LocalDate;
+
 import backend.models.Patient;
 
 public class PatientDTO {
@@ -14,21 +16,26 @@ public class PatientDTO {
 
 	private String category;
 	
+	private LocalDate date;
+	
+
+
 	public PatientDTO() {
 		
 	}
 	
-	public PatientDTO(Patient p) {
-		this(p.getId(), p.getName(), p.getSurname(), p.getAddress(), p.getCategory());
+	public PatientDTO(Patient p, LocalDate date) {
+		this(p.getId(), p.getName(), p.getSurname(), p.getAddress(), p.getCategory(), date);
 	}
 	
-	public PatientDTO(Long id, String name, String surname, Long address, String category) {
+	public PatientDTO(Long id, String name, String surname, Long address, String category, LocalDate date) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.address = address;
 		this.category = category;
+		this.date = date;
 	}
 
 	public Long getId() {
@@ -69,6 +76,14 @@ public class PatientDTO {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}	
+	
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	@Override

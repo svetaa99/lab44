@@ -1,5 +1,6 @@
 package backend.services.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,20 @@ public class VisitService implements IService<Visit>{
 	
 	public List<Visit> findByPatientIdEquals(Long patientId){
 		return visitRepository.findByPatientIdEquals(patientId);
+	}
+	
+	public LocalDateTime lastVisitByPatientIdEquals(Long patientId) {
+		List<Visit> allPatientsVisits = visitRepository.findByPatientIdEquals(patientId);
+
+		if(allPatientsVisits.size() == 0)
+			return null;
+		
+		LocalDateTime max = allPatientsVisits.get(0).getStart();
+		for (Visit visit : allPatientsVisits) {
+			if(visit.getStart().isAfter(max))
+				max = visit.getStart();
+		}
+		return max;
 	}
 	
 	@Override
