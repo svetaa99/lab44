@@ -1,7 +1,7 @@
 <template>
   <div>
-    <MedicinesSearch v-model="medicines" @clicked="onSearchClick"/>
-    <MedicinesList v-bind:medicines="this.medicines" />
+    <MedicinesSearch v-model="searchName" @clicked="onSearchClick"/>
+    <MedicinesList :medicines="this.medicines" />
   </div>
 </template>
 
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       medicines: [],
+      searchName: '',
     };
   },
   mounted() {
@@ -30,8 +31,19 @@ export default {
     });
   },
   methods: {
-    onSearchClick (medicines) {
-      this.medicines = medicines;
+    onSearchClick (searchName) {
+      console.log(searchName)
+      if (searchName == '') {
+        axios.get(`${API_URL}/medicines/all`).then((response) => {
+          this.medicines = response.data;
+        });
+      } else {
+        axios
+          .get(`${API_URL}/medicines/search/${searchName}`)
+          .then((response) => {
+            this.medicines = response.data;
+          });
+      }
     }
   }
 };

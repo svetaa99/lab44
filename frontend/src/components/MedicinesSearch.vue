@@ -15,33 +15,16 @@
 </template>
 
 <script>
-import axios from "axios";
-import { config } from "@/config.js";
-
-const API_URL = config.API_URL;
-
 export default {
   name: "MedicinesSearch",
   data() {
     return {
-      searchName: "",
+      searchName: '',
     };
   },
   methods: {
     searchMedicine: function () {
-      if (this.searchName == "") {
-        axios.get(`${API_URL}/medicines/all`).then((response) => {
-          this.pharmacies = response.data;
-          this.$emit("clicked", this.pharmacies);
-        });
-      } else {
-        axios
-          .get(`${API_URL}/medicines/search/${this.searchName}`)
-          .then((response) => {
-            this.medicines = response.data;
-            this.$emit("clicked", this.medicines);
-          });
-      }
+      this.$emit("clicked", this.searchName)
     },
   },
 };
