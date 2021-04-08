@@ -12,5 +12,7 @@ public interface PharmacyMedicinesRepository extends JpaRepository<PharmacyMedic
 	
 	List<PharmacyMedicines> findByMedicineIdEquals(Long medicineId);
 	
+	List<PharmacyMedicines> findByMedicineNameContainingIgnoreCase(String medicineName);
+	
 	PharmacyMedicines findByPharmacyIdEqualsAndMedicineIdEquals(Long pharmacyId, Long medicineId);
 }

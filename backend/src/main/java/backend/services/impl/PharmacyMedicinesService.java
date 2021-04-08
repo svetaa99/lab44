@@ -88,6 +88,10 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 		return pharmacyMedicineRepository.findByMedicineIdEquals(medicineId);
 	}
 	
+	@Override
+	public List<PharmacyMedicines> findAllByMedicineName(String medicineName) {
+		return pharmacyMedicineRepository.findByMedicineNameContainingIgnoreCase(medicineName);
+	}
 	
 
 }
