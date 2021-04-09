@@ -1,16 +1,18 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/pharmacies">Pharmacies</router-link> |
-      <router-link to="/employee-patients">Patients</router-link> |
-      <router-link to="/medicines">Medicines</router-link> | 
-      <router-link to="/employee-reservation">Reservation</router-link> | 
-    </div>
-    <router-view/>
+    <header-component></header-component>
+    <router-view />
   </div>
 </template>
+
+<script>
+import Header from '@/components/HeaderComponent.vue'
+export default {
+  components: {
+    'header-component': Header
+  }
+};
+</script>
 
 <style>
 #app {
