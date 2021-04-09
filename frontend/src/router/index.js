@@ -7,6 +7,8 @@ import Patients from '../views/Patients.vue'
 import Medicines from '../views/MedicinesPage.vue'
 import Reservation from '../views/Reservation.vue'
 import MedicinePage from '../views/MedicinePage.vue'
+import LoginPage from '../views/LoginPage.vue'
+import RegistrationPage from '../views/RegistrationPage.vue'
 
 Vue.use(VueRouter)
 
@@ -54,6 +56,16 @@ const routes = [
     name: 'MedicinesPage',
     component: MedicinePage
   },
+  {
+    path: '/login',
+    name: 'LoginPage',
+    component: LoginPage
+  },
+  {
+    path: '/registration',
+    name: 'RegistrationPage',
+    component: RegistrationPage
+  }
 ]
 
 const router = new VueRouter({
