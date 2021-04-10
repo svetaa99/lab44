@@ -9,6 +9,7 @@ import Reservation from '../views/Reservation.vue'
 import MedicinePage from '../views/MedicinePage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegistrationPage from '../views/RegistrationPage.vue'
+import ProfilePage from '../views/ProfilePage.vue';
 
 Vue.use(VueRouter)
 
@@ -65,6 +66,11 @@ const routes = [
     path: '/registration',
     name: 'RegistrationPage',
     component: RegistrationPage
+  },
+  {
+    path: '/profile',
+    name: 'ProfilePage',
+    component: ProfilePage
   }
 ]
 

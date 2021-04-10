@@ -70,6 +70,17 @@
               >Reservation</router-link
             >
           </li>
+          <li
+            :class="
+              $route.path === '/profile'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/profile" class="nav-link"
+              >Profile</router-link
+            >
+          </li>
         </ul>
       </div>
 
