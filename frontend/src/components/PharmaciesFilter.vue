@@ -2,8 +2,8 @@
   <div class="input-group">
     <div class="form-outline">
       <select id="inputFilter" class="custom-select" placeholder="Izaberi" v-model="filterType">
-        <option value="" disabled selected>Izaberi ocenu...</option>
-        <option value="all">Sve</option>
+        <option value="" disabled selected>Choose rating...</option>
+        <option value="all">All</option>
         <option value="10">10</option>
         <option value="9">9</option>
         <option value="8">8</option>
@@ -17,7 +17,7 @@
           class="btn btn-primary input-group-append"
           v-on:click="filterPharmacy()"
         >
-          <i class="fas fa-filter">Filtriraj</i>
+          <i class="fas fa-filter">Filter</i>
         </button>
       </div>
   </div>

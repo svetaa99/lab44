@@ -10,7 +10,7 @@
               type="search"
               id="form1"
               class="form-control"
-              placeholder="Ime"
+              placeholder="Name"
               v-model="searchName"
             />
           </div>
@@ -19,7 +19,7 @@
             class="btn btn-primary"
             v-on:click="searchPatients()"
           >
-            <i class="fas fa-search">Pretrazi</i>
+            <i class="fas fa-search">Search</i>
           </button>
         </div>
       </div>

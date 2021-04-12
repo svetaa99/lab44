@@ -3,12 +3,12 @@
     <div class="main-body">
     
           <!-- Breadcrumb -->
-          <nav aria-label="breadcrumb" class="main-breadcrumb">
+          <!-- <nav aria-label="breadcrumb" class="main-breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="index.html">Home</a></li>
               <li class="breadcrumb-item active" aria-current="page">Reservation</li>
             </ol>
-          </nav>
+          </nav> -->
           <!-- /Breadcrumb -->
             <!-- User information -->
           <div class="row gutters-sm">
