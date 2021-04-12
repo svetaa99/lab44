@@ -3,13 +3,13 @@
     <hr />
     <h1>List of pharmacies</h1>
     <br />
-    <div class="container">
+    <div class="container" align="center" style="width: 700px;">
       <div class="row">
         <div class="col-lg">
           <PharmaciesSearch v-model="pharmacies" @clicked="onSearchClick" />
         </div>
         <div class="col-lg">
-          <PharmaciesFilter v-model="pharmacies" @clicked="onFilterClick"/>
+          <PharmaciesFilter v-model="pharmacies" @clicked="onFilterClick" />
         </div>
       </div>
     </div>

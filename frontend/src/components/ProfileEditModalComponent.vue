@@ -21,6 +21,7 @@
           </button>
         </div>
         <div class="modal-body">
+          <h1>lala</h1>
           <!-- <registration-form :edit="true"></registration-form> -->
         </div>
       </div>
