@@ -5,6 +5,7 @@
         type="search"
         id="form1"
         class="form-control"
+        placeholder="Naziv leka"
         v-model="searchName"
       />
     </div>

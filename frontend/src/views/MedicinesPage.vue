@@ -1,6 +1,5 @@
 <template>
   <div>
-    <hr />
     <h1>List of medicines</h1>
     <br />
     <div class="container" align="center" style="width: 350px">
