@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h1>List of medicines</h1>
-    
     <table
       id="dtBasicExample"
       class="table table-striped table-bordered table-sm"

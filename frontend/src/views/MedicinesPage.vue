@@ -1,13 +1,21 @@
 <template>
   <div>
-    <MedicinesSearch v-model="searchName" @clicked="onSearchClick"/>
+    <hr />
+    <h1>List of medicines</h1>
+    <br />
+    <div class="container" align="center" style="width: 350px">
+      <div class="row" align="center">
+        <MedicinesSearch v-model="searchName" @clicked="onSearchClick" />
+      </div>
+    </div>
+    <br />
     <MedicinesList :medicines="this.medicines" />
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import { config } from '@/config.js'
+import axios from "axios";
+import { config } from "@/config.js";
 import MedicinesList from "@/components/MedicinesList";
 import MedicinesSearch from "@/components/MedicinesSearch";
 
@@ -22,7 +30,7 @@ export default {
   data() {
     return {
       medicines: [],
-      searchName: '',
+      searchName: "",
     };
   },
   mounted() {
@@ -31,9 +39,9 @@ export default {
     });
   },
   methods: {
-    onSearchClick (searchName) {
-      console.log(searchName)
-      if (searchName == '') {
+    onSearchClick(searchName) {
+      console.log(searchName);
+      if (searchName == "") {
         axios.get(`${API_URL}/medicines/all`).then((response) => {
           this.medicines = response.data;
         });
@@ -44,8 +52,8 @@ export default {
             this.medicines = response.data;
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
