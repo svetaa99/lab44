@@ -21,8 +21,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <h1>lala</h1>
-          <!-- <registration-form :edit="true"></registration-form> -->
+          <registration-form :edit="true"></registration-form>
         </div>
       </div>
     </div>
@@ -30,10 +29,11 @@
 </template>
 
 <script>
+import RegistrationForm from '@/components/RegistrationForm.vue'
 export default {
-  mounted() {
-    console.log('AAAAAAAAAAAAAAAAAAAAAA')
-  }
+  components: {
+    "registration-form": RegistrationForm,
+  },
 };
 </script>
 

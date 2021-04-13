@@ -152,6 +152,7 @@ export default {
   components: {
     // vuejsDatepicker,
   },
+  props: ["edit"],
   data: () => {
     return {
       name: "",
