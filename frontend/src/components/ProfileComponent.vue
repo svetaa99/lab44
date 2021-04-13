@@ -11,9 +11,10 @@
             <div class="card-body">
               <div class="d-flex flex-column align-items-center text-center">
                 <div class="mt-1">
-                  <h4>Ime Prezime</h4>
+                  <h4>{{ user.name }} {{user.surname}}</h4>
                   <p class="text-secondary mb-1">Tip</p>
                   <button
+                    type="button"
                     class="btn btn-primary"
                     data-toggle="modal"
                     data-target="#editProfileModal"
@@ -41,37 +42,37 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-3">
-                  <h6 class="mb-0">Username</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">username</div>
-              </div>
-              <hr />
-              <div class="row">
-                <div class="col-sm-3">
                   <h6 class="mb-0">Name</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">ime</div>
+                <div class="col-sm-9 text-secondary">{{user.name}}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0">Surname</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">prezime</div>
+                <div class="col-sm-9 text-secondary">{{user.surname}}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-sm-3">
-                  <h6 class="mb-0">Gender</h6>
+                  <h6 class="mb-0">Email</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">pol</div>
+                <div class="col-sm-9 text-secondary">{{user.email}}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-sm-3">
-                  <h6 class="mb-0">Birthday</h6>
+                  <h6 class="mb-0">Phone number</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">dob</div>
+                <div class="col-sm-9 text-secondary">{{user.phoneNum}}</div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Address</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">{{user.address}}</div>
               </div>
             </div>
           </div>
@@ -124,11 +125,26 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { config } from '@/config.js'
 import ProfileEditModalComponent from "../components/ProfileEditModalComponent.vue";
+
+const API_URL = config.API_URL
+
 export default {
   components: {
     "edit-profile-modal-component": ProfileEditModalComponent,
   },
+  data() {
+    return {
+      user: {},
+    }
+  },
+  mounted() {
+    axios
+      .get(`${API_URL}/users/1`)
+      .then(response => {this.user = response.data; console.log(this.user)})
+  }
 };
 </script>
 

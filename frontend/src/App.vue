@@ -6,7 +6,11 @@
 </template>
 
 <script>
+
 import Header from '@/components/HeaderComponent.vue'
+global.jQuery = require('jquery');
+var $ = global.jQuery;
+window.$ = $;
 export default {
   components: {
     'header-component': Header

@@ -84,12 +84,12 @@
         </ul>
       </div>
 
-      <router-link v-if="!isLoggedIn" to="/login" class="btn btn-custom"
+      <router-link to="/login" class="btn btn-custom"
         >Login</router-link
       >
-      <button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
+      <!-- <button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
         Logout
-      </button>
+      </button> -->
     </div>
   </nav>
 </template>
