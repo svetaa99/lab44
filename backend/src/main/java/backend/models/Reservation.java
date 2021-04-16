@@ -29,6 +29,9 @@ public class Reservation {
 	@JoinColumn(name = "medicine_id")
 	Medicine medicine;
 	
+	@Column(name = "date")
+	long date;
+	
 	@Column(name = "quantity")
 	int quantity;
 	
@@ -39,12 +42,13 @@ public class Reservation {
 		
 	}
 
-	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, int quantity, double totalPrice) {
+	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity, double totalPrice) {
 		super();
 		this.id = id;
 		this.patient = patient;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
+		this.date = date;
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
 	}
@@ -80,6 +84,14 @@ public class Reservation {
 
 	public void setMedicine(Medicine medicine) {
 		this.medicine = medicine;
+	}
+
+	public long getDate() {
+		return date;
+	}
+
+	public void setDate(long date) {
+		this.date = date;
 	}
 
 	public int getQuantity() {

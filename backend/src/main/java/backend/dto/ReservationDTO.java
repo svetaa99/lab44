@@ -10,6 +10,7 @@ public class ReservationDTO {
 	private Patient patient;
 	private Pharmacy pharmacy;
 	private Medicine medicine;
+	private long date;
 	private int quantity;
 	private double totalPrice;
 	
@@ -18,18 +19,19 @@ public class ReservationDTO {
 	}
 	
 	
-	public ReservationDTO(Patient patient, Pharmacy pharmacy, Medicine medicine, int quantity, double totalPrice) {
+	public ReservationDTO(Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity, double totalPrice) {
 		super();
 		this.patient = patient;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
+		this.date = date;
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
 	}
 
 
 	public ReservationDTO(Reservation r) {
-		this(r.getPatient(), r.getPharmacy(), r.getMedicine(), r.getQuantity(), r.getTotalPrice());
+		this(r.getPatient(), r.getPharmacy(), r.getMedicine(), r.getDate(), r.getQuantity(), r.getTotalPrice());
 	}
 
 
@@ -60,6 +62,16 @@ public class ReservationDTO {
 
 	public void setMedicine(Medicine medicine) {
 		this.medicine = medicine;
+	}
+	
+
+	public long getDate() {
+		return date;
+	}
+
+
+	public void setDate(long date) {
+		this.date = date;
 	}
 
 
