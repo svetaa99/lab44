@@ -33,20 +33,20 @@ public class Reservation {
 	int quantity;
 	
 	@Column(name = "total_price")
-	double total_price;
+	double totalPrice;
 	
 	public Reservation() {
 		
 	}
 
-	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, int quantity, double total_price) {
+	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, int quantity, double totalPrice) {
 		super();
 		this.id = id;
 		this.patient = patient;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
 		this.quantity = quantity;
-		this.total_price = total_price;
+		this.totalPrice = totalPrice;
 	}
 
 	public Long getId() {
@@ -90,12 +90,12 @@ public class Reservation {
 		this.quantity = quantity;
 	}
 
-	public double getTotal_price() {
-		return total_price;
+	public double getTotalPrice() {
+		return totalPrice;
 	}
 
-	public void setTotal_price(double total_price) {
-		this.total_price = total_price;
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 	
 	
