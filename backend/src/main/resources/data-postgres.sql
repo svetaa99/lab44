@@ -49,3 +49,5 @@ insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 2,
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (4, 2, '2021-04-28 11:00:00', '2021-04-28 11:45:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 3, '2021-05-05 16:00:00', '2021-05-05 17:00:00');
 
+insert into reservations (patient_id, pharmacy_id, medicine_id, quantity, total_price) values (1, 1, 1, 2, 200);
+insert into reservations (patient_id, pharmacy_id, medicine_id, quantity, total_price) values (1, 2, 3, 1, 70);
