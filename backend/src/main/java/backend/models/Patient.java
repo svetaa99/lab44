@@ -1,10 +1,13 @@
 package backend.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +23,9 @@ public class Patient extends User{
 	
 	@Column(name = "category", nullable = true)
 	private String category;
+	
+	@OneToMany(mappedBy = "patient")
+	private List<Reservation> reservations;
 	
 	public Patient() {
 		
