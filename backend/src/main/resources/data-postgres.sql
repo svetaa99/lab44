@@ -44,7 +44,15 @@ insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (2, 1, '
 insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 2, '2021-05-05 15:00:00', '2021-05-05 15:30:00');
 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 1, '2021-04-20 16:00:00', '2021-04-20 16:30:00'); 
-insert into visit (patient_id, doctor_id, start_time, finish_time) values (2, 1, '2021-04-20 17:00:00', '2021-04-20 18:00:00'); 
+insert into visit (patient_id, doctor_id, start_time, finish_time) values (2, 1, '2021-04-16 17:00:00', '2021-04-16 18:00:00'); 
+insert into visit (patient_id, doctor_id, start_time, finish_time) values (3, 1, '2021-03-20 16:00:00', '2021-03-20 16:30:00'); 
+insert into visit (patient_id, doctor_id, start_time, finish_time) values (4, 1, '2021-04-16 18:40:00', '2021-04-16 19:30:00'); 
+insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 1, '2021-06-07 16:00:00', '2021-06-07 16:30:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 2, '2021-04-27 15:00:00', '2021-04-27 15:40:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (4, 2, '2021-04-28 11:00:00', '2021-04-28 11:45:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 3, '2021-05-05 16:00:00', '2021-05-05 17:00:00'); 
+
+insert into patients_allergies (patient_id, medicine_id) values (1, 1);
+insert into patients_allergies (patient_id, medicine_id) values (1, 2);
+insert into patients_allergies (patient_id, medicine_id) values (2, 1);
+insert into patients_allergies (patient_id, medicine_id) values (2, 2);

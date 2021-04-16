@@ -1,6 +1,8 @@
 package backend.controllers;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -28,7 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import backend.dto.VisitDTO;
+import backend.models.Doctor;
+import backend.models.Patient;
 import backend.models.Visit;
+import backend.services.impl.PatientService;
 import backend.services.impl.VisitService;
 
 @RestController
@@ -38,6 +44,10 @@ public class VisitController {
 
 	@Autowired
 	private VisitService visitService;
+	
+	@Autowired
+	private PatientService patientService;
+	
 	private static Gson g = new Gson();
 	
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -62,6 +72,26 @@ public class VisitController {
 	public ResponseEntity<String> getAppointmentsForPatient(@PathVariable Long patientId){
 		List<Visit> appointments = visitService.findByPatientIdEquals(patientId);
 		return new ResponseEntity<String>(g.toJson(appointments), HttpStatus.OK);
+	}
+	
+	@GetMapping("/td/{doctorId}")
+	public ResponseEntity<List<VisitDTO>> getDoctorsAppointmentsToDo(@PathVariable Long doctorId){
+		
+		List<Visit> visits = visitService.findByDoctorIdFuture(doctorId);
+		
+		List<VisitDTO> visitsDTO = new ArrayList<VisitDTO>();
+		
+		for (Visit visit : visits) {
+			Long visitId = visit.getId();
+			Patient visitPatient = patientService.findById(visit.getPatientId());
+			Doctor visitDoctor = new Doctor(); // visit.getDoctorId();
+			LocalDateTime visitStart = visit.getStart();
+			LocalDateTime visitFinish = visit.getFinish();
+			VisitDTO newVisitDTO = new VisitDTO(visitId, visitPatient, visitDoctor, visitStart, visitFinish);
+			visitsDTO.add(newVisitDTO);
+		}
+		Collections.sort(visitsDTO);
+		return new ResponseEntity<List<VisitDTO>>(visitsDTO,  HttpStatus.OK);
 	}
 	
 	private boolean checkTermTaken(Visit newReservation) {

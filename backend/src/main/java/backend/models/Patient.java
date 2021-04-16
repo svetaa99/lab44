@@ -1,10 +1,16 @@
 package backend.models;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +27,11 @@ public class Patient extends User{
 	@Column(name = "category", nullable = true)
 	private String category;
 	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "patients_allergies", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
+	private List<Medicine> allergies;
+	
+
 	public Patient() {
 		
 	}
@@ -48,6 +59,20 @@ public class Patient extends User{
 		this.phoneNum = phoneNum;
 		this.points = points;
 		this.category = category;
+	}
+
+	public Patient(Long id, String name, String surname, String email, String password, Long addressId, String phoneNum, double points, String category, List<Medicine> allergies) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.password = password;
+		this.addressId = addressId;
+		this.phoneNum = phoneNum;
+		this.points = points;
+		this.category = category;
+		this.allergies = allergies;
 	}
 
 	public Long getId() {
@@ -105,6 +130,14 @@ public class Patient extends User{
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	
+	public List<Medicine> getAllergies() {
+		return allergies;
+	}
+
+	public void setAllergies(List<Medicine> allergies) {
+		this.allergies = allergies;
+	}
 
 	@Override
 	public int hashCode() {
@@ -113,7 +146,7 @@ public class Patient extends User{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -128,13 +161,11 @@ public class Patient extends User{
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Patient [id=" + id + ", name=" + name + ", surname=" + surname + ", address=" + addressId + ", category="
 				+ category + "]";
 	}
 	
-	
-
 }

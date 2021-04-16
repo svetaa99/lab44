@@ -10,6 +10,7 @@ import MedicinePage from '../views/MedicinePage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import RegistrationPage from '../views/RegistrationPage.vue'
 import ProfilePage from '../views/ProfilePage.vue';
+import DoctorScheduledVisits from '../components/DoctorScheduledVisits.vue'
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,11 @@ const routes = [
     path: '/profile',
     name: 'ProfilePage',
     component: ProfilePage
+  },
+  {
+    path: '/employee-appointments',
+    name: 'DoctorScheduledVisits',
+    component: DoctorScheduledVisits
   }
 ]
 
