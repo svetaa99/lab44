@@ -22,6 +22,10 @@ public class Reservation {
 	Patient patient;
 	
 	@ManyToOne
+	@JoinColumn(name = "pharmacy_id")
+	Pharmacy pharmacy;
+	
+	@ManyToOne
 	@JoinColumn(name = "medicine_id")
 	Medicine medicine;
 	
@@ -35,10 +39,11 @@ public class Reservation {
 		
 	}
 
-	public Reservation(Long id, Patient patient, Medicine medicine, int quantity, double total_price) {
+	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, int quantity, double total_price) {
 		super();
 		this.id = id;
 		this.patient = patient;
+		this.pharmacy = pharmacy;
 		this.medicine = medicine;
 		this.quantity = quantity;
 		this.total_price = total_price;
@@ -58,6 +63,15 @@ public class Reservation {
 
 	public void setPatient(Patient patient) {
 		this.patient = patient;
+	}
+	
+
+	public Pharmacy getPharmacy() {
+		return pharmacy;
+	}
+
+	public void setPharmacy(Pharmacy pharmacy) {
+		this.pharmacy = pharmacy;
 	}
 
 	public Medicine getMedicine() {

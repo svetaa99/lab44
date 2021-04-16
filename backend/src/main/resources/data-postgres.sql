@@ -47,4 +47,5 @@ insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 1,
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (2, 1, '2021-04-20 17:00:00', '2021-04-20 18:00:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 2, '2021-04-27 15:00:00', '2021-04-27 15:40:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (4, 2, '2021-04-28 11:00:00', '2021-04-28 11:45:00'); 
-insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 3, '2021-05-05 16:00:00', '2021-05-05 17:00:00'); 
+insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 3, '2021-05-05 16:00:00', '2021-05-05 17:00:00');
+
