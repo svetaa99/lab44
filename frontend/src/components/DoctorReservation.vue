@@ -111,11 +111,23 @@ export default {
       }
     },
     methods : {
-      formatDate: function(dateInStr){
-        return dateInStr
+      formatDate: function(dateInJson){
+        return "" + dateInJson.day.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + "." + dateInJson.month.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + "." + dateInJson.year + "." 
       },
-      formatTime: function(timeInStr){
-        return timeInStr
+      formatTime: function(timeInJson){
+        return "" + timeInJson.hour.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + ":" + timeInJson.minute.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          })
       },
       formatDateTimeForReq: function(dateTimeJson){
         return "" + dateTimeJson.date.year + "-" 

@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 import backend.dto.VisitDTO;
 import backend.models.Doctor;
 import backend.models.Patient;
+import backend.models.Report;
 import backend.models.Visit;
 import backend.services.impl.PatientService;
 import backend.services.impl.VisitService;
@@ -61,6 +62,12 @@ public class VisitController {
 		notifyPatientViaEmail(patientsEmail);
 		
 		return new ResponseEntity<String>(g.toJson(newReservation), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/report-visit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> saveAppointment(@RequestBody Report newReport){
+		
+		return new ResponseEntity<String>("Report saved!", HttpStatus.OK);
 	}
 
 	@GetMapping("/doctor/{doctorId}")
