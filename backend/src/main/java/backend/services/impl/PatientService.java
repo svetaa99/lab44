@@ -44,7 +44,6 @@ public class PatientService implements IService<Patient>{
 	public void delete(Patient obj) {
 		patientRepository.delete(obj);
 	}
-	
-	
+
 	
 }

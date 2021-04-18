@@ -18,10 +18,10 @@ insert into medicine(name, type, specification) values ('Lek1', 1, 'neeekaaa spe
 insert into medicine(name, type, specification) values ('Lek2', 2, 'sdfsefs');
 insert into medicine(name, type, specification) values ('Lek3', 2, 'uiyuoirtl');
 
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price) values (1, 1, 100);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price) values (1, 2, 120);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price) values (1, 3, 90);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price) values (2, 3, 70);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (1, 1, 100, 100);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (1, 2, 120, 100);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (1, 3, 90, 100);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (2, 3, 70, 10);
 
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (1, 'Mika', 'Mikic', 'mika22@gmail.com', 'mika123', 5, '011100100');
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (2, 'Djuka', 'Djukic', 'djuka22@gmail.com', 'djuka123', 5, '011101101');
@@ -51,6 +51,7 @@ insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 1,
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 2, '2021-04-27 15:00:00', '2021-04-27 15:40:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (4, 2, '2021-04-28 11:00:00', '2021-04-28 11:45:00'); 
 insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 3, '2021-05-05 16:00:00', '2021-05-05 17:00:00'); 
+insert into visit (patient_id, doctor_id, start_time, finish_time) values (1, 1, '2021-04-18 20:50:00', '2021-04-18 22:00:00'); 
 
 insert into patients_allergies (patient_id, medicine_id) values (1, 1);
 insert into patients_allergies (patient_id, medicine_id) values (1, 2);

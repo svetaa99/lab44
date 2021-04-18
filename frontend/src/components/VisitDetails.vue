@@ -64,6 +64,7 @@ export default {
             prescribedMedicine: [],
             visitInformation: "",
             saved: false,
+            medicineDTO: [],
         };
     },
     methods: {
@@ -89,11 +90,53 @@ export default {
         }
         },
         save: function(){
-            var saveObj = {visitId: this.visitId, medicineDays: prescribedMedicine, information: visitInformation};
+            var medDay = []
+            for(var i = 0; i < this.prescribedMedicine.length; i++){
+                var medicine = this.prescribedMedicine[i].medicine.id;
+                var days = this.prescribedMedicine[i].days;
+                medDay.push({medicine, days})
+            }
+            var saveObj = {visitId: this.visitId, medicineDays: medDay, information: this.visitInformation};
             axios
-            .post()
-            alert("Information and prescription saved!");
-            this.saved = true;
+            .post('http://localhost:8000/reports/save', saveObj)
+            .then((response) => {
+                console.log(response.data);
+                this.medicineDTO = response.data;
+                this.saved = true;
+                this.displayInfo();
+            });
+        },
+        displayInfo: function(){
+            var flag = false;
+            for(var i = 0; i < this.medicineDTO.length; i++){
+                var oneMedicineDTO = this.medicineDTO[i];
+                if(oneMedicineDTO.allergic){
+                    flag = true;
+                    alert("Patient is allergic to medicine: " + oneMedicineDTO.medicine.name);
+                }
+                else if (!oneMedicineDTO.available){
+                    flag = true;
+                    alert("Medicine " + oneMedicineDTO.medicine.name + "is not available!");
+                }
+            }
+            if(!flag){
+                alert("Report saved!");
+            }
+            else{
+                for(var i = 0; i < this.prescribedMedicine.length; i++){
+                    var one = this.prescribedMedicine[i]; // medicine - days
+                    for(var j = 0; j < this.medicineDTO.length; j++){ 
+                        var two = this.medicineDTO[j]; // full medicine info
+                        if(two.allergic || two.available){
+                            if(one.medicine.id == two.medicine.id)
+                            {
+                                this.removeMedicine(one);
+                            }
+                        }
+                    }
+                }
+                alert("Unavailable or allergic medicines removed from list!");
+            }
         },
         redirectToReservation: function(){
             // Are you sure you want to redirect without saving?

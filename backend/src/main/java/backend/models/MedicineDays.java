@@ -1,8 +1,11 @@
 package backend.models;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class MedicineDays {
 
-	private Medicine medicine;
+	private Long medicine;
 	
 	private int days;
 	
@@ -10,17 +13,17 @@ public class MedicineDays {
 		
 	}
 
-	public MedicineDays(Medicine medicine, int days) {
+	public MedicineDays(Long medicine, int days) {
 		super();
 		this.medicine = medicine;
 		this.days = days;
 	}
 
-	public Medicine getMedicine() {
+	public Long getmedicine() {
 		return medicine;
 	}
 
-	public void setMedicine(Medicine medicine) {
+	public void setmedicine(Long medicine) {
 		this.medicine = medicine;
 	}
 
@@ -36,5 +39,6 @@ public class MedicineDays {
 	public String toString() {
 		return "MedicineDays [medicine=" + medicine + ", days=" + days + "]";
 	}
+	
 	
 }

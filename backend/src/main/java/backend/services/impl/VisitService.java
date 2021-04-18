@@ -25,8 +25,7 @@ public class VisitService implements IService<Visit>{
 
 	@Override
 	public Visit findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Visit) visitRepository.findByIdEquals(id);
 	}
 	
 	public List<Visit> findByDoctorIdEquals(Long doctorId){

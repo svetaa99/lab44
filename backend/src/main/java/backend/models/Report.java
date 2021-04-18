@@ -2,7 +2,11 @@ package backend.models;
 
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +22,14 @@ public class Report {
 	@Column(name="visit_id", unique=false, nullable=false)
 	private Long visitId;
 	
+	@ElementCollection
+    @CollectionTable(name="medicine_days")
+	@AttributeOverrides({
+        @AttributeOverride(name="medicine", 
+                           column=@Column(name="medicine")),
+        @AttributeOverride(name="days", 
+                           column=@Column(name="days")),
+      })
 	private List<MedicineDays> medicineDays;
 	
 	@Column(name="information", unique=false, nullable=true)

@@ -11,4 +11,6 @@ public interface VisitRepository extends JpaRepository<Visit, Long>{
 	List<Visit> findByPatientIdEquals(Long patientId);
 	
 	List<Visit> findByDoctorIdEquals(Long doctorId);
+	
+	List<Visit> findByIdEquals(Long id);
 }
