@@ -9,5 +9,9 @@ public interface IPharmacyService extends IService<Pharmacy> {
 	List<Pharmacy> findAllByName(String name);
 	
 	List<Pharmacy> findAllByRating(double rating);
+
+	List<Pharmacy> sortByPrice(String type);
+
+	List<Pharmacy> sortByRating(String type);
 	
 }
