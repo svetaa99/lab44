@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container" align="center" style="width: 450px">
-      <date-time-component></date-time-component>
+      <date-time-component v-model="pharmacies" @clicked="updatePharmacies"></date-time-component>
       <!-- <pharmacies-search></pharmacies-search> -->
     </div>
     <br />
@@ -32,6 +32,11 @@ export default {
       this.pharmacies = response.data;
     });
   },
+  methods: {
+    updatePharmacies(pharmacies) {
+      this.pharmacies = pharmacies
+    }
+  }
 };
 </script>
 
