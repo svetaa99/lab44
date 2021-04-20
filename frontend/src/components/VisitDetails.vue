@@ -127,20 +127,20 @@ export default {
                     var one = this.prescribedMedicine[i]; // medicine - days
                     for(var j = 0; j < this.medicineDTO.length; j++){ 
                         var two = this.medicineDTO[j]; // full medicine info
-                        if(two.allergic || two.available){
-                            if(one.medicine.id == two.medicine.id)
-                            {
-                                this.removeMedicine(one);
-                            }
+                        if(two.allergic || !two.available){
+                            // if(one.medicine.id == two.medicine.id)
+                            // {
+                            //     this.removeMedicine(one.medicine); // why
+                            // }
                         }
                     }
                 }
-                alert("Unavailable or allergic medicines removed from list!");
+                //alert("Unavailable or allergic medicines removed from list!");
             }
         },
         redirectToReservation: function(){
             // Are you sure you want to redirect without saving?
-            window.location.href="http://localhost:8080/employee-appointments";
+            window.location.href="http://localhost:8080/employee-reservation";
         },
         appendMedicine: function(medicine){
             var flag = false;

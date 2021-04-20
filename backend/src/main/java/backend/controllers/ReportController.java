@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 
-import backend.dto.PharmacyMedicinesDTO;
 import backend.models.Medicine;
 import backend.models.MedicineDays;
 import backend.models.MedicineReportDTO;
@@ -24,7 +22,6 @@ import backend.models.Patient;
 import backend.models.PharmacyMedicines;
 import backend.models.Report;
 import backend.services.IMedicineService;
-import backend.services.IPatientService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.impl.PatientService;
 import backend.services.impl.ReportService;
@@ -47,12 +44,12 @@ public class ReportController {
 	@Autowired
 	private PatientService patientService;
 
-	private static Gson g = new Gson();
+	//private static Gson g = new Gson();
 	
 	@PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MedicineReportDTO>> saveAppointment(@RequestBody Report newReport){
 		
-		PharmacyMedicines pm = new PharmacyMedicines(); 
+		//PharmacyMedicines pm = new PharmacyMedicines(); 
 		// Visit has no field in which pharmacy it is held
 		// One that is changed in the model it will not be hardcoded to 1
 		List<MedicineReportDTO> medDTO = new ArrayList<MedicineReportDTO>();
