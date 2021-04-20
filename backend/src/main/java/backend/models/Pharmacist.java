@@ -16,5 +16,13 @@ public class Pharmacist extends Doctor {
 	public void setPharmacy(Pharmacy pharmacy) {
 		this.pharmacy = pharmacy;
 	}
+
+	@Override
+	public String toString() {
+		return "Pharmacist [pharmacy=" + pharmacy + ", name=" + name + ", surname=" + surname + ", email=" + email
+				+ ", password=" + password + ", addressId=" + addressId + ", phoneNum=" + phoneNum + "]";
+	}
+	
+	
 	
 }

@@ -28,10 +28,10 @@ insert into dermatologist (id, name, surname, email, password, address, phone_nu
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (3, 'Ivan', 'Ivanovic', 'iivan@gmail.com', 'ivan123', 5, '011102102');
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (4, 'Nikola', 'Nikolic', 'nikolicaprikolica@gmail.com', 'nidza123', 5, '011103103');
 
-insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (1, 'Filip', 'Filipovic', 'filipfilip@gmail.com', 'fica123', 5, '011200200', 3);
-insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (2, 'Djordje', 'Volas', 'djokica@gmail.com', 'djoka123', 5, '011201201', 1);
-insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (3, 'Stefan', 'Stefanovic', 'stefke@gmail.com', 'stefi123', 5, '011202202', 1);
-insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (4, 'Marko', 'Markovic', 'markelof@gmail.com', 'mare123', 5, '011203203', 2);
+insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (5, 'Filip', 'Filipovic', 'filipfilip@gmail.com', 'fica123', 5, '011200200', 3);
+insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (6, 'Djordje', 'Volas', 'djokica@gmail.com', 'djoka123', 5, '011201201', 1);
+insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (7, 'Stefan', 'Stefanovic', 'stefke@gmail.com', 'stefi123', 5, '011202202', 1);
+insert into pharmacist (id, name, surname, email, password, address, phone_num, pharmacy_id) values (8, 'Marko', 'Markovic', 'markelof@gmail.com', 'mare123', 5, '011203203', 2);
 
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,1);
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,2);

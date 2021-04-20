@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.dto.PharmacistDTO;
 import backend.models.Pharmacist;
 import backend.services.IPharmacistService;
+import backend.services.impl.PharmacistService;
 
 @RestController
 @RequestMapping(value = "pharmacist")
@@ -19,7 +20,7 @@ import backend.services.IPharmacistService;
 public class PharmacistController {
 
 	@Autowired
-	private IPharmacistService pharmacistService;
+	private PharmacistService pharmacistService;
 	
 	private List<PharmacistDTO> createPharmacistDTOList(List<Pharmacist> pharmacists) {
 		List<PharmacistDTO> pharmacistsDTO = new ArrayList<PharmacistDTO>();

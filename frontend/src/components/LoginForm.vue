@@ -8,8 +8,8 @@
       <label for="inputUsername" class="visually-hidden">Username</label>
       <input
         @keyup.enter="login()"
-        type="username"
-        v-model="username"
+        type="email"
+        v-model="email"
         id="inputUsername"
         class="form-control"
         placeholder="Username"
@@ -33,7 +33,7 @@
       <br />
 
       <p v-if="hasLoginError" class="text-danger">
-        The username or the password are incorrect
+        The email or the password are incorrect
       </p>
 
       <br />
@@ -57,18 +57,42 @@
         Create New Account
       </button> -->
 
-      <p class="mt-5 mb-3 text-muted">&copy; labnoni 2021</p>
+      <p class="mt-5 mb-3 text-muted">&copy; laboni 2021</p>
     </form>
   </main>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data: () => {
     return {
-      username: "",
+      email: "",
       password: "",
+      loginObject: null,
+      hasLoginError: false,
     };
+  },
+  methods: {
+    login()
+    {
+      var loginData = {"email": this.email, "password": this.password};
+      console.log(loginData);
+      axios
+      .post('http://localhost:8000/users/login-user', loginData)
+      .then(response => {this.loginObject = response.data; this.printInfo()});
+    },
+    printInfo()
+    {
+      console.log(this.loginObject);
+      if(this.loginObject.accessToken == ""){
+        alert("Bad credentials!");
+      }
+      else{
+        alert("Successfully logged in!");
+        window.location.href="http://localhost:8080/";
+      }
+    }
   },
 };
 </script>
