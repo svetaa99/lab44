@@ -45,21 +45,21 @@ public class PharmacyService implements IPharmacyService {
 		return pharmacyRepository.findAllByRating(rating);
 	}
 	
-	@Override
-	public List<Pharmacy> sortByPrice(String type) {
-		if (type.equals("asc")) {
-			return pharmacyRepository.findByOrderByPriceAsc();
-		} else {
-			return pharmacyRepository.findByOrderByPriceDesc();
-		}
-	}
+//	@Override
+//	public List<Pharmacy> sortByPrice(String type) {
+//		if (type.equals("asc")) {
+//			return pharmacyRepository.findByOrderByPriceAsc();
+//		} else {
+//			return pharmacyRepository.findByOrderByPriceDesc();
+//		}
+//	}
 	
 	@Override
 	public List<Pharmacy> sortByRating(String type) {
 		if (type.equals("asc")) {
-			return pharmacyRepository.findByOrderByPriceAsc();
+			return pharmacyRepository.findByOrderByRatingAsc();
 		} else {
-			return pharmacyRepository.findByOrderByPriceDesc();
+			return pharmacyRepository.findByOrderByRatingDesc();
 		}
 	}
 

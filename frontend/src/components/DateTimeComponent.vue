@@ -10,9 +10,9 @@
       >
         Search
       </button>
-      <button type="button" class="btn btn-primary" v-on:click="sortPrice()">
+      <!-- <button type="button" class="btn btn-primary" v-on:click="sortPrice()">
         Sort by price
-      </button>
+      </button> -->
       <button type="button" class="btn btn-primary" v-on:click="sortRating()">
         Sort by rating
       </button>
@@ -21,7 +21,12 @@
 </template>
 
 <script>
+import axios from "axios";
+import { config } from "@/config.js";
 import Datepicker from "vuejs-datepicker";
+
+const API_URL = config.API_URL;
+
 export default {
   components: {
     Datepicker,
@@ -30,18 +35,24 @@ export default {
     return {
       date: "",
       time: "",
-      currentSortDir: 'asc'
+      currentSortDir: "asc",
     };
   },
   methods: {
     searchPharmacy: function () {
       console.log("searchPharmacy");
     },
-    sortPrice: function () {
-      this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
-    },
+    // sortPrice: function () {
+    //   this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+    // },
     sortRating: function () {
-        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      axios
+        .get(`${API_URL}/pharmacies/sort/rating/${this.currentSortDir}`)
+        .then((response) => {
+          this.pharmacies = response.data;
+          this.$emit("clicked", this.pharmacies);
+        });
     },
   },
 };
