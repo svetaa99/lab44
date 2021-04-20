@@ -63,16 +63,36 @@ export default {
       selectedPM: {}, 
       medicine: {},
       reservation: {
+        pharmacy: {},
+        patient: {},
         medicine: this.medicine,
-        pharmacy: "",
         date: "",
-        quantity: ""
+        quantity: "",
+        totalPrice: "",
       }
     };
   },
   methods: {
     reserve() {
-      console.log(this.selectedPM)
+      this.reservation.pharmacy = this.selectedPM.pharmacy
+      this.reservation.patient = {
+        id: 1,
+        name: "Uros", 
+        surname: "Petric",
+        email: "uki.tricpe@gmail.com",
+        password: "urosplatinium",
+        address: 3,
+        phoneNum: "0651344891",
+        points: "22",
+        category: "PLATINUM"
+      }
+      this.reservation.medicine = this.selectedPM.medicine
+      this.reservation.totalPrice = this.selectedPM.price * this.reservation.quantity
+      this.reservation.date = this.reservation.date.getTime()
+
+      axios
+        .post(`${API_URL}/reservations`, this.reservation)
+        .then(response => console.log(response.data))
     }
   },
   mounted() {

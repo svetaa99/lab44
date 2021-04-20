@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -30,6 +31,10 @@ public class Patient extends User{
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "patients_allergies", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
 	private List<Medicine> allergies;
+	
+
+	@OneToMany(mappedBy = "patient")
+	private List<Reservation> reservations;
 	
 
 	public Patient() {
