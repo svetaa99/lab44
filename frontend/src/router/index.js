@@ -12,6 +12,7 @@ import RegistrationPage from '../views/RegistrationPage.vue'
 import ProfilePage from '../views/ProfilePage.vue';
 import DoctorScheduledVisits from '../components/DoctorScheduledVisits.vue'
 import VisitPage from '../views/VisitPage'
+import PharmacistAppointmentPage from '../views/PharmacistAppointmentPage.vue'
 
 Vue.use(VueRouter)
 
@@ -83,6 +84,11 @@ const routes = [
     path: '/employee-appointments/:id',
     name: 'VisitDetails',
     component: VisitPage
+  },
+  {
+    path: '/patient-pharmacist-appointment',
+    name: 'PharmacistAppointmentPage',
+    component: PharmacistAppointmentPage
   }
 ]
 

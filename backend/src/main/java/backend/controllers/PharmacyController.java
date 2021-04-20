@@ -92,6 +92,24 @@ public class PharmacyController {
 		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
 	}
 	
+//	@GetMapping("/sort/price/{type}")
+//	private ResponseEntity<List<PharmacyDTO>> getAllSortedByPrice(@PathVariable String type) {
+//
+//		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.sortByPrice(type);
+//		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
+//		
+//		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
+//	}
+	
+	@GetMapping("/sort/rating/{type}")
+	private ResponseEntity<List<PharmacyDTO>> getAllSortedByRating(@PathVariable String type) {
+
+		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.sortByRating(type);
+		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
+		
+		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<PharmacyMedicinesDTO> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
 		Pharmacy pharmacy = pharmacyService.findById(obj.getPharmacyId());

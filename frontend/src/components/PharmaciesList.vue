@@ -5,21 +5,28 @@
         <tr>
           <th class="th-sm">Name</th>
           <th class="th-sm">Address</th>
-          <th class="th-sm">Description</th>
           <th class="th-sm">Rating</th>
+          <th class="th-sm" v-if="!appointment">Description</th>
+          <th class="th-sm" v-if="appointment">Price</th>
         </tr>
 			</thead>
 			<tbody>
 				<tr v-for="pharmacy in pharmacies" :key="pharmacy.id">
 					<td>{{pharmacy.name}}</td>
-					<td>{{pharmacy.address}}</td>
-          <td>{{pharmacy.description}}</td>
+					<td>{{pharmacy.addressId}}</td>
           <td>{{pharmacy.rating}}</td>
+          <td v-if="!appointment">{{pharmacy.description}}</td>
+          <td v-if="appointment">{{pharmacy.price}}</td>
           <td>
-            <router-link
+            <router-link v-if="!appointment"
               :to="`/pharmacies/${pharmacy.id}`"
             >
             Prikazi
+            </router-link>
+            <router-link v-if="appointment"
+              :to="`/pharmacies/${pharmacy.id}/pharmacists`"
+            >
+            Choose
             </router-link>
           </td>
 				</tr>
@@ -36,7 +43,8 @@ const api_url = config.API_URL
 export default {
   name: 'PharmaciesList',
   props: {
-    pharmacies: Array
+    pharmacies: Array,
+    appointment: Boolean,
   },
   data () {
     return {

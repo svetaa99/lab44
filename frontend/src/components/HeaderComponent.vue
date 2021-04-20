@@ -72,6 +72,17 @@
           </li>
           <li
             :class="
+              $route.path === '/patient-pharmacist-appointment'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/patient-pharmacist-appointment" class="nav-link"
+              >Pharmacist appointment</router-link
+            >
+          </li>
+          <li
+            :class="
               $route.path === '/profile'
                 ? 'nav-item active'
                 : 'nav-item'
