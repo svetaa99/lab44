@@ -13,6 +13,7 @@ import ProfilePage from '../views/ProfilePage.vue';
 import DoctorScheduledVisits from '../components/DoctorScheduledVisits.vue'
 import VisitPage from '../views/VisitPage'
 import PharmacistAppointmentPage from '../views/PharmacistAppointmentPage.vue'
+import PharmacyPharmacistPage from '../views/PharmacyPharmacistPage.vue';
 
 Vue.use(VueRouter)
 
@@ -89,6 +90,11 @@ const routes = [
     path: '/patient-pharmacist-appointment',
     name: 'PharmacistAppointmentPage',
     component: PharmacistAppointmentPage
+  },
+  {
+    path: '/pharmacies/:id/pharmacists',
+    name: 'PharmacyPharmacistPage',
+    component: PharmacyPharmacistPage
   }
 ]
 
