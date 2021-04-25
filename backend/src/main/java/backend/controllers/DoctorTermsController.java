@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
+import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
 
 @RestController
@@ -48,8 +49,13 @@ public class DoctorTermsController {
 		System.out.println("We got : " + newTerm + "\n\n from client...");
 		
 		if(checkIfTakenTerm(newTerm)) {
-			doctorTermsService.save(newTerm);
-			System.out.println("Object saved to db...");
+			if(checkIfInWorkingHours(newTerm)) {
+				doctorTermsService.save(newTerm);
+				System.out.println("Object saved to db...");
+		
+			}
+			else
+				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
 		}
 		else {
 			System.out.println("Taken term...");
@@ -90,8 +96,14 @@ public class DoctorTermsController {
 				return false;
 			else if(startTime.isBefore(doctorTerms.getStart()) && finishTime.isAfter(doctorTerms.getFinish()))
 				return false;
-		}
-		//check if working hours match the term 
+		} 
 		return true;
+	}
+	private boolean checkIfInWorkingHours(DoctorTerms newTerm) {
+		for (WorkHours wh : doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacyId())) {
+			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))
+				return true;
+		}
+		return false;
 	}
 }
