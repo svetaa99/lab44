@@ -92,14 +92,14 @@ public class PharmacyController {
 		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/sort/price/{type}")
-//	private ResponseEntity<List<PharmacyDTO>> getAllSortedByPrice(@PathVariable String type) {
-//
-//		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.sortByPrice(type);
-//		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
-//		
-//		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
-//	}
+	@GetMapping("/sort/price/{type}")
+	private ResponseEntity<List<PharmacyDTO>> getAllSortedByPrice(@PathVariable String type) {
+
+		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.sortByPharmacistPrice(type);
+		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
+		
+		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
+	}
 	
 	@GetMapping("/sort/rating/{type}")
 	private ResponseEntity<List<PharmacyDTO>> getAllSortedByRating(@PathVariable String type) {

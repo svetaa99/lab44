@@ -12,9 +12,9 @@ public interface PharmacyRepository extends JpaRepository<Pharmacy, Long> {
 
 	public List<Pharmacy> findAllByRating(double rating);
 	
-//	public List<Pharmacy> findByOrderByPriceAsc();
+	public List<Pharmacy> findByOrderByPharmacistPriceAsc();
 	
-//	public List<Pharmacy> findByOrderByPriceDesc();
+	public List<Pharmacy> findByOrderByPharmacistPriceDesc();
 	
 	public List<Pharmacy> findByOrderByRatingAsc();
 	

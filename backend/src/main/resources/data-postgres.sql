@@ -10,9 +10,9 @@ insert into address (street, number, city, country) values ('Bulevar', 55, 'Beog
 insert into address (street, number, city, country) values ('Nikole tesle', 71, 'Ruma', 'Srbija');
 insert into address (street, number, city, country) values ('Doktorska', 100, 'Beograd', 'Srbija');
 
-insert into pharmacy (name, address, description, rating) values ('Apoteka1', 1, 'opis1', 7);
-insert into pharmacy (name, address, description, rating) values ('Apoteka2', 2, 'opis2', 6);
-insert into pharmacy (name, address, description, rating) values ('Apoteka3', 3, 'opis3', 9);
+insert into pharmacy (name, address, description, rating, pharmacist_price) values ('Apoteka1', 1, 'opis1', 7, 1000);
+insert into pharmacy (name, address, description, rating, pharmacist_price) values ('Apoteka2', 2, 'opis2', 6, 2000);
+insert into pharmacy (name, address, description, rating, pharmacist_price) values ('Apoteka3', 3, 'opis3', 9, 3000);
 
 insert into medicine(name, type, specification) values ('Lek1', 1, 'neeekaaa speeeec');
 insert into medicine(name, type, specification) values ('Lek2', 2, 'sdfsefs');

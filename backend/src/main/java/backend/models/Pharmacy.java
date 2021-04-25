@@ -32,6 +32,9 @@ public class Pharmacy {
 	@Column(name = "rating", nullable = false)
 	private double rating;
 	
+	@Column(name = "pharmacist_price", nullable = false)
+	private double pharmacistPrice;
+	
 //	@ManyToMany
 //	@JoinTable(name = "pharmacy_medicines", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
 //	private List<Medicine> medicines = new ArrayList<Medicine>();
@@ -53,13 +56,14 @@ public class Pharmacy {
 		
 	}
 
-	public Pharmacy(Long id, String name, Long addressId, String description, double rating) {
+	public Pharmacy(Long id, String name, Long addressId, String description, double rating, double pharmacistPrice) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.addressId = addressId;
 		this.description = description;
 		this.rating = rating;
+		this.pharmacistPrice = pharmacistPrice;
 	}
 
 	public Long getId() {
@@ -100,6 +104,14 @@ public class Pharmacy {
 
 	public void setRating(double rating) {
 		this.rating = rating;
+	}
+	
+	public double getpharmacistPrice() {
+		return pharmacistPrice;
+	}
+
+	public void setRatinpharmacistPrice(double pharmacistPrice) {
+		this.pharmacistPrice = pharmacistPrice;
 	}
 
 	public List<Dermatologist> getDermatologists() {
@@ -146,7 +158,7 @@ public class Pharmacy {
 	@Override
 	public String toString() {
 		return "Pharmacy [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
-				+ ", rating=" + rating + "]";
+				+ ", rating=" + rating + ", pharmacistPrice=" + pharmacistPrice + "]";
 	}
 	
 	
