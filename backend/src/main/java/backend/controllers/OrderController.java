@@ -37,6 +37,7 @@ public class OrderController {
 	
 	@PostMapping(value = "/create-order", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+		System.out.println(orderDTO);
 		if (orderDTO.getOrderMedicines().size() == 0) {
 			return new ResponseEntity<OrderDTO>(HttpStatus.BAD_REQUEST);
 		}

@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Our public endpoints
         .antMatchers("/users/login-user").permitAll()
         .antMatchers("/").permitAll()
-        .antMatchers("/orders/create-order").permitAll()
+        .antMatchers("/orders/**").permitAll()
         .antMatchers("/medicines/**").authenticated();
         
         http.addFilterBefore(
