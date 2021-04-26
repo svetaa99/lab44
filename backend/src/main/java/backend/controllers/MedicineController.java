@@ -13,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.MedicineDTO;
-import backend.dto.PharmacyDTO;
 import backend.models.Medicine;
-import backend.models.Pharmacy;
 import backend.services.IMedicineService;
-import backend.services.impl.MedicineService;
 
 @RestController
 @RequestMapping(value = "medicines")

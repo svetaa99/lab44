@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,7 @@ public class PatientController {
 		return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
 	}
 	@GetMapping("/{name}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST', 'LAB_ADMIN', 'HEAD_ADMIN')")
 	public ResponseEntity<String> getPatientsByName(@PathVariable String name){
 		System.out.println("Returning patients searched by name...");
 		List<Patient> retVal = patientService.findAllByName(name);
@@ -61,8 +63,8 @@ public class PatientController {
 		return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
 	}
 	@GetMapping("/{param}/{order}/{searchParam}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST', 'LAB_ADMIN', 'HEAD_ADMIN')")
 	public ResponseEntity<String> getPatientsSorted(@PathVariable String param, @PathVariable int order, @PathVariable String searchParam){
-		System.out.println("IDE GAS");
 		List<Patient> patients = new ArrayList<Patient>();
 		List<PatientDTO> patientsDTO = new ArrayList<PatientDTO>();
 		
@@ -72,7 +74,6 @@ public class PatientController {
 			dateComparator.setOrder(order);
 			patientsDTO = turnPatientsToDTO(patients);
 			patientsDTO.sort(dateComparator);
-			System.out.println("sortirano po datumu po orderu : " + dateComparator.getOrder());
 		}
 		
 		else if(searchParam.equals("no-search")) {

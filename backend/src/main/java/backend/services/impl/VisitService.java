@@ -25,7 +25,7 @@ public class VisitService implements IService<Visit>{
 
 	@Override
 	public Visit findById(Long id) {
-		return (Visit) visitRepository.findByIdEquals(id);
+		return visitRepository.findById(id).orElse(null);
 	}
 	
 	public List<Visit> findByDoctorIdEquals(Long doctorId){

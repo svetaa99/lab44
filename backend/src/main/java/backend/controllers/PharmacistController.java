@@ -1,7 +1,6 @@
 package backend.controllers;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.dto.PharmacistDTO;
 import backend.models.Pharmacist;
 import backend.models.Pharmacy;
-import backend.services.IPharmacistService;
 import backend.services.IPharmacyService;
 import backend.services.impl.PharmacistService;
 

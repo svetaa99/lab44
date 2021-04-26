@@ -40,23 +40,21 @@ public class DoctorTermsController {
 	private static Gson g = new Gson();
 	
 	@GetMapping("/definedterms")
-	@PreAuthorize("hasRole('DERMATOLOGIST')")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> getDefinedTerms(){
 		System.out.println("Returning predefined terms for doctor in current session...");
-		//extract real doctors id -- now hardcoded on doctorId = 1
-		//extract real pharmacy id -- now hardcoded on pharmacyId = 1, might send this as method param?
-		Long doctorId = (long) 1;
-		//Long pharmacyId = (long) 1;
-		
-		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId);
-		
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
+		Long doctorId = u.getId();
+		//Long pharmacyId = (long) 1;
+
+		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId);
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/createnew", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('DERMATOLOGIST')")
 	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm){
 		System.out.println("We got : " + newTerm + "\n\n from client...");
 		
@@ -78,9 +76,12 @@ public class DoctorTermsController {
 	}
 	
 	@PostMapping(value = "/search-date-time", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE )
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> searchDateTime(@RequestBody SearchDateTime newDateTime){
-		//get doctors id from session for now hardcode to 1
-		Long doctorId = (long) 1;
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		Long doctorId = u.getId();
+		
 		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId);
 		
 		System.out.println("Termina ukupno: " + retVal.size());

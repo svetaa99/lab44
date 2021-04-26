@@ -35,7 +35,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="input-group">
-                    <input type="search" class="form-control rounded" placeholder="Date" aria-label="Search"
+                    <input type="search" class="form-control rounded" placeholder="YYYY-MM-dd" aria-label="Search"
                         aria-describedby="search-addon" v-model="searchDateTimeObject.searchDate"/>
                     <input type="search" class="form-control rounded" placeholder="Time" aria-label="Search"
                         aria-describedby="search-addon" v-model="searchDateTimeObject.searchTime"/>

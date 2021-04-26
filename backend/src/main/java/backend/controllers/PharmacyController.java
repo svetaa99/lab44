@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.PharmacyDTO;
@@ -27,9 +26,6 @@ import backend.models.PharmacyMedicines;
 import backend.services.IMedicineService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
-import backend.services.impl.MedicineService;
-import backend.services.impl.PharmacyMedicinesService;
-import backend.services.impl.PharmacyService;
 
 @RestController
 @RequestMapping(value = "pharmacies")

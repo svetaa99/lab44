@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +36,12 @@ import backend.dto.VisitDTO;
 import backend.models.Doctor;
 import backend.models.Patient;
 import backend.models.Report;
+import backend.models.User;
 import backend.models.Visit;
+import backend.services.impl.DoctorService;
 import backend.services.impl.PatientService;
+import backend.services.impl.ReportService;
+import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
 
 @RestController
@@ -49,9 +55,19 @@ public class VisitController {
 	@Autowired
 	private PatientService patientService;
 	
+	@Autowired
+	private ReportService reportService;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private DoctorService doctorService;
+	
 	private static Gson g = new Gson();
 	
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> makeAppointment(@RequestBody Visit newReservation){
 		visitService.save(newReservation);
 		
@@ -59,29 +75,36 @@ public class VisitController {
 			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
 		
 		String patientsEmail = "filip.kresa@gmail.com"; //hardcoded for now, once we have user in session we will have his e-mail
-		notifyPatientViaEmail(patientsEmail);
+		Long doctorId = newReservation.getDoctorId();
+		LocalDateTime ldt = newReservation.getStart();
+		
+		notifyPatientViaEmail(patientsEmail, doctorId, ldt);
 		
 		return new ResponseEntity<String>(g.toJson(newReservation), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/report-visit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> saveAppointment(@RequestBody Report newReport){
-		
+		reportService.save(newReport);
 		return new ResponseEntity<String>("Report saved!", HttpStatus.OK);
 	}
 
 	@GetMapping("/doctor/{doctorId}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> getAppointmentsForDoctor(@PathVariable Long doctorId){
 		List<Visit> appointments = visitService.findByDoctorIdEquals(doctorId);
 		return new ResponseEntity<String>(g.toJson(appointments), HttpStatus.OK);
 	}
 	@GetMapping("/patient/{patientId}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> getAppointmentsForPatient(@PathVariable Long patientId){
 		List<Visit> appointments = visitService.findByPatientIdEquals(patientId);
 		return new ResponseEntity<String>(g.toJson(appointments), HttpStatus.OK);
 	}
 	
 	@GetMapping("/td/{doctorId}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<List<VisitDTO>> getDoctorsAppointmentsToDo(@PathVariable Long doctorId){
 		
 		List<Visit> visits = visitService.findByDoctorIdFuture(doctorId);
@@ -116,7 +139,7 @@ public class VisitController {
 		return true;
 	}
 	
-	public void notifyPatientViaEmail(String patientsEmail) {
+	public void notifyPatientViaEmail(String patientsEmail, Long doctorId, LocalDateTime startTime) {
 		final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 		 // Get a Properties object
 		    Properties props = System.getProperties();
@@ -144,9 +167,20 @@ public class VisitController {
 		   // -- Set the FROM and TO fields --
 		      msg.setFrom(new InternetAddress("labonibato44@gmail.com"));
 		      msg.setRecipients(Message.RecipientType.TO, 
-		                        InternetAddress.parse(patientsEmail,false));
+		                        InternetAddress.parse(patientsEmail, false));
 		      msg.setSubject("Doctors appointment");
-		      msg.setText("Dear NAME,\nYour doctor DOCTORSNAME has appointed new treatment on DATETIME.\nSincerely yours,\nLABONI44.");
+		      
+		      String token = SecurityContextHolder.getContext().getAuthentication().getName();
+			  User u = userService.findUserByEmail(token);
+		      
+			  String NAME = u.getName();
+			  
+			  Doctor doc = doctorService.findById(doctorId);
+			  String DOCTORS_NAME = doc.getName();
+			  
+			  String DATE_TIME = startTime.toString();
+			  
+		      msg.setText("Dear " + NAME + ",\nYour doctor " + DOCTORS_NAME + " has appointed new treatment on " + DATE_TIME + ".\nSincerely yours,\nLABONI44.");
 		      msg.setSentDate(new Date());
 		      Transport.send(msg);
 		      System.out.println("Message sent.");

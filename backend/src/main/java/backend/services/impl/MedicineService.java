@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import backend.models.Medicine;
 import backend.repositories.MedicineRepository;
 import backend.services.IMedicineService;
-import backend.services.IService;
 
 @Service
 public class MedicineService implements IMedicineService{

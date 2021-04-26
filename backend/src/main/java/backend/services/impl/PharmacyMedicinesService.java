@@ -6,13 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import backend.dto.MedicineDTO;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.repositories.PharmacyMedicinesRepository;
 import backend.services.IPharmacyMedicinesService;
-import backend.services.IService;
 
 @Service
 public class PharmacyMedicinesService implements IPharmacyMedicinesService {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,10 +22,12 @@ import backend.models.MedicineReportDTO;
 import backend.models.Patient;
 import backend.models.PharmacyMedicines;
 import backend.models.Report;
+import backend.models.Visit;
 import backend.services.IMedicineService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.impl.PatientService;
 import backend.services.impl.ReportService;
+import backend.services.impl.VisitService;
 
 
 @RestController
@@ -43,10 +46,14 @@ public class ReportController {
 	
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private VisitService visitService;
 
 	//private static Gson g = new Gson();
 	
 	@PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<List<MedicineReportDTO>> saveAppointment(@RequestBody Report newReport){
 		
 		//PharmacyMedicines pm = new PharmacyMedicines(); 
@@ -54,13 +61,15 @@ public class ReportController {
 		// One that is changed in the model it will not be hardcoded to 1
 		List<MedicineReportDTO> medDTO = new ArrayList<MedicineReportDTO>();
 		
+		Visit visitReport = visitService.findById(newReport.getVisitId());
+		
 		for (MedicineDays medDays : newReport.getMedicineDays()) {
 			MedicineReportDTO newMedRepDTO = new MedicineReportDTO(medicineService.findById(medDays.getmedicine()));
 			
-			Long pharmacyId = 1l;
+			Long pharmacyId = 1l; //visitReport.getPharmacyId();
 			newMedRepDTO.setAvailable(checkAvailable(pharmacyId, medDays.getmedicine())); //if not send notification to lab admin!
 			
-			Long patientId = 1l;
+			Long patientId = visitReport.getPatientId();
 			newMedRepDTO.setAllergic(checkAllergic(patientId, medDays.getmedicine())); //if true send ALTERNATIVES? to doctor
 			
 			medDTO.add(newMedRepDTO);
