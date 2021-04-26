@@ -64,6 +64,7 @@
 
 <script>
 import axios from 'axios';
+
 export default {
   data: () => {
     return {
@@ -71,6 +72,7 @@ export default {
       password: "",
       loginObject: null,
       hasLoginError: false,
+      jwt: null,
     };
   },
   methods: {
@@ -80,18 +82,29 @@ export default {
       console.log(loginData);
       axios
       .post('http://localhost:8000/users/login-user', loginData)
-      .then(response => {this.loginObject = response.data; this.printInfo()});
+      .then(response => {this.jwt = response.data; this.printInfo()});
     },
     printInfo()
     {
-      console.log(this.loginObject);
-      if(this.loginObject.accessToken == ""){
+      console.log(this.jwt);
+      if(this.jwt.accessToken == ""){
         alert("Bad credentials!");
       }
       else{
         alert("Successfully logged in!");
+        this.saveUserToLocalStorage(this.jwt); //save JWT and EXPIRATION
+        this.addAxiosInterceptors(axios);
         window.location.href="http://localhost:8080/";
       }
+    },
+    saveUserToLocalStorage(jwt) {
+      localStorage.setItem('jwt', JSON.stringify(jwt));
+    },
+    addAxiosInterceptors(axios) {
+        axios.interceptors.request.use(request => {
+        request.headers['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).accessToken;
+        return request;
+      });
     }
   },
 };

@@ -1,10 +1,21 @@
 package backend.models;
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
 @MappedSuperclass
-public class User {
+public class User implements UserDetails {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1145944638748587516L;
 
 	@Column(name="name", unique=false, nullable=false)
 	protected String name;
@@ -80,6 +91,41 @@ public class User {
 		return "User [name=" + name + ", surname=" + surname + ", email=" + email + ", password=" + password
 				+ ", addressId=" + addressId + ", phoneNum=" + phoneNum + "]";
 	}
-	
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 	
 }

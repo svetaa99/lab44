@@ -70,3 +70,17 @@ insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values 
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (3, 2, '10:00:00', '16:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (4, 2, '16:00:00', '22:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 2, '18:00:00', '20:00:00');
+
+insert into ROLE (name) values ('PATIENT');
+insert into ROLE (name) values ('DERMATOLOGIST');
+insert into ROLE (name) values ('PHARMACIST');
+insert into ROLE (name) values ('LAB_ADMIN');
+insert into ROLE (name) values ('HEAD_ADMIN');
+
+insert into user_role (user_id, role_id) VALUES (1, 2);
+insert into user_role (user_id, role_id) VALUES (2, 2);
+insert into user_role (user_id, role_id) VALUES (3, 2);
+insert into user_role (user_id, role_id) VALUES (1, 1);
+insert into user_role (user_id, role_id) VALUES (1, 1);
+insert into user_role (user_id, role_id) VALUES (2, 1);
+insert into user_role (user_id, role_id) VALUES (3, 1);

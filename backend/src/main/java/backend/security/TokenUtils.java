@@ -4,10 +4,12 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import backend.models.User;
+import backend.services.impl.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -32,6 +34,9 @@ public class TokenUtils {
 	private String AUTH_HEADER;
 	
 	private static final String AUDIENCE_WEB = "web";
+	
+	@Autowired
+	private UserService userService;
 
 	// Algoritam za potpisivanje JWT
 	private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
@@ -175,6 +180,11 @@ public class TokenUtils {
 	
 	public String getAuthHeaderFromHeader(HttpServletRequest request) {
 		return request.getHeader(AUTH_HEADER);
+	}
+
+	public boolean validate(String token) {
+		String uname = getUsernameFromToken(token);
+		return (uname != null && userService.findUserByEmail(uname) != null);
 	}
 	
 }
