@@ -17,7 +17,7 @@
               id="firstName"
               placeholder=""
               value=""
-              v-model="name"
+              v-model="user.name"
               required
             />
             <div v-if="submitted && !nameValid" class="text-danger">
@@ -45,23 +45,7 @@
         <br />
 
         <div class="row g-3">
-          <div class="col-6">
-            <label for="firstName" class="form-label">Username</label>
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              placeholder=""
-              value=""
-              v-model="username"
-              required
-            />
-            <div v-if="submitted && !usernameValid" class="text-danger">
-              Please insert a valid username.
-            </div>
-          </div>
-
-          <div class="col-6">
+          <!-- <div class="col-6">
             <label for="birthday" class="form-label">Birthday</label>
             <vuejs-datepicker
               input-class="form-control"
@@ -70,10 +54,25 @@
             <div v-if="submitted && !dateOfBirthValid" class="text-danger">
               Please insert a valid birthday.
             </div>
-          </div>
+          </div> -->
         </div>
         <br />
         <div class="row g-3">
+          <div class="col-6">
+            <label for="phoneNumber" class="form-label">Phone number</label>
+            <input
+              type="phoneNumber"
+              class="form-control"
+              id="phoneNumber"
+              placeholder=""
+              value=""
+              v-model="phoneNumber"
+              required
+            />
+            <div v-if="submitted && !phoneNumberValid" class="text-danger">
+              Please insert a valid phone number.
+            </div>
+          </div>
           <div class="col-6">
             <label for="firstName" class="form-label">Password</label>
             <input
@@ -90,7 +89,7 @@
             </div>
           </div>
 
-          <div class="col-6">
+          <!-- <div class="col-6">
             <label for="lastName" class="form-label">Confirm password</label>
             <input
               type="password"
@@ -104,42 +103,11 @@
             <div v-if="!passwordsMatch" class="text-danger">
               Password did not match.
             </div>
-          </div>
+          </div> -->
         </div>
         <br />
-
-        <div class="row g-3">
-          <div class="col-12">
-            <label for="gender" class="form-label">Gender</label>
-            <div>
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  v-model="gender"
-                  value="Male"
-                />
-                <label class="form-check-label">Male</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  v-model="gender"
-                  value="Female"
-                />
-                <label class="form-check-label">Female</label>
-              </div>
-            </div>
-
-            <div v-if="submitted && !genderValid" class="text-danger">
-              Please select gender.
-            </div>
-          </div>
-        </div>
-
         <hr class="mb-4" />
-        <button class="btn btn-primary btn-block" @click="saveChanges($event)">
+        <button class="btn btn-primary btn-block" @click="update()">
           Save changes
         </button>
       </form>
@@ -148,23 +116,35 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { config } from '@/config.js';
+const API_URL = config.API_URL
 export default {
-  components: {
-    // vuejsDatepicker,
-  },
-  props: ["edit"],
+  props: ["edit", "user"],
   data: () => {
     return {
       name: "",
       surname: "",
-      username: "",
       password: "",
-    //   dateOfBirth: "",
-      gender: "",
-      confirmPassword: "",
+      phoneNumber: "",
       submitted: false,
     };
   },
+  mounted() {
+    if(this.edit) {
+      this.name = this.user.name;
+      this.surname = this.user.surname;
+      this.password = this.user.password;
+      this.phoneNumber = this.user.phoneNumber;
+    }
+  },
+  methods: {
+    update() {
+      axios
+      .post(`${API_URL}/users/update-user`, this.user)
+      .then(response => {this.user = response.data; this.name = this.user.name; console.log(this.user)})
+    }
+  }
 };
 </script>
 

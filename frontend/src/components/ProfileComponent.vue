@@ -3,7 +3,7 @@
     <div class="main-body">
       <br /><br />
 
-      <edit-profile-modal-component></edit-profile-modal-component>
+      <edit-profile-modal-component :user="user"></edit-profile-modal-component>
 
       <div class="row gutters-sm">
         <div class="col-md-4 mb-3">
@@ -66,13 +66,6 @@
                   <h6 class="mb-0">Phone number</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">{{user.phoneNum}}</div>
-              </div>
-              <hr />
-              <div class="row">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Address</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">{{user.address}}</div>
               </div>
             </div>
           </div>
@@ -142,7 +135,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`${API_URL}/users/1`)
+      .get(`${API_URL}/users/user`)
       .then(response => {this.user = response.data; console.log(this.user)})
   }
 };

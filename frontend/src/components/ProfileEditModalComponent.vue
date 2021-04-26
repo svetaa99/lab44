@@ -21,7 +21,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <registration-form :edit="true"></registration-form>
+          <registration-form :edit="true" :user="user"></registration-form>
         </div>
       </div>
     </div>
@@ -31,6 +31,7 @@
 <script>
 import RegistrationForm from '@/components/RegistrationForm.vue'
 export default {
+  props: ["user"],
   components: {
     "registration-form": RegistrationForm,
   },
