@@ -84,3 +84,10 @@ insert into user_role (user_id, role_id) VALUES (1, 1);
 insert into user_role (user_id, role_id) VALUES (2, 1);
 insert into user_role (user_id, role_id) VALUES (3, 1);
 insert into user_role (user_id, role_id) VALUES (5, 2);
+
+insert into orders (deadline) values (1619560800000);
+insert into orders (deadline) values (1620165600000);
+
+insert into order_medicines (order_id, medicine_id, quantity) values (1, 1, 5);
+insert into order_medicines (order_id, medicine_id, quantity) values (1, 2, 3);
+insert into order_medicines (order_id, medicine_id, quantity) values (2, 3, 1);

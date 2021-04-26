@@ -18,12 +18,8 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany
-	@Column
-	private List<Medicine> medicines;
-	
-	@Column
-	private int quantity;
+	@OneToMany(mappedBy = "order")
+	private List<OrderMedicines> orders;
 	
 	@Column
 	private long deadline;
@@ -32,11 +28,9 @@ public class Order {
 		
 	}
 
-	public Order(Long id, List<Medicine> medicines, int quantity, long deadline) {
+	public Order(Long id, long deadline) {
 		super();
 		this.id = id;
-		this.medicines = medicines;
-		this.quantity = quantity;
 		this.deadline = deadline;
 	}
 
@@ -46,22 +40,6 @@ public class Order {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public List<Medicine> getMedicines() {
-		return medicines;
-	}
-
-	public void setMedicines(List<Medicine> medicines) {
-		this.medicines = medicines;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	public long getDeadline() {
