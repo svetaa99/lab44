@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import backend.models.Role;
 import backend.services.impl.UserService;
 
 @Component
@@ -56,6 +57,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String tokenStr = jwtTokenUtil.getToken(request);
         UserDetails userDetails = userRepo
             .findUserByEmail(jwtTokenUtil.getUsernameFromToken(tokenStr));
+        System.out.println("Kojeg korisnika nadje: " + userDetails.getUsername());
 
         UsernamePasswordAuthenticationToken
             authentication = new UsernamePasswordAuthenticationToken(
@@ -63,12 +65,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 userDetails == null ?
                     List.of() : userDetails.getAuthorities()
             );
-
+        
+        System.out.println("ROLE KORISNIKA : " + userDetails.getAuthorities());
+        
         authentication.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println("\n\nAUTENTIFIKOVAN? : " + SecurityContextHolder.getContext().getAuthentication().isAuthenticated() + "\n\nKOOO: " +  SecurityContextHolder.getContext().getAuthentication().getName() + "\n" +
+        		SecurityContextHolder.getContext().getAuthentication().toString());
         chain.doFilter(request, response);
     }
 

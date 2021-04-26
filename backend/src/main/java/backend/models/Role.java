@@ -33,7 +33,7 @@ public class Role implements GrantedAuthority {
 	@Override
 	public String getAuthority() {
 		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	public Long getId() {
@@ -51,4 +51,10 @@ public class Role implements GrantedAuthority {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+	
 }
