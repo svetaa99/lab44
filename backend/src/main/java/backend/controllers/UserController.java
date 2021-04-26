@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 
 import backend.dto.UserTokenState;
 import backend.models.Login;
+import backend.models.Role;
 import backend.models.User;
 import backend.security.TokenUtils;
 import backend.services.impl.UserService;
@@ -39,15 +40,17 @@ public class UserController {
 		return us.findAll();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@PostMapping(value="/login-user", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserTokenState> login(@RequestBody Login loginData) {
 		String jwt = "";
 		if (authenticate(loginData)) {
 			jwt = tokenUtils.generateToken(loginData.getEmail());
-			int expiresIn = tokenUtils.getExpiredIn();
-			return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn), HttpStatus.OK);
+			Long expiresIn = (long) tokenUtils.getExpiredIn();
+			List<Role> role = (List<Role>) us.findUserByEmail(loginData.getEmail()).getAuthorities();
+			return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, expiresIn, role), HttpStatus.OK);
 		}
-		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, 0), HttpStatus.OK);
+		return new ResponseEntity<UserTokenState>(new UserTokenState(jwt, 18000), HttpStatus.OK);
 	}
 	
 	private boolean authenticate(Login loginData) {

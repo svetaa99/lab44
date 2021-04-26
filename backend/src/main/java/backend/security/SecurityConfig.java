@@ -48,8 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         http.authorizeRequests()
         // Our public endpoints
-        .antMatchers("/users/login-user").permitAll()
         .antMatchers("/").permitAll()
+        .antMatchers("/users/**").permitAll()
         .antMatchers("/medicines/**").authenticated();
         
         http.addFilterBefore(

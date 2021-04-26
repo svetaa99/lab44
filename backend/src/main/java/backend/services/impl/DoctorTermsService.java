@@ -48,5 +48,4 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 		return workHoursRepository.findByDoctorIdAndPharmacyId(doctorId, pharmacyId);
 	}
 	
-	
 }

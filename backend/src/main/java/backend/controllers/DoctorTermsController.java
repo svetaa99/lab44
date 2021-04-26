@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +21,10 @@ import com.google.gson.Gson;
 
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
+import backend.models.User;
 import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
+import backend.services.impl.UserService;
 
 @RestController
 @RequestMapping(value = "doctorterms")
@@ -30,6 +33,10 @@ public class DoctorTermsController {
 
 	@Autowired
 	private DoctorTermsService doctorTermsService;
+	
+	@Autowired
+	private UserService userService;
+	
 	private static Gson g = new Gson();
 	
 	@GetMapping("/definedterms")
@@ -42,6 +49,9 @@ public class DoctorTermsController {
 		//Long pharmacyId = (long) 1;
 		
 		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId);
+		
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
@@ -87,7 +97,7 @@ public class DoctorTermsController {
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
 	
-	private  boolean checkIfTakenTerm(DoctorTerms newTerm) {
+	private boolean checkIfTakenTerm(DoctorTerms newTerm) {
 		List<DoctorTerms> doctorsTakenTerms = doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId());
 		LocalDateTime startTime = newTerm.getStart();
 		LocalDateTime finishTime = newTerm.getFinish();

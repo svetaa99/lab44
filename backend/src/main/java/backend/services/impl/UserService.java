@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import backend.models.User;
 import backend.repositories.UserRepository;
+import backend.security.TokenUtils;
 import backend.services.IService;
 
 @Service
@@ -14,6 +15,9 @@ public class UserService implements IService<User>{
 	
 	@Autowired 
 	private UserRepository userService;
+	
+	@Autowired
+	private TokenUtils tokenUtils;
 	
 	@Override
 	public List<User> findAll() {
@@ -29,6 +33,13 @@ public class UserService implements IService<User>{
 	public User findUserByEmail(String email){
 		return userService.findUserByEmailEquals(email).get(0);
 	}
+	
+	public User findUserByToken(String token) {
+		if(userService.findUserByEmailEquals(tokenUtils.getUsernameFromToken(token)).size() == 0)
+			return null;
+		return userService.findUserByEmailEquals(tokenUtils.getUsernameFromToken(token)).get(0);
+	}
+	
 	@Override
 	public User findById(Long id) {
 		return null;

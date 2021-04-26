@@ -92,7 +92,7 @@ public class TokenUtils {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			username = claims.getSubject();
 		} catch (ExpiredJwtException ex) {
-			throw ex;
+			username = null;
 		} catch (Exception e) {
 			username = null;
 		}
@@ -106,7 +106,8 @@ public class TokenUtils {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			issueAt = claims.getIssuedAt();
 		} catch (ExpiredJwtException ex) {
-			throw ex;
+			System.out.println("Token expired");
+			issueAt = null;
 		} catch (Exception e) {
 			issueAt = null;
 		}
@@ -119,7 +120,8 @@ public class TokenUtils {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			audience = claims.getAudience();
 		} catch (ExpiredJwtException ex) {
-			throw ex;
+			System.out.println("Token expired");
+			audience = null;
 		} catch (Exception e) {
 			audience = null;
 		}
@@ -132,7 +134,8 @@ public class TokenUtils {
 			final Claims claims = this.getAllClaimsFromToken(token);
 			expiration = claims.getExpiration();
 		} catch (ExpiredJwtException ex) {
-			throw ex;
+			System.out.println("Token expired");
+			expiration = null;
 		} catch (Exception e) {
 			expiration = null;
 		}
@@ -154,7 +157,8 @@ public class TokenUtils {
 					.parseClaimsJws(token)
 					.getBody();
 		} catch (ExpiredJwtException ex) {
-			throw ex;
+			System.out.println("Token expired");
+			claims = null;
 		} catch (Exception e) {
 			claims = null;
 		}
