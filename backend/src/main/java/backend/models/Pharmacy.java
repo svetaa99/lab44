@@ -46,7 +46,7 @@ public class Pharmacy {
 	@JoinTable(name="pharmacy_dermatologists", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id"))
 	private List<Dermatologist> dermatologists = new ArrayList<Dermatologist>();
 	
-	@OneToMany(mappedBy="pharmacy")
+	@OneToMany
 	private List<Pharmacist> pharmacists = new ArrayList<Pharmacist>();
 	
 	@OneToMany(mappedBy = "pharmacy")
@@ -122,13 +122,13 @@ public class Pharmacy {
 		this.dermatologists = dermatologists;
 	}
 
-//	public List<Pharmacist> getPharmacists() {
-//		return pharmacists;
-//	}
-//
-//	public void setPharmacists(List<Pharmacist> pharmacists) {
-//		this.pharmacists = pharmacists;
-//	}
+	public List<Pharmacist> getPharmacists() {
+		return pharmacists;
+	}
+
+	public void setPharmacists(List<Pharmacist> pharmacists) {
+		this.pharmacists = pharmacists;
+	}
 
 	@Override
 	public int hashCode() {
