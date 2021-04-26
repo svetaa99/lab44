@@ -156,7 +156,10 @@ export default {
         var newTerm = {doctorId: 1, pharmacyId: 1, start: (this.newStartDate + "T" + this.newStartTime), finish: (this.newStartDate + "T" + this.newFinishTime)}  //for now values for doctor id and pharmacy id will be hardcoded, once login is implemented these information will be extracted from session
         axios
         .post('http://localhost:8000/doctorterms/createnew', newTerm)
-        .then(response => {response.data == "Taken term" ? alert("Term is taken!") : this.freeTerms = response.data})
+        .then(response => {this.handleResponse(response.data)})
+      },
+      handleResponse: function(respData){
+        respData == "Taken term" ? alert("Term is taken!") : respData == "Not in your working hours" ? alert("Not in your working hours") : this.freeTerms = respData;
       },
       makeReservation: function(){
         //dialog for are you sure first - once clicked yes action preforms

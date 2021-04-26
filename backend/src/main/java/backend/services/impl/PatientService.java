@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import backend.models.Patient;
 import backend.repositories.PatientRepository;
 import backend.services.IPatientService;
-import backend.services.IService;
 
 @Service
 public class PatientService implements IPatientService{ 
