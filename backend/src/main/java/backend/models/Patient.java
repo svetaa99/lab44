@@ -5,22 +5,21 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name="patient")
 public class Patient extends User{
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8762993377530933263L;
 
 	@Column(name="points", unique=false, nullable=true)
 	private double points;
@@ -29,13 +28,12 @@ public class Patient extends User{
 	private String category;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "patients_allergies", joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
 	private List<Medicine> allergies;
 	
-
 	@OneToMany(mappedBy = "patient")
 	private List<Reservation> reservations;
-	
 
 	public Patient() {
 		
@@ -166,11 +164,11 @@ public class Patient extends User{
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Patient [id=" + id + ", name=" + name + ", surname=" + surname + ", address=" + addressId + ", category="
-				+ category + "]";
+		return "Patient [points=" + points + ", category=" + category + ", allergies=" + allergies + ", roles=" + roles
+				+ "]";
 	}
 	
 }

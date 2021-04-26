@@ -1,16 +1,15 @@
 package backend.models;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Doctor extends User{	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6078131993224161011L;
 	
-	@Id
-	private Long id;
 
 	public Long getId() {
 		return id;
@@ -19,5 +18,7 @@ public class Doctor extends User{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	
 	
 }

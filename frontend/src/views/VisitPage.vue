@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 import VisitDetails from '../components/VisitDetails.vue'
 export default {
     name: "employee-visit",

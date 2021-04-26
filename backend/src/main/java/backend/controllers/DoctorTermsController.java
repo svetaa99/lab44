@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.google.gson.Gson;
 
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
+import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
 
 @RestController
@@ -31,6 +33,7 @@ public class DoctorTermsController {
 	private static Gson g = new Gson();
 	
 	@GetMapping("/definedterms")
+	@PreAuthorize("hasRole('DERMATOLOGIST')")
 	public ResponseEntity<String> getDefinedTerms(){
 		System.out.println("Returning predefined terms for doctor in current session...");
 		//extract real doctors id -- now hardcoded on doctorId = 1
@@ -48,8 +51,13 @@ public class DoctorTermsController {
 		System.out.println("We got : " + newTerm + "\n\n from client...");
 		
 		if(checkIfTakenTerm(newTerm)) {
-			doctorTermsService.save(newTerm);
-			System.out.println("Object saved to db...");
+			if(checkIfInWorkingHours(newTerm)) {
+				doctorTermsService.save(newTerm);
+				System.out.println("Object saved to db...");
+		
+			}
+			else
+				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
 		}
 		else {
 			System.out.println("Taken term...");
@@ -90,8 +98,14 @@ public class DoctorTermsController {
 				return false;
 			else if(startTime.isBefore(doctorTerms.getStart()) && finishTime.isAfter(doctorTerms.getFinish()))
 				return false;
-		}
-		//check if working hours match the term 
+		} 
 		return true;
+	}
+	private boolean checkIfInWorkingHours(DoctorTerms newTerm) {
+		for (WorkHours wh : doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacyId())) {
+			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))
+				return true;
+		}
+		return false;
 	}
 }

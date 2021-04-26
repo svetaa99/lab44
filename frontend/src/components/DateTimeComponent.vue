@@ -10,9 +10,9 @@
       >
         Search
       </button>
-      <!-- <button type="button" class="btn btn-primary" v-on:click="sortPrice()">
+      <button type="button" class="btn btn-primary" v-on:click="sortPrice()">
         Sort by price
-      </button> -->
+      </button>
       <button type="button" class="btn btn-primary" v-on:click="sortRating()">
         Sort by rating
       </button>
@@ -42,9 +42,15 @@ export default {
     searchPharmacy: function () {
       console.log("searchPharmacy");
     },
-    // sortPrice: function () {
-    //   this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
-    // },
+    sortPrice: function () {
+      this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      axios
+        .get(`${API_URL}/pharmacies/sort/price/${this.currentSortDir}`)
+        .then((response) => {
+          this.pharmacies = response.data;
+          this.$emit("clicked", this.pharmacies);
+        });
+    },
     sortRating: function () {
       this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       axios

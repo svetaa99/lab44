@@ -6,6 +6,10 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Pharmacist extends Doctor {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6364275306913980399L;
 	@ManyToOne
 	private Pharmacy pharmacy;
 
@@ -20,9 +24,7 @@ public class Pharmacist extends Doctor {
 	@Override
 	public String toString() {
 		return "Pharmacist [pharmacy=" + pharmacy + ", name=" + name + ", surname=" + surname + ", email=" + email
-				+ ", password=" + password + ", addressId=" + addressId + ", phoneNum=" + phoneNum + "]";
+				+ ", roles=" + roles + "]";
 	}
-	
-	
 	
 }

@@ -130,7 +130,7 @@ export default {
                         if(two.allergic || !two.available){
                             // if(one.medicine.id == two.medicine.id)
                             // {
-                            //     this.removeMedicine(one.medicine); // why
+                            //     this.removeMedicine(one.medicine); 
                             // }
                         }
                     }
@@ -167,7 +167,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .form-control {
     width:90%;
     max-width:90%;

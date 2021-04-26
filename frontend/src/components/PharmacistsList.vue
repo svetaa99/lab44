@@ -28,22 +28,11 @@
 </template>
 
 <script>
+
 export default {
-  data() {
-    return {
-      pharmacists: [],
-      pharmacy: {},
-    };
-  },
-  mounted() {
-    const arr = window.location.href.split("/");
-    const id = arr[arr.length - 1];
-
-    console.log(id);
-
-    axios.get(`${API_URL}/pharmacists/${id}`).then((response) => {
-      this.pharmacists = response.data;
-    });
+  name: "pharmacists-list",
+  props: {
+    pharmacists: Array
   },
 };
 </script>

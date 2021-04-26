@@ -16,7 +16,7 @@
 					<td>{{pharmacy.addressId}}</td>
           <td>{{pharmacy.rating}}</td>
           <td v-if="!appointment">{{pharmacy.description}}</td>
-          <td v-if="appointment">{{pharmacy.price}}</td>
+          <td v-if="appointment">{{pharmacy.pharmacistPrice}}</td>
           <td>
             <router-link v-if="!appointment"
               :to="`/pharmacies/${pharmacy.id}`"
