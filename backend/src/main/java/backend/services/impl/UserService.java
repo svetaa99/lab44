@@ -31,6 +31,8 @@ public class UserService implements IService<User>{
 	}
 	
 	public User findUserByEmail(String email){
+		if(userService.findUserByEmailEquals(email).size() == 0)
+			return null;
 		return userService.findUserByEmailEquals(email).get(0);
 	}
 	
@@ -48,7 +50,7 @@ public class UserService implements IService<User>{
 	@Override
 	public User save(User obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return userService.save(obj);
 	}
 
 	@Override

@@ -15,6 +15,8 @@ public class UserDTO {
 		this(u.getName(), u.getSurname(), u.getEmail(), u.getPassword(), u.getAddress(), u.getPhoneNum());
 	}
 	
+	public UserDTO() {}
+	
 	public UserDTO(String name, String surname, String email, String password, long addressId, String phoneNum) {
 		super();
 		this.name = name;
