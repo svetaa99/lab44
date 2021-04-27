@@ -45,7 +45,7 @@
                 ? 'nav-item active'
                 : 'nav-item'
             "
-          >
+          v-if="userRoles.includes(2) || userRoles.includes(3) || userRoles.includes(4)">
             <router-link to="/employee-patients" class="nav-link"
               >Patients</router-link
             >
@@ -54,7 +54,7 @@
             :class="
               $route.path === '/medicines' ? 'nav-item active' : 'nav-item'
             "
-          >
+          v-if="userRoles.includes(1) || userRoles.includes(2) || userRoles.includes(3) || userRoles.includes(4)">
             <router-link to="/medicines" class="nav-link"
               >Medicines</router-link
             >
@@ -65,7 +65,7 @@
                 ? 'nav-item active'
                 : 'nav-item'
             "
-          >
+          v-if="userRoles.includes(1)">
             <router-link to="/patient-pharmacist-appointment" class="nav-link"
               >Pharmacist appointment</router-link
             >
@@ -76,7 +76,7 @@
                 ? 'nav-item active'
                 : 'nav-item'
             "
-          >
+          v-if="userRoles.includes(2) || userRoles.includes(3)">
             <router-link to="/employee-appointments" class="nav-link"
               >Appointments</router-link
             >
@@ -96,17 +96,36 @@
       </div>
 
       <router-link to="/login" class="btn btn-custom"
-        >Login</router-link
-      >
-      <!-- <button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
+        >Login</router-link 
+      > <!--v-if="!isLoggedIn" -->
+      <!--<button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
         Logout
-      </button> -->
+      </button>-->
     </div>
   </nav>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      userRoles: [],
+      isLoggedIn: false,
+    };
+  },
+  methods: {
+    hasAnyRole(listOfRoles){
+
+    }
+  },
+  mounted: function(){
+    var list = JSON.parse(localStorage.getItem('jwt')).roles.map(el => {
+      this.userRoles.push(el.id);
+    });
+    this.isLoggedIn = JSON.parse(localStorage.getItem('jwt')).accessToken != null;
+    console.log(this.userRoles);
+  }
+};
 </script>
 
 <style>
