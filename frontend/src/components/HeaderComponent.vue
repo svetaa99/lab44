@@ -61,17 +61,6 @@
           </li>
           <li
             :class="
-              $route.path === '/employee-reservation'
-                ? 'nav-item active'
-                : 'nav-item'
-            "
-          >
-            <router-link to="/employee-reservation" class="nav-link"
-              >Reservation</router-link
-            >
-          </li>
-          <li
-            :class="
               $route.path === '/patient-pharmacist-appointment'
                 ? 'nav-item active'
                 : 'nav-item'
@@ -79,6 +68,17 @@
           >
             <router-link to="/patient-pharmacist-appointment" class="nav-link"
               >Pharmacist appointment</router-link
+            >
+          </li>
+          <li
+            :class="
+              $route.path === '/employee-appointments'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/employee-appointments" class="nav-link"
+              >Appointments</router-link
             >
           </li>
           <li

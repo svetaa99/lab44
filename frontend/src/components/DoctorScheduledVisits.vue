@@ -20,7 +20,7 @@
                 <td>{{ sVisit.patient.surname }}</td>
                 <td>{{ formatDate(sVisit.start) }}</td>
                 <td>{{ formatTime(sVisit.start) }}</td>
-                <td><a :href="'http://localhost:8080/employee-appointments/' + sVisit.patient.id" v-if="isTime(sVisit)">Start</a></td>
+                <td><a :href="'http://localhost:8080/employee-appointments/' + sVisit.id" v-if="isTime(sVisit)">Start</a></td>
                 </tr>
             </tbody>
         </table>
@@ -36,7 +36,6 @@ export default {
     },
     data(){
         return {
-            doctorId: 1,
         };
     },
     methods: {
@@ -58,7 +57,7 @@ export default {
         }
     },
     mounted: function() {
-        axios.get(`http://localhost:8000/appointments/td/${this.doctorId}`).then((response) => {
+        axios.get(`http://localhost:8000/appointments/td`).then((response) => {
         this.scheduledVisits = response.data;
         console.log(JSON.stringify(this.scheduledVisits));
     });

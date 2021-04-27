@@ -67,14 +67,6 @@ public class UserController {
 		return new ResponseEntity<UserDTO>(uDTO, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/update-user")
-//	public ResponseEntity<UserDTO> updateUserGET() {
-//		String token = SecurityContextHolder.getContext().getAuthentication().getName();
-//		User u = us.findUserByEmail(token);
-//		UserDTO uDTO = new UserDTO(u);
-//		return new ResponseEntity<UserDTO>(uDTO, HttpStatus.OK);
-//	}
-	
 	@PostMapping(value="/update-user", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserDTO> updateUser(@RequestBody User user) {
 		

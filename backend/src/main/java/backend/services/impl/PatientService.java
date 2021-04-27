@@ -32,7 +32,7 @@ public class PatientService implements IPatientService{
 	
 	@Override
 	public Patient findById(Long id) {
-		return patientRepository.findById(id).orElseGet(null);
+		return patientRepository.findById(id).orElse(null);
 	}
 
 	@Override

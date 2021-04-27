@@ -58,7 +58,7 @@ public class ReportController {
 		
 		//PharmacyMedicines pm = new PharmacyMedicines(); 
 		// Visit has no field in which pharmacy it is held
-		// One that is changed in the model it will not be hardcoded to 1
+		// Once that is changed in the model it will not be hardcoded to 1
 		List<MedicineReportDTO> medDTO = new ArrayList<MedicineReportDTO>();
 		
 		Visit visitReport = visitService.findById(newReport.getVisitId());

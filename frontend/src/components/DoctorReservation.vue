@@ -1,16 +1,7 @@
 <template>
     <div class="container">
     <div class="main-body">
-    
-          <!-- Breadcrumb -->
-          <!-- <nav aria-label="breadcrumb" class="main-breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Reservation</li>
-            </ol>
-          </nav> -->
-          <!-- /Breadcrumb -->
-            <!-- User information -->
+          <!-- User information -->
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
               <div class="card">
@@ -19,9 +10,9 @@
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
                         <!-- Once we have information about user in session this information will not be static -->
-                      <h4>Name Surname</h4>
-                      <p class="text-secondary mb-1">filip.kresa@gmail.com</p>
-                      <p class="text-muted font-size-sm">Address</p>
+                      <h4>{{patient.name}} {{patient.surname}}</h4>
+                      <p class="text-secondary mb-1">{{patient.email}}</p>
+                      <p class="text-muted font-size-sm">{{patient.category}}</p>
                       <button class="btn btn-outline-primary">Scheduled terms</button>
                     </div>
                   </div>
@@ -37,7 +28,7 @@
                     <div class="input-group">
                     <input type="search" class="form-control rounded" placeholder="YYYY-MM-dd" aria-label="Search"
                         aria-describedby="search-addon" v-model="searchDateTimeObject.searchDate"/>
-                    <input type="search" class="form-control rounded" placeholder="Time" aria-label="Search"
+                    <input type="search" class="form-control rounded" placeholder="HH:mm" aria-label="Search"
                         aria-describedby="search-addon" v-model="searchDateTimeObject.searchTime"/>
                     <button type="button" class="btn btn-outline-primary" v-on:click="searchDateTime()">Search</button>
                     </div>
@@ -91,9 +82,10 @@ export default {
     },
     data() {
         return {
+            visitId: this.$route.params.id,
             newTermShow: false,
-            patientToken: '',  //this data will be hardcoded for now because there is no authentification ATM
-            doctorToken: '',
+            patient: null,  //this data will be hardcoded for now because there is no authentification ATM
+            doctor: null,
             pharmacyId: '',
             newStartDate: '',
             newStartTime: '', //these attributes will be selected by doctor
@@ -163,7 +155,7 @@ export default {
       },
       makeReservation: function(){
         //dialog for are you sure first - once clicked yes action preforms
-        var newReservation = {patientId: 1, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish)}
+        var newReservation = {patientId: this.patient.id, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish)}
         axios
         .post('http://localhost:8000/appointments/make-appointment', newReservation)
         .then(response => {response.data === "Patient unavailable" ? alert("Patient is unavailable in given term!") : alert("New appointment added to work calendar!");})
@@ -176,10 +168,12 @@ export default {
       }
     },
     mounted: function(){
-        //TO DO: axios call to get all free terms for current DOCTOR
         axios 
         .get('http://localhost:8000/doctorterms/definedterms') 
-        .then(response => {this.freeTerms = response.data; console.log(this.freeTerms)}) 
+        .then(response => {this.freeTerms = response.data; console.log(this.freeTerms)});
+        axios
+        .get(`http://localhost:8000/appointments/get-user/${this.visitId}`)
+        .then(response => {this.patient = response.data; console.log(this.patient)});
     }
 
 }

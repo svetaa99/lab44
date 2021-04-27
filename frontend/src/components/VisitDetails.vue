@@ -102,7 +102,6 @@ export default {
             .then((response) => {
                 console.log(response.data);
                 this.medicineDTO = response.data;
-                this.saved = true;
                 this.displayInfo();
             });
         },
@@ -120,6 +119,7 @@ export default {
                 }
             }
             if(!flag){
+                this.saved = true;
                 alert("Report saved!");
             }
             else{
@@ -139,8 +139,13 @@ export default {
             }
         },
         redirectToReservation: function(){
-            // Are you sure you want to redirect without saving?
-            window.location.href="http://localhost:8080/employee-reservation";
+            if(!this.saved){
+                if (confirm('Are you sure you want to leave page without saving?')) {
+                    window.location.href=`http://localhost:8080/employee-reservation/${this.visitId}`;
+                }
+            }
+            else
+                window.location.href=`http://localhost:8080/employee-reservation/${this.visitId}`;
         },
         appendMedicine: function(medicine){
             var flag = false;
@@ -163,6 +168,7 @@ export default {
         }
     },
     mounted: function(){
+
     }
 }
 </script>

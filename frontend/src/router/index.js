@@ -52,7 +52,7 @@ const routes = [
     component: Medicines
   },
   {
-    path: '/employee-reservation',
+    path: '/employee-reservation/:id',
     name: 'Reservation',
     component: Reservation
   },

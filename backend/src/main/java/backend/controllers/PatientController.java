@@ -3,6 +3,7 @@ package backend.controllers;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,12 +77,15 @@ public class PatientController {
 			patientsDTO.sort(dateComparator);
 		}
 		
-		else if(searchParam.equals("no-search")) {
+		else {
 			patients = patientService.findAllSorted(param, order);
 			patientsDTO = turnPatientsToDTO(patients);
 		}
-		System.out.println("Sorting by: " + param + "\nOrder: " + (order) + "\nCurrent search res for: " + searchParam);
-		return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
+		if(searchParam.equals("no-search") || searchParam.equals(""))
+			return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
+
+		return new ResponseEntity<String>(g.toJson(patientsDTO
+				.stream().filter(p -> p.getName().equalsIgnoreCase(searchParam)).collect(Collectors.toList())), HttpStatus.OK);
 	}
 	
 	public List<PatientDTO> turnPatientsToDTO(List<Patient> patients){

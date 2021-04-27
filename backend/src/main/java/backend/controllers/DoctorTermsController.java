@@ -54,7 +54,7 @@ public class DoctorTermsController {
 	}
 	
 	@PostMapping(value = "/createnew", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('DERMATOLOGIST')")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm){
 		System.out.println("We got : " + newTerm + "\n\n from client...");
 		
@@ -78,6 +78,7 @@ public class DoctorTermsController {
 	@PostMapping(value = "/search-date-time", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE )
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> searchDateTime(@RequestBody SearchDateTime newDateTime){
+
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		Long doctorId = u.getId();

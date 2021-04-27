@@ -16,15 +16,11 @@ import backend.dto.PharmacistDTO;
 import backend.models.Pharmacist;
 import backend.models.Pharmacy;
 import backend.services.IPharmacyService;
-import backend.services.impl.PharmacistService;
 
 @RestController
 @RequestMapping(value = "pharmacist")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PharmacistController {
-
-	@Autowired
-	private PharmacistService pharmacistService;
 	
 	@Autowired
 	private IPharmacyService pharmacyService;

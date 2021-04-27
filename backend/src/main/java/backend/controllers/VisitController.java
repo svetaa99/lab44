@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
 import backend.models.Doctor;
 import backend.models.Patient;
@@ -69,16 +70,22 @@ public class VisitController {
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> makeAppointment(@RequestBody Visit newReservation){
-		visitService.save(newReservation);
 		
 		if(!checkTermTaken(newReservation))
 			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
 		
-		String patientsEmail = "filip.kresa@gmail.com"; //hardcoded for now, once we have user in session we will have his e-mail
-		Long doctorId = newReservation.getDoctorId();
+		visitService.save(newReservation);
+		
+		Patient p = patientService.findById(newReservation.getPatientId());
+		System.out.println("Pacijent null? - " + p + "\nId: " + newReservation.getPatientId() + "\n");
+		String patientsEmail = p.getEmail();
+		
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		Long doctorId = u.getId();
 		LocalDateTime ldt = newReservation.getStart();
 		
-		notifyPatientViaEmail(patientsEmail, doctorId, ldt);
+		notifyPatientViaEmail(patientsEmail, doctorId, ldt, p.getName());
 		
 		return new ResponseEntity<String>(g.toJson(newReservation), HttpStatus.OK);
 	}
@@ -103,18 +110,20 @@ public class VisitController {
 		return new ResponseEntity<String>(g.toJson(appointments), HttpStatus.OK);
 	}
 	
-	@GetMapping("/td/{doctorId}")
+	@GetMapping("/td")
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
-	public ResponseEntity<List<VisitDTO>> getDoctorsAppointmentsToDo(@PathVariable Long doctorId){
+	public ResponseEntity<List<VisitDTO>> getDoctorsAppointmentsToDo(){
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		Long docId = userService.findUserByEmail(token).getId();
 		
-		List<Visit> visits = visitService.findByDoctorIdFuture(doctorId);
+		List<Visit> visits = visitService.findByDoctorIdFuture(docId);
 		
 		List<VisitDTO> visitsDTO = new ArrayList<VisitDTO>();
 		
 		for (Visit visit : visits) {
 			Long visitId = visit.getId();
 			Patient visitPatient = patientService.findById(visit.getPatientId());
-			Doctor visitDoctor = new Doctor(); // visit.getDoctorId();
+			Doctor visitDoctor = doctorService.findById(visit.getDoctorId());
 			LocalDateTime visitStart = visit.getStart();
 			LocalDateTime visitFinish = visit.getFinish();
 			VisitDTO newVisitDTO = new VisitDTO(visitId, visitPatient, visitDoctor, visitStart, visitFinish);
@@ -123,11 +132,21 @@ public class VisitController {
 		Collections.sort(visitsDTO);
 		return new ResponseEntity<List<VisitDTO>>(visitsDTO,  HttpStatus.OK);
 	}
+	@GetMapping("/get-user/{visitId}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
+	public ResponseEntity<PatientDTO> getPatientByVisitId(@PathVariable Long visitId){
+		Visit v = visitService.findById(visitId);
+		Patient p = patientService.findById(v.getPatientId());
+		
+		return new ResponseEntity<PatientDTO>(new PatientDTO(p), HttpStatus.OK);
+	}
 	
 	private boolean checkTermTaken(Visit newReservation) {
 		List<Visit> patientsAppointments = visitService.findByPatientIdEquals(newReservation.getPatientId());
+		
 		LocalDateTime startTime = newReservation.getStart();
 		LocalDateTime finishTime = newReservation.getFinish();
+
 		for (Visit visit : patientsAppointments) {
 			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
 				return false;
@@ -135,11 +154,13 @@ public class VisitController {
 				return false;
 			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
 				return false;
+			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
+				return false;
 		}
 		return true;
 	}
 	
-	public void notifyPatientViaEmail(String patientsEmail, Long doctorId, LocalDateTime startTime) {
+	public void notifyPatientViaEmail(String patientsEmail, Long doctorId, LocalDateTime startTime, String patientsName) {
 		final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 		 // Get a Properties object
 		    Properties props = System.getProperties();
@@ -170,10 +191,7 @@ public class VisitController {
 		                        InternetAddress.parse(patientsEmail, false));
 		      msg.setSubject("Doctors appointment");
 		      
-		      String token = SecurityContextHolder.getContext().getAuthentication().getName();
-			  User u = userService.findUserByEmail(token);
-		      
-			  String NAME = u.getName();
+			  String NAME = patientsName;
 			  
 			  Doctor doc = doctorService.findById(doctorId);
 			  String DOCTORS_NAME = doc.getName();
