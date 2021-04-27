@@ -92,7 +92,7 @@
               >Profile</router-link
             >
           </li>
-          <li
+          <li v-if="userRoles.includes(4)"
             :class="
               $route.path === '/orders'
                 ? 'nav-item active'
@@ -103,7 +103,7 @@
               >Orders</router-link
             >
           </li>
-          <li
+          <li v-if="userRoles.includes(4)"
             :class="
               $route.path === '/supplier-offers'
                 ? 'nav-item active'
@@ -135,13 +135,8 @@ export default {
       isLoggedIn: false,
     };
   },
-  methods: {
-    hasAnyRole(listOfRoles){
-
-    }
-  },
   mounted: function(){
-    var list = JSON.parse(localStorage.getItem('jwt')).roles.map(el => {
+    JSON.parse(localStorage.getItem('jwt')).roles.map(el => {
       this.userRoles.push(el.id);
     });
     this.isLoggedIn = JSON.parse(localStorage.getItem('jwt')).accessToken != null;

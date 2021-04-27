@@ -49,8 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Our public endpoints
         .antMatchers("/").permitAll()
         .antMatchers("/users/**").permitAll()
-        .antMatchers("/medicines/**").authenticated()
-        .antMatchers("/orders/**").authenticated();
+        .antMatchers("/medicines/**").authenticated();
         
         http.addFilterBefore(
                 jwtTokenFilter,

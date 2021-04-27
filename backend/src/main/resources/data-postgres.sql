@@ -38,6 +38,11 @@ insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,2)
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (2,3);
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (2,1);
 
+insert into pharmacy_admin (id, name, surname, email, password, address, phone_num, pharmacy_id) values (15, 'Lazar', 'Lazarevic', 'laske@gmail.com', 'laza123', 5, '011203203', 1);
+insert into pharmacy_admin (id, name, surname, email, password, address, phone_num, pharmacy_id) values (16, 'Mihajlo', 'Mihajlovic', 'mihajlomikimiki@gmail.com', 'miki123', 4, '022113113', 2);
+insert into pharmacy_admin (id, name, surname, email, password, address, phone_num, pharmacy_id) values (17, 'Paun', 'Paunovic', 'paun@gmail.com', 'paun123', 3, '022213213', 3);
+insert into pharmacy_admin (id, name, surname, email, password, address, phone_num, pharmacy_id) values (18, 'Zeljko', 'Zeljkovic', 'zelje@gmail.com', 'zelje123', 2, '022213213', 1);
+
 insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-05-05 16:00:00', '2021-05-05 17:00:00');
 insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-05-05 18:00:00', '2021-05-05 18:30:00');
 insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (2, 1, '2021-05-05 16:00:00', '2021-05-05 17:00:00');
@@ -102,6 +107,10 @@ insert into user_role (user_id, role_id) VALUES (11, 1);
 insert into user_role (user_id, role_id) VALUES (12, 1);
 insert into user_role (user_id, role_id) VALUES (13, 1);
 insert into user_role (user_id, role_id) VALUES (14, 1);
+insert into user_role (user_id, role_id) VALUES (15, 4);
+insert into user_role (user_id, role_id) VALUES (16, 4);
+insert into user_role (user_id, role_id) VALUES (17, 4);
+insert into user_role (user_id, role_id) VALUES (18, 4);
 
 insert into orders (deadline) values (1619560800000);
 insert into orders (deadline) values (1620165600000);

@@ -68,6 +68,7 @@ import axios from 'axios'
 import { config } from "@/config.js";
 import MedicinesList from '@/components/MedicinesList.vue'
 import Datepicker from "vuejs-datepicker";
+import Swal from 'sweetalert2'
 
 const API_URL = config.API_URL;
 
@@ -117,18 +118,43 @@ export default {
         })
       })
 
+      if (orderMedicines.length === 0) {
+        Swal.fire({
+          title: 'Error',
+          text: 'Medicine list for order is empty!',
+          icon: 'error',
+          confirmButtonText: 'Back'
+        })
+      }
+
+      if (this.date === "") {
+        Swal.fire({
+          title: 'Error',
+          text: 'Selected date is empty!',
+          icon: 'error',
+          confirmButtonText: 'Back'
+        })
+      }
+
       const postObj = {
         id: 1, 
         orderMedicines: orderMedicines,
         deadline: this.date.getTime()
       }
 
-      console.log(postObj)
-
       axios
         .post(`${API_URL}/orders/create-order`, postObj)
         .then(response => {
-          console.log(response.data)
+          if (response.status === 200) {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Successfully posted order.',
+              icon: 'success',
+              confirmButtonText: 'Continue'
+            })
+
+            window.location.href = '/'
+          }
         })
     },
     handleDeleteClick(medicine) {

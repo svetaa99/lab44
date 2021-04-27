@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +57,7 @@ public class OrderController {
 	private ISupplierOfferService soService;
 	
 	@PostMapping(value = "/create-order", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
 		System.out.println(orderDTO);
 		if (orderDTO.getOrderMedicines().size() == 0) {
@@ -113,6 +115,7 @@ public class OrderController {
 	}
 	
 	@GetMapping(value = "/list-offers/{id}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<List<SupplierOfferDTO>> listAllOffers(@PathVariable Long id) {
 		List<SupplierOffer> sos = soService.findAllByOrderId(id);
 		List<SupplierOfferDTO> soDTOlist = new ArrayList<SupplierOfferDTO>();
@@ -125,6 +128,7 @@ public class OrderController {
 	}
 	
 	@PostMapping(value = "/accept-offer", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<SupplierOfferDTO> acceptOffer(@RequestBody SupplierOfferDTO soDTO) {
 		List<OrderMedicines> omList = omService.findByOrderId(soDTO.getOrderId());
 		
