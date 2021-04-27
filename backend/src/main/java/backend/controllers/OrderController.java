@@ -153,6 +153,12 @@ public class OrderController {
 			}
 		}
 		
+		List<SupplierOffer> soList = soService.findAllByOrderId(soDTO.getOrderId());
+		for (SupplierOffer so : soList) {
+			soService.delete(so);
+		}
+		
+		orderService.delete(orderService.findById(soDTO.getOrderId()));
 		
 		return new ResponseEntity<SupplierOfferDTO>(soDTO, HttpStatus.OK);
 	}

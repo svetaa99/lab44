@@ -19,7 +19,7 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderMedicines> orders;
 	
 	@OneToMany(mappedBy = "order")
