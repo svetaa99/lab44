@@ -15,6 +15,7 @@ import VisitPage from '../views/VisitPage'
 import PharmacistAppointmentPage from '../views/PharmacistAppointmentPage.vue'
 import PharmacyPharmacistPage from '../views/PharmacyPharmacistPage.vue';
 import OrdersPage from '../views/OrdersPage.vue'
+import SupplierOffersPage from '../views/SupplierOffersPage.vue'
 
 Vue.use(VueRouter)
 
@@ -102,6 +103,11 @@ const routes = [
     name: 'OrdersPage',
     component: OrdersPage
   },
+  {
+    path: '/supplier-offers',
+    name: 'SupplierOffersPage',
+    component: SupplierOffersPage
+  }
 ]
 
 const router = new VueRouter({

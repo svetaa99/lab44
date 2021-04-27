@@ -83,6 +83,16 @@ public class PatientController {
 		return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
 	}
 	
+	@GetMapping("/print-allergies/{id}")
+	public ResponseEntity<PatientDTO> getAllergies(@PathVariable Long id) {
+		System.out.println("USOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+		Patient p = patientService.findById(id);
+		
+		System.out.println("ALEEEEERG" + p.getAllergies());
+		
+		return null;
+	}
+	
 	public List<PatientDTO> turnPatientsToDTO(List<Patient> patients){
 		List<PatientDTO> patientsDTO = new ArrayList<>();
 		for (Patient p : patients) {

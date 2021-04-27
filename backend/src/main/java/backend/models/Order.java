@@ -2,6 +2,7 @@ package backend.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,8 +19,11 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
 	private List<OrderMedicines> orders;
+	
+	@OneToMany(mappedBy = "order")
+	private List<SupplierOffer> offers;
 	
 	@Column
 	private long deadline;

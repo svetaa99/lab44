@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,19 +8,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.MedicineQuantityDTO;
 import backend.dto.OrderDTO;
+import backend.dto.SupplierOfferDTO;
 import backend.models.Medicine;
 import backend.models.Order;
 import backend.models.OrderMedicines;
+import backend.models.Pharmacy;
+import backend.models.PharmacyMedicines;
+import backend.models.SupplierOffer;
 import backend.services.IMedicineService;
 import backend.services.IOrderMedicinesService;
 import backend.services.IOrderService;
+import backend.services.IPharmacyMedicinesService;
+import backend.services.IPharmacyService;
+import backend.services.ISupplierOfferService;
 
 @RestController
 @RequestMapping(value = "orders")
@@ -34,6 +45,15 @@ public class OrderController {
 	
 	@Autowired
 	private IOrderMedicinesService omService;
+	
+	@Autowired
+	private IPharmacyMedicinesService pmService;
+	
+	@Autowired
+	private IPharmacyService pharmacyService;
+	
+	@Autowired
+	private ISupplierOfferService soService;
 	
 	@PostMapping(value = "/create-order", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
@@ -62,7 +82,78 @@ public class OrderController {
 			omService.save(om);
 		}
 		
+		// HARDKODED PHARMACY 2
+		
+		Long pharmacyId = (long) 2;
+		
+		List<Medicine> meds = pmService.findAllMedicinesInPharmacy(pharmacyId);
+		
+		for (MedicineQuantityDTO mq : medicines) {
+			Medicine m = medicineService.findById(mq.getMedicineId());
+			if (!meds.contains(m)) {
+				PharmacyMedicines pm = new PharmacyMedicines();
+				pm.setMedicine(m);
+				
+				Pharmacy p = pharmacyService.findById(pharmacyId);
+				pm.setPharmacy(p);
+				
+				pm.setPrice(100);
+				pm.setQuantity(mq.getQuantity());
+				pmService.save(pm);
+			} else {
+				PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(pharmacyId, m.getId());
+				int quantity = pm.getQuantity();
+				int newQuantity = quantity + mq.getQuantity();
+				pm.setQuantity(newQuantity);
+				pmService.save(pm);
+			}
+		}
+		
 		return new ResponseEntity<OrderDTO>(orderDTO, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/list-offers/{id}")
+	public ResponseEntity<List<SupplierOfferDTO>> listAllOffers(@PathVariable Long id) {
+		List<SupplierOffer> sos = soService.findAllByOrderId(id);
+		List<SupplierOfferDTO> soDTOlist = new ArrayList<SupplierOfferDTO>();
+		
+		for (SupplierOffer so : sos) {
+			soDTOlist.add(new SupplierOfferDTO(so));
+		}
+		
+		return new ResponseEntity<List<SupplierOfferDTO>>(soDTOlist, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/accept-offer", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SupplierOfferDTO> acceptOffer(@RequestBody SupplierOfferDTO soDTO) {
+		List<OrderMedicines> omList = omService.findByOrderId(soDTO.getOrderId());
+		
+		Long pharmacyId = (long) 2;
+		
+		List<Medicine> meds = pmService.findAllMedicinesInPharmacy(pharmacyId);
+		
+		for (OrderMedicines om : omList) {
+			Medicine m = om.getMedicine();
+			if (!meds.contains(m)) {
+				PharmacyMedicines pm = new PharmacyMedicines();
+				pm.setMedicine(m);
+				
+				Pharmacy p = pharmacyService.findById(pharmacyId);
+				pm.setPharmacy(p);
+				
+				pm.setPrice(100);
+				pm.setQuantity(om.getQuantity());
+				pmService.save(pm);
+			} else {
+				PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(pharmacyId, m.getId());
+				int quantity = pm.getQuantity();
+				int newQuantity = quantity + om.getQuantity();
+				pm.setQuantity(newQuantity);
+				pmService.save(pm);
+			}
+		}
+		
+		
+		return new ResponseEntity<SupplierOfferDTO>(soDTO, HttpStatus.OK);
+	}
 }

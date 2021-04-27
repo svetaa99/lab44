@@ -36,4 +36,9 @@ public class OrderMedicinesService implements IOrderMedicinesService {
 		omRepository.delete(obj);
 	}
 
+	@Override
+	public List<OrderMedicines> findByOrderId(Long orderId) {
+		return omRepository.findByOrderIdEquals(orderId);
+	}
+
 }
