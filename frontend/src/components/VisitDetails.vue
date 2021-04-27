@@ -53,7 +53,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 export default {
     data(){
         return{
@@ -69,7 +70,11 @@ export default {
     },
     methods: {
         penaltyForPatient: function(){
-            alert("User received a penalty!")
+            Swal.fire({
+            title: 'User received penalty',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+            })
         },
         searchForMedicine: function(){
             if (this.searchMedicine == "") {
@@ -111,16 +116,30 @@ export default {
                 var oneMedicineDTO = this.medicineDTO[i];
                 if(oneMedicineDTO.allergic){
                     flag = true;
-                    alert("Patient is allergic to medicine: " + oneMedicineDTO.medicine.name);
+                    Swal.fire({
+                    title: 'Alergy',
+                    text: 'Patient is allergic to medicine: ' + oneMedicineDTO.medicine.name,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                    })
                 }
                 else if (!oneMedicineDTO.available){
                     flag = true;
-                    alert("Medicine " + oneMedicineDTO.medicine.name + "is not available!");
+                    Swal.fire({
+                    title: 'Unavailable',
+                    text: 'Medicine ' + oneMedicineDTO.medicine.name + 'is not available!',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                    })
                 }
             }
             if(!flag){
                 this.saved = true;
-                alert("Report saved!");
+                Swal.fire({
+                    title: 'Report saved',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                })
             }
             else{
                 for(var i = 0; i < this.prescribedMedicine.length; i++){
@@ -140,9 +159,18 @@ export default {
         },
         redirectToReservation: function(){
             if(!this.saved){
-                if (confirm('Are you sure you want to leave page without saving?')) {
+                Swal.fire({
+                text: "Are you sure you want to leave page without saving?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+                }).then((result) => {
+                if (result.isConfirmed) {
                     window.location.href=`http://localhost:8080/employee-reservation/${this.visitId}`;
                 }
+                })
             }
             else
                 window.location.href=`http://localhost:8080/employee-reservation/${this.visitId}`;
@@ -155,11 +183,25 @@ export default {
                 }
             }
             if(!flag){
-                var days = prompt("Therapy length in days", "7");
-                this.prescribedMedicine.push({medicine, days});
+                Swal.fire({
+                    title: "Therapy lenght",
+                    text: "Days:",
+                    input: 'number',
+                    showCancelButton: true   
+                }).then((result) => {
+                    if (result.value) {
+                        var days = result.value;
+                        this.prescribedMedicine.push({medicine, days});
+                    }
+                });
+            
             }
             else{
-                alert("Medicine already added!");
+                Swal.fire({
+                    text: 'Medicine already added!',
+                    icon: 'warning',
+                    confirmButtonText: 'Ok'
+                    })
             }
         },
         removeMedicine: function(medicine){

@@ -75,6 +75,7 @@
 
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
 export default {
     name: "DoctorReservation",
     props: {
@@ -151,14 +152,34 @@ export default {
         .then(response => {this.handleResponse(response.data)})
       },
       handleResponse: function(respData){
-        respData == "Taken term" ? alert("Term is taken!") : respData == "Not in your working hours" ? alert("Not in your working hours") : this.freeTerms = respData;
+        respData == "Taken term" ? 
+        Swal.fire({
+          title: 'Taken term',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+      : respData == "Not in your working hours" ? 
+        Swal.fire({
+          title: 'Not in your working hours',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        }) : this.freeTerms = respData;
       },
       makeReservation: function(){
         //dialog for are you sure first - once clicked yes action preforms
         var newReservation = {patientId: this.patient.id, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish)}
         axios
         .post('http://localhost:8000/appointments/make-appointment', newReservation)
-        .then(response => {response.data === "Patient unavailable" ? alert("Patient is unavailable in given term!") : alert("New appointment added to work calendar!");})
+        .then(response => {response.data === "Patient unavailable" ? Swal.fire({
+          text: 'Patient is unavailable in given term',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        }) : 
+        Swal.fire({
+          title: 'New appointment added to work calendar',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        });})
       },
       searchDateTime: function(){
         console.log(this.searchDateTimeObject.searchDate + " " + this.searchDateTimeObject.searchTime);
@@ -191,5 +212,8 @@ export default {
 }
 #newTermButton{
   margin: 0 20px
+}
+.swal-overlay {
+  background-color: rgba(43, 165, 137, 0.45);
 }
 </style>
