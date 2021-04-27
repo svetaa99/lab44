@@ -1,41 +1,65 @@
 <template>
   <div>
-    <h3>Available medicines</h3>
-    <medicines-list :medicines="this.medicines" @clicked="onRowDblClick"></medicines-list>
+    <div class="padding-bottom">
+      <h3>Available medicines</h3>
+      <medicines-list :medicines="this.medicines" @clicked="onRowDblClick"></medicines-list>
 
-    <div class='selected-medicine-div'>
-      Odbrani lek:
-      <h5>{{this.selectedMedicine.name}}</h5>
-      Kolicina:
-      <div class="quantity">
-        <input
-              placeholder="Kolicina"
-              type="number"
-              class="form-control"
-              id="quantity"
-              name="quantity"
-              min="1"
-              v-model="quantity"
-            />
-      </div>
-      <div class="col-sm">
-        <Datepicker placeholder="Datum" v-model="date"/>
-      </div>
-      <button type="button" class="btn btn-primary" v-on:click="addMedicine()">Add medicine to the order</button>
-      <button type="button" class="btn btn-primary" v-on:click="finishOrder()">Finish order</button>
     </div>
 
-    <h3>Selected medicines for order</h3>
-    <table>
-      <tr>
-        <th>Lek</th>
-        <th>Kolicina</th>
-      </tr>
-      <tr v-for="m in this.selectedMedicines" :key="m.medicineId">
-        <td>{{m.medicineId}}</td>
-        <td>{{m.quantity}}</td>
-      </tr>
-    </table>
+    <div class='container'>
+      <div>
+        <h4>
+          Selected medicine:
+        </h4>
+        <h5>{{this.selectedMedicine.name}}</h5>
+      </div>
+      <div class='row justify-content-md-center align-items-center padding-bottom'>
+        <h6>
+          Quantity:
+        </h6>
+        <div class="col col-lg-2">
+          <input
+                placeholder="Kolicina"
+                type="number"
+                class="form-control"
+                id="quantity"
+                name="quantity"
+                min="1"
+                v-model="quantity"
+              />
+        </div>
+        <div class="col col-lg-4">
+          <button type="button" class="btn btn-primary" v-on:click="addMedicine()">Add medicine to the order</button>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <div class='row justify-content-md-center'>
+            <h3>Selected medicines for order</h3>
+      </div>
+      <div class="row justify-content-md-center">
+        <table>
+          <tr>
+            <th>Medicine name</th>
+            <th>Quantity</th>
+          </tr>
+          <tr v-for="m in this.selectedMedicines" :key="m.medicineId">
+            <td>{{m.medicine.name}}</td>
+            <td>{{m.quantity}}</td>
+            <td><button class="btn btn-primary" v-on:click="handleDeleteClick(m)">Delete</button></td>
+          </tr>
+        </table>
+      </div>
+      <div class='row padding-bottom'>
+          <div class="col">
+            <h5>Deadline:</h5>
+            <Datepicker class="text-center" placeholder="Date" v-model="date"/>
+          </div>
+      </div>
+      <div>
+          <button type="button" class="btn btn-primary" v-on:click="finishOrder()">Finish order</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -56,8 +80,10 @@ export default {
   data() {
     return {
       medicines: [],
-      selectedMedicine: {},
-      quantity: 0,
+      selectedMedicine: {
+        name: "Medicine not selected"
+      },
+      quantity: 1,
       date: "",
       selectedMedicines: [],
     }
@@ -75,16 +101,25 @@ export default {
     },
     addMedicine() {
       var medicineQuantity = {
-        medicineId: this.selectedMedicine.id,
+        medicine: this.selectedMedicine,
         quantity: parseInt(this.quantity),
       }
 
       this.selectedMedicines.push(medicineQuantity);
     },
     finishOrder() {
+      var orderMedicines = []
+
+      this.selectedMedicines.map(mq => {
+        orderMedicines.push({
+          medicineId: mq.medicine.id,
+          quantity: mq.quantity
+        })
+      })
+
       const postObj = {
         id: 1, 
-        orderMedicines: this.selectedMedicines,
+        orderMedicines: orderMedicines,
         deadline: this.date.getTime()
       }
 
@@ -95,6 +130,13 @@ export default {
         .then(response => {
           console.log(response.data)
         })
+    },
+    handleDeleteClick(medicine) {
+      for (var i = 0; i < this.selectedMedicines.length; i++) {
+        if (this.selectedMedicines[i] == medicine) {
+          this.selectedMedicines.splice(i, 1);
+        }
+      }
     }
 
   }
@@ -105,14 +147,18 @@ export default {
 <style>
 
 .selected-medicine-div {
-  height: 20ex;
+  height: 30ex;
   align-items: center;
 }
 
-.quantity {
-  display: inline;
-  max-width: 100px;
+.padding-bottom {
+  padding-bottom: 5ex;
 }
+
+.text-center {
+  text-align: center;
+}
+
 
 
 </style>
