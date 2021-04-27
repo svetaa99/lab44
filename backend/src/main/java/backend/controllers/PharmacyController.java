@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.PharmacyDTO;
@@ -105,6 +107,11 @@ public class PharmacyController {
 		
 		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
 	}
+	
+//	@PostMapping(value="freeTerms", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//	private ResponseEntity<List<PharmacyDTO>> getPharmaciesWithFreeTerms(@RequestParam(name="date") LocalTime date, @RequestParam(name="time") LocalTime time) {
+//		
+//	}
 	
 	@PostMapping(value = "/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<PharmacyMedicinesDTO> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {

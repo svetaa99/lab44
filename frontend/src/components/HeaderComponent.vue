@@ -92,6 +92,28 @@
               >Profile</router-link
             >
           </li>
+          <li
+            :class="
+              $route.path === '/orders'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/orders" class="nav-link"
+              >Orders</router-link
+            >
+          </li>
+          <li
+            :class="
+              $route.path === '/supplier-offers'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/supplier-offers" class="nav-link"
+              >Offers</router-link
+            >
+          </li>
         </ul>
       </div>
 

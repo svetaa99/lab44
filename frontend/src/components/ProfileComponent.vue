@@ -12,7 +12,7 @@
               <div class="d-flex flex-column align-items-center text-center">
                 <div class="mt-1">
                   <h4>{{ user.name }} {{user.surname}}</h4>
-                  <p class="text-secondary mb-1">Tip</p>
+                  <p class="text-secondary mb-1"></p>
                   <button
                     type="button"
                     class="btn btn-primary"

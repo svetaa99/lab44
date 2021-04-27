@@ -8,7 +8,7 @@
       </div>
     </div>
     <br />
-    <MedicinesList :medicines="this.medicines" />
+    <MedicinesList :medicines="this.medicines" :extra="extra"/>
   </div>
 </template>
 
@@ -30,6 +30,7 @@ export default {
     return {
       medicines: [],
       searchName: "",
+      extra: "add"
     };
   },
   mounted() {

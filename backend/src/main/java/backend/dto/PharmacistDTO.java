@@ -9,18 +9,20 @@ public class PharmacistDTO {
 	private String name;
 	private String surname;
 	private Long address;
+	private double rating;
 	private Pharmacy pharmacy;
 	
 	public PharmacistDTO(Pharmacist p) {
-		this(p.getId(), p.getName(), p.getSurname(), p.getAddress(), p.getPharmacy());
+		this(p.getId(), p.getName(), p.getSurname(), p.getAddress(), p.getRating(), p.getPharmacy());
 	}
 
-	public PharmacistDTO(Long id, String name, String surname, Long address, Pharmacy pharmacy) {
+	public PharmacistDTO(Long id, String name, String surname, Long address, double rating, Pharmacy pharmacy) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.address = address;
+		this.rating = rating;
 		this.pharmacy = pharmacy;
 	}
 
@@ -54,6 +56,14 @@ public class PharmacistDTO {
 
 	public void setAddress(Long address) {
 		this.address = address;
+	}
+	
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 
 	public Pharmacy getPharmacy() {

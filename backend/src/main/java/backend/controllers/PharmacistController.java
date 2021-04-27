@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.PharmacistDTO;
+import backend.dto.PharmacyDTO;
 import backend.models.Pharmacist;
 import backend.models.Pharmacy;
+import backend.services.IPharmacistService;
 import backend.services.IPharmacyService;
 
 @RestController
@@ -24,6 +26,9 @@ public class PharmacistController {
 	
 	@Autowired
 	private IPharmacyService pharmacyService;
+	
+	@Autowired
+	private IPharmacistService pharmacistService;
 	
 	private List<PharmacistDTO> createPharmacistDTOList(List<Pharmacist> pharmacists) {
 		
@@ -39,10 +44,17 @@ public class PharmacistController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<List<PharmacistDTO>> getPharmacistsFromPharmacy(@PathVariable Long id) {
-		Pharmacy pharmacy = pharmacyService.findById(id);
-		List<Pharmacist> pharmasists = pharmacy.getPharmacists();
-		System.out.println(pharmasists);
-		return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmasists), HttpStatus.OK);
+		List<Pharmacist> pharmacists = pharmacistService.findAllByPharmacy(id);
+		return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacists), HttpStatus.OK);
+	}
+	
+	@GetMapping("/sort/rating/{type}/{id}")
+	private ResponseEntity<List<PharmacistDTO>> getSortedByRating(@PathVariable String type, @PathVariable Long id) {
+
+		List<Pharmacist> pharmacists = (List<Pharmacist>) pharmacistService.sortByRating(type, id);
+		List<PharmacistDTO> pharmacistsDTO = createPharmacistDTOList(pharmacists);
+		
+		return new ResponseEntity<List<PharmacistDTO>>(pharmacistsDTO, HttpStatus.OK);
 	}
 	
 }

@@ -39,9 +39,15 @@ export default {
     };
   },
   methods: {
-    searchPharmacy: function () {
-      console.log("searchPharmacy");
-    },
+    // searchPharmacy: function () {
+    //   console.log(this.date, this.time);
+    //   axios.post(`${API_URL}/pharmacies/freeTerms`, {
+    //     date: this.date,
+    //     time: this.time,
+    //   }).then((response) => {
+    //     this.pharmacies = response.data;
+    //   })
+    // },
     sortPrice: function () {
       this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       axios
