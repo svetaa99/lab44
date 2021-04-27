@@ -25,9 +25,11 @@ import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicineAddRemoveObject;
 import backend.models.PharmacyMedicines;
+import backend.models.WorkHours;
 import backend.services.IMedicineService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
+import backend.services.impl.WorkHoursService;
 
 @RestController
 @RequestMapping(value = "pharmacies")
@@ -42,6 +44,9 @@ public class PharmacyController {
 	
 	@Autowired
 	private IPharmacyMedicinesService pmService;
+	
+	@Autowired
+	private WorkHoursService whService;
 	
 	private List<PharmacyDTO> createPharmacyDTOList(List<Pharmacy> pharmacies) {
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<PharmacyDTO>();
@@ -108,10 +113,16 @@ public class PharmacyController {
 		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
 	}
 	
-//	@PostMapping(value="freeTerms", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-//	private ResponseEntity<List<PharmacyDTO>> getPharmaciesWithFreeTerms(@RequestParam(name="date") LocalTime date, @RequestParam(name="time") LocalTime time) {
-//		
-//	}
+	@GetMapping("/freeTerms/{time}")
+	private ResponseEntity<List<Pharmacy>> getAllPharmaciesByTime(@PathVariable LocalTime time) {
+		List<WorkHours> wh = whService.getPharmaciesByTime(time);
+		System.out.println("sizeeeee: " + wh.size());
+		List<Pharmacy> pharmacies = new ArrayList<Pharmacy>();
+		for (WorkHours workHours : wh) {
+			pharmacies.add(workHours.getPharmacy());
+		}
+		return new ResponseEntity<List<Pharmacy>>(pharmacies, HttpStatus.OK);
+	}
 	
 	@PostMapping(value = "/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<PharmacyMedicinesDTO> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {

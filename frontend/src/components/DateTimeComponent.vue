@@ -31,6 +31,9 @@ export default {
   components: {
     Datepicker,
   },
+  props: {
+    pharmacies: Array,
+  },
   data() {
     return {
       date: "",
@@ -39,15 +42,12 @@ export default {
     };
   },
   methods: {
-    // searchPharmacy: function () {
-    //   console.log(this.date, this.time);
-    //   axios.post(`${API_URL}/pharmacies/freeTerms`, {
-    //     date: this.date,
-    //     time: this.time,
-    //   }).then((response) => {
-    //     this.pharmacies = response.data;
-    //   })
-    // },
+    searchPharmacy: function () {
+      axios.get(`${API_URL}/pharmacies/freeTerms/${this.time}`).then((response) => {
+        this.pharmacies = response.data;
+        this.$emit("clicked", this.pharmacies);
+      })
+    },
     sortPrice: function () {
       this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       axios
