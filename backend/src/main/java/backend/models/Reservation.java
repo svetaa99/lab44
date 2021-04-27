@@ -109,6 +109,12 @@ public class Reservation {
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+
+	@Override
+	public String toString() {
+		return "Reservation [patient=" + patient + ", pharmacy=" + pharmacy + ", medicine=" + medicine + ", date="
+				+ date + ", quantity=" + quantity + ", totalPrice=" + totalPrice + "]";
+	}
 	
 	
 }

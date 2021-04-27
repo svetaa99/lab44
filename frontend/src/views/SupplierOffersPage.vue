@@ -20,7 +20,7 @@
             <td>{{ o.orderId }}</td>
             <td>{{ o.supplierId }}</td>
             <td>{{ o.price }}</td>
-            <td>{{ o.deadline }}</td>
+            <td>{{ new Date(o.deadline).toDateString() }}</td>
             <td><button class="btn btn-primary" v-on:click="handleAcceptClick(o)">Accept</button></td>
           </tr>
         </tbody>
@@ -31,6 +31,7 @@
 <script>
 import axios from 'axios'
 import { config } from '@/config.js'
+import Swal from 'sweetalert2'
 
 const API_URL = config.API_URL;
 
@@ -55,7 +56,13 @@ export default {
         .post(`${API_URL}/orders/accept-offer`, { orderId: offer.orderId, supplierId: offer.supplierId })
         .then(response => {
           if (response.status === 200) {
-            alert('Successfully accepted offer!')
+            Swal.fire({
+              title: 'Success',
+              text: 'Accepted offer!',
+              icon: 'success',
+              button: null,
+              time: 2000
+            })
             window.location.href = '/'
           }
         })

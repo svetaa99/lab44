@@ -60,8 +60,9 @@ public class ReservationController {
 		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
 	}
 	
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ReservationDTO> createReservation(@RequestBody Reservation reservation) {
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" + reservation);
 		Patient patient = reservation.getPatient();
 		if (patientService.findById(patient.getId()).equals(null)) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.NOT_FOUND);

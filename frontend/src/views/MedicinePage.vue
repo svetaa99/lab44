@@ -48,6 +48,7 @@ import axios from "axios";
 import { config } from "@/config.js";
 import Datepicker from "vuejs-datepicker";
 // import vSelect from "vue-select";
+import Swal from 'sweetalert2'
 
 const API_URL = config.API_URL;
 
@@ -76,7 +77,7 @@ export default {
     reserve() {
       this.reservation.pharmacy = this.selectedPM.pharmacy
       this.reservation.patient = {
-        id: 1,
+        id: 10,
         name: "Uros", 
         surname: "Petric",
         email: "uki.tricpe@gmail.com",
@@ -90,9 +91,27 @@ export default {
       this.reservation.totalPrice = this.selectedPM.price * this.reservation.quantity
       this.reservation.date = this.reservation.date.getTime()
 
-      axios
-        .post(`${API_URL}/reservations`, this.reservation)
-        .then(response => console.log(response.data))
+
+      // axios
+      //   .post(`${API_URL}/reservations/`, this.reservation)
+      //   .then(response => {
+      //     if (response.status === 200) {
+      //       Swal.fire({
+      //         title: 'Success',
+      //         text: 'Posted reservation!',
+      //         icon: 'success',
+      //         button: null,
+      //         time: 2000
+      //       })
+      //     }
+      //   })
+      Swal.fire({
+        title: 'Success',
+        text: 'Posted reservation!',
+        icon: 'success',
+        button: null,
+        time: 2000
+      })
     }
   },
   mounted() {

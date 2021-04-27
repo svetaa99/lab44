@@ -81,7 +81,7 @@
               >Appointments</router-link
             >
           </li>
-          <li
+          <li v-if="userRoles.length !== 0"
             :class="
               $route.path === '/profile'
                 ? 'nav-item active'
