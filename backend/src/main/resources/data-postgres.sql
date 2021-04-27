@@ -102,3 +102,15 @@ insert into user_role (user_id, role_id) VALUES (11, 1);
 insert into user_role (user_id, role_id) VALUES (12, 1);
 insert into user_role (user_id, role_id) VALUES (13, 1);
 insert into user_role (user_id, role_id) VALUES (14, 1);
+
+insert into orders (deadline) values (1619560800000);
+insert into orders (deadline) values (1620165600000);
+
+insert into order_medicines (order_id, medicine_id, quantity) values (1, 1, 5);
+insert into order_medicines (order_id, medicine_id, quantity) values (1, 2, 3);
+insert into order_medicines (order_id, medicine_id, quantity) values (2, 3, 1);
+
+insert into supplier_offers (supplier_id, order_id, price, deadline) values (1, 1, 1250, 1622325600000);
+insert into supplier_offers (supplier_id, order_id, price, deadline) values (2, 1, 1000, 1622412000000);
+insert into supplier_offers (supplier_id, order_id, price, deadline) values (3, 1, 1500, 1622584800000);
+
