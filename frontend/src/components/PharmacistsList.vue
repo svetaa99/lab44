@@ -35,6 +35,7 @@
 <script>
 import axios from "axios";
 import { config } from "@/config.js";
+import Swal from 'sweetalert2'
 
 const API_URL = config.API_URL;
 export default {
@@ -59,7 +60,13 @@ export default {
         });
     },
     reserve() {
-      this.$swal('Hello')
+      Swal.fire({
+        title: 'Successfully',
+        text: 'Appointment made successfully',
+        icon: 'success',
+        button: null,
+        timer: 2000
+      })
     }
   }
 };

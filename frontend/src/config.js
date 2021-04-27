@@ -3,3 +3,4 @@ export const config = {
 }
 import axios from 'axios';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).accessToken; // for all requests
+
