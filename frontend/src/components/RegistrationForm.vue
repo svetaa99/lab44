@@ -33,7 +33,7 @@
               id="lastName"
               placeholder=""
               value=""
-              v-model="surname"
+              v-model="user.surname"
               required
             />
             <div v-if="submitted && !surnameValid" class="text-danger">
@@ -66,7 +66,7 @@
               id="phoneNumber"
               placeholder=""
               value=""
-              v-model="phoneNumber"
+              v-model="user.phoneNum"
               required
             />
             <div v-if="submitted && !phoneNumberValid" class="text-danger">
@@ -81,7 +81,7 @@
               id="password"
               placeholder=""
               value=""
-              v-model="password"
+              v-model="user.password"
               required
             />
             <div v-if="submitted && !passwordValid" class="text-danger">
@@ -126,7 +126,7 @@ export default {
       name: "",
       surname: "",
       password: "",
-      phoneNumber: "",
+      phoneNum: "",
       submitted: false,
     };
   },
@@ -135,7 +135,7 @@ export default {
       this.name = this.user.name;
       this.surname = this.user.surname;
       this.password = this.user.password;
-      this.phoneNumber = this.user.phoneNumber;
+      this.phoneNum = this.user.phoneNum;
     }
   },
   methods: {

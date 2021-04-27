@@ -1,5 +1,10 @@
 <template>
   <div>
+    <button type="button" class="btn btn-primary" v-on:click="sortRating()">
+      Sort by rating
+    </button>
+    <br />
+    <br>
     <table
       id="dtBasicExample"
       class="table table-striped table-bordered table-sm"
@@ -19,7 +24,7 @@
           <td>{{ pharmacist.surname }}</td>
           <td>{{ pharmacist.rating }}</td>
           <td>
-            <router-link> Choose </router-link>
+            <button class="btn btn-primary" v-on:click="reserve()">Choose</button>
           </td>
         </tr>
       </tbody>
@@ -28,12 +33,35 @@
 </template>
 
 <script>
+import axios from "axios";
+import { config } from "@/config.js";
 
+const API_URL = config.API_URL;
 export default {
   name: "pharmacists-list",
   props: {
-    pharmacists: Array
+    pharmacists: Array,
+    id: String,
   },
+  data() {
+    return {
+      currentSortDir: "asc",
+    };
+  },
+  methods: {
+    sortRating() {
+      this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      axios
+        .get(`${API_URL}/pharmacist/sort/rating/${this.currentSortDir}/${this.id}`)
+        .then((response) => {
+          this.pharmacists = response.data;
+          this.$emit("clicked", this.pharmacists);
+        });
+    },
+    reserve() {
+      this.$swal('Hello')
+    }
+  }
 };
 </script>
 
