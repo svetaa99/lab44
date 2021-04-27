@@ -64,6 +64,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   data: () => {
@@ -88,13 +89,25 @@ export default {
     {
       console.log(this.jwt);
       if(this.jwt.accessToken == ""){
-        alert("Bad credentials!");
+        Swal.fire({
+          title: 'Login error',
+          text: 'Bad credentials!',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+      });
       }
       else{
-        alert("Successfully logged in!");
-        this.saveUserToLocalStorage(this.jwt); //save JWT and EXPIRATION
-        this.addAxiosInterceptors(axios);
-        window.location.href="http://localhost:8080/";
+        Swal.fire({
+				title:"Successfully logged in",
+				text:"Welcome!",
+				icon: "success",
+				button: "Ok",
+			  }).then(() => {
+          this.saveUserToLocalStorage(this.jwt); //save JWT and EXPIRATION
+          this.addAxiosInterceptors(axios);
+          window.location.href="http://localhost:8080/";
+        })
+        
       }
     },
     saveUserToLocalStorage(jwt) {
