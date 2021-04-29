@@ -44,10 +44,16 @@ export default {
   },
   mounted() {
     axios
-      .get(`${API_URL}/orders/list-offers/1`)
+      .get(`${API_URL}/labadmins/registered-admin`)
       .then(response => {
-        this.offers = response.data;
+        this.admin = response.data;
+        axios
+          .get(`${API_URL}/orders/list-offers/${this.admin.pharmacy.id}/1`)
+          .then(response => {
+            this.offers = response.data;
+          })
       })
+    
   },
   methods: {
     handleAcceptClick(offer) {
@@ -59,7 +65,13 @@ export default {
               title: 'Success',
               text: 'Accepted offer! Other offers are automatically declined.',
               icon: 'success',
+              confirmButtonText: 'Ok'
+            }).then(result => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
             })
+
           }
         })
     }

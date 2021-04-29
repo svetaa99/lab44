@@ -101,7 +101,6 @@ export default {
       .get(`${API_URL}/labadmins/registered-admin`)
       .then(response => {
         this.admin = response.data;
-        console.log(this.admin);
       })
   },
   methods: {
@@ -139,7 +138,7 @@ export default {
             orderMedicines: this.selectedMedicines,
             deadline: this.date.getTime()
           }
-          
+
           axios
             .post(`${API_URL}/orders/create-order`, postObj)
             .then(response => {

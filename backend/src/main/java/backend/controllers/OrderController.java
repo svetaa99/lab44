@@ -140,10 +140,15 @@ public class OrderController {
 		return new ResponseEntity<List<OrderDTO>>(oDTOs, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/list-offers/{id}")
+	@GetMapping(value = "/list-offers/{pharmacyId}/{orderId}")
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
-	public ResponseEntity<List<SupplierOfferDTO>> listAllOffers(@PathVariable Long id) {
-		List<SupplierOffer> sos = soService.findAllByOrderId(id);
+	public ResponseEntity<List<SupplierOfferDTO>> listAllOffers(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("orderId") Long orderId) {
+		List<Order> orders = orderService.findAllFromPharmacyId(pharmacyId);
+		if (orders.size() == 0) {
+			return new ResponseEntity<List<SupplierOfferDTO>>(new ArrayList<SupplierOfferDTO>(), HttpStatus.OK);
+		}
+		
+		List<SupplierOffer> sos = soService.findAllByOrderId(orderId);
 		List<SupplierOfferDTO> soDTOlist = new ArrayList<SupplierOfferDTO>();
 		
 		for (SupplierOffer so : sos) {
