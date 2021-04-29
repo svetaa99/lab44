@@ -117,13 +117,13 @@ public class Pharmacy {
 		this.pharmacistPrice = pharmacistPrice;
 	}
 
-	public List<Dermatologist> getDermatologists() {
-		return dermatologists;
-	}
-
-	public void setDermatologists(List<Dermatologist> dermatologists) {
-		this.dermatologists = dermatologists;
-	}
+//	public List<Dermatologist> getDermatologists() {
+//		return dermatologists;
+//	}
+//
+//	public void setDermatologists(List<Dermatologist> dermatologists) {
+//		this.dermatologists = dermatologists;
+//	}
 
 	public List<Pharmacist> getPharmacists() {
 		return pharmacists;
