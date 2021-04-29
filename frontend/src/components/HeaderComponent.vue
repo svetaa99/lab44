@@ -118,11 +118,11 @@
       </div>
 
       <router-link to="/login" class="btn btn-custom"
-        >Login</router-link 
+        v-if="!isLoggedIn">Login</router-link 
       > <!--v-if="!isLoggedIn" -->
-      <!--<button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
+      <button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
         Logout
-      </button>-->
+      </button>
     </div>
   </nav>
 </template>
@@ -135,11 +135,23 @@ export default {
       isLoggedIn: false,
     };
   },
+  methods: {
+    logout() {
+      localStorage.removeItem('jwt');
+      window.location.href = "http://localhost:8080/";
+    }  
+  },
   mounted: function(){
-    JSON.parse(localStorage.getItem('jwt')).roles.map(el => {
+    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+
+    tokenItem.token.roles.map(el => {
       this.userRoles.push(el.id);
     });
-    this.isLoggedIn = JSON.parse(localStorage.getItem('jwt')).accessToken != null;
+    this.isLoggedIn = 
+      tokenItem.token.accessToken != null
+      &&
+      new Date().getTime() < tokenItem.expiry ;
+
     console.log(this.userRoles);
   }
 };

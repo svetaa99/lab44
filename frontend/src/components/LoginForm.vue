@@ -111,7 +111,11 @@ export default {
       }
     },
     saveUserToLocalStorage(jwt) {
-      localStorage.setItem('jwt', JSON.stringify(jwt));
+      const jwtExp = {
+        token: jwt,
+        expiry: new Date().getTime() + jwt.expiresIn
+      }
+      localStorage.setItem('jwt', JSON.stringify(jwtExp));
     },
     addAxiosInterceptors(axios) {
         axios.interceptors.request.use(request => {

@@ -70,11 +70,16 @@ export default {
     },
     methods: {
         penaltyForPatient: function(){
-            Swal.fire({
-            title: 'User received penalty',
-            icon: 'error',
-            confirmButtonText: 'Ok'
+            axios
+            .get(`http://localhost:8000/patients/penalty/${this.visitId}`)
+            .then(
+                Swal.fire({
+                title: 'User received penalty',
+                icon: 'error',
+                confirmButtonText: 'Ok'
             })
+            )
+            
         },
         searchForMedicine: function(){
             if (this.searchMedicine == "") {

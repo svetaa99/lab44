@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,10 @@ import com.google.gson.Gson;
 
 import backend.dto.PatientDTO;
 import backend.models.Patient;
+import backend.models.Penalty;
+import backend.models.Visit;
 import backend.services.impl.PatientService;
+import backend.services.impl.PenaltyService;
 import backend.services.impl.VisitService;
 import comparators.PatientDTOComparator;
 
@@ -33,6 +37,9 @@ public class PatientController {
 	
 	@Autowired
 	private VisitService visitService;
+	
+	@Autowired
+	private PenaltyService penaltyService;
 	
 	private static Gson g = new Gson();
 	
@@ -96,6 +103,18 @@ public class PatientController {
 		System.out.println("ALEEEEERG" + p.getAllergies());
 		
 		return null;
+	}
+	
+	@GetMapping("/penalty/{visitId}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST', 'LAB_ADMIN', 'HEAD_ADMIN')")
+	public ResponseEntity<String> penalty(@PathVariable Long visitId){
+		Visit v = visitService.findById(visitId);
+		Long pId  = v.getPatientId();
+		
+		Penalty penalty = new Penalty(pId, LocalDate.now());
+		penaltyService.save(penalty);
+		
+		return new ResponseEntity<String>("Saved", HttpStatus.OK);
 	}
 	
 	public List<PatientDTO> turnPatientsToDTO(List<Patient> patients){
