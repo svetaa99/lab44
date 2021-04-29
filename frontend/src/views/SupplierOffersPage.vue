@@ -47,7 +47,6 @@ export default {
       .get(`${API_URL}/orders/list-offers/1`)
       .then(response => {
         this.offers = response.data;
-        console.log(this.offers)
       })
   },
   methods: {
@@ -58,12 +57,9 @@ export default {
           if (response.status === 200) {
             Swal.fire({
               title: 'Success',
-              text: 'Accepted offer!',
+              text: 'Accepted offer! Other offers are automatically declined.',
               icon: 'success',
-              button: null,
-              time: 2000
             })
-            window.location.href = '/'
           }
         })
     }

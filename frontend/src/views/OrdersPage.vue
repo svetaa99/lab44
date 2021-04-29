@@ -125,37 +125,38 @@ export default {
           icon: 'error',
           confirmButtonText: 'Back'
         })
-      }
-
-      if (this.date === "") {
+      } else if (this.date === "") {
         Swal.fire({
           title: 'Error',
           text: 'Selected date is empty!',
           icon: 'error',
           confirmButtonText: 'Back'
         })
-      }
-
-      const postObj = {
-        id: 1, 
-        orderMedicines: orderMedicines,
-        deadline: this.date.getTime()
-      }
-
-      axios
-        .post(`${API_URL}/orders/create-order`, postObj)
-        .then(response => {
-          if (response.status === 200) {
-            Swal.fire({
-              title: 'Success!',
-              text: 'Successfully posted order.',
-              icon: 'success',
-              confirmButtonText: 'Continue'
-            })
-
-            window.location.href = '/'
+      } else {
+          const postObj = {
+            id: 1, 
+            orderMedicines: orderMedicines,
+            deadline: this.date.getTime()
           }
-        })
+
+          axios
+            .post(`${API_URL}/orders/create-order`, postObj)
+            .then(response => {
+              if (response.status === 200) {
+                Swal.fire({
+                  title: 'Success!',
+                  text: 'Successfully posted order.',
+                  icon: 'success',
+                })
+              } else if (response.status === 400) {
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Error when trying to post order.',
+                  icon: 'order',
+                })
+              }
+            })
+      }
     },
     handleDeleteClick(medicine) {
       for (var i = 0; i < this.selectedMedicines.length; i++) {
@@ -164,7 +165,6 @@ export default {
         }
       }
     }
-
   }
 
 }

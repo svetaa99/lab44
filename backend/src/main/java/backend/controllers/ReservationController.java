@@ -18,9 +18,11 @@ import backend.dto.ReservationDTO;
 import backend.models.Medicine;
 import backend.models.Patient;
 import backend.models.Pharmacy;
+import backend.models.PharmacyMedicines;
 import backend.models.Reservation;
 import backend.services.IMedicineService;
 import backend.services.IPatientService;
+import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
 import backend.services.IReservationService;
 
@@ -40,6 +42,9 @@ public class ReservationController {
 	
 	@Autowired
 	private IMedicineService medicineService;
+	
+	@Autowired
+	private IPharmacyMedicinesService pmService;
 	
 	
 	
@@ -62,7 +67,6 @@ public class ReservationController {
 	
 	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ReservationDTO> createReservation(@RequestBody Reservation reservation) {
-		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" + reservation);
 		Patient patient = reservation.getPatient();
 		if (patientService.findById(patient.getId()).equals(null)) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.NOT_FOUND);
@@ -94,8 +98,18 @@ public class ReservationController {
 		}
 		
 		reservation = reservationService.save(reservation);
-		ReservationDTO rDTO = new ReservationDTO(reservation);
 		
+		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(pharmacy.getId(), medicine.getId());
+		int oldQuantity = pm.getQuantity();
+		if (oldQuantity < quantity) {
+			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
+		int newQuantity = oldQuantity - quantity;
+		pm.setQuantity(newQuantity);
+		pmService.save(pm);
+		
+		ReservationDTO rDTO = new ReservationDTO(reservation);
 		return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
 	}
 }

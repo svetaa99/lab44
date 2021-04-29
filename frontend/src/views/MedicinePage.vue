@@ -78,40 +78,31 @@ export default {
       this.reservation.pharmacy = this.selectedPM.pharmacy
       this.reservation.patient = {
         id: 10,
-        name: "Uros", 
-        surname: "Petric",
-        email: "uki.tricpe@gmail.com",
-        password: "urosplatinium",
-        address: 3,
-        phoneNum: "0651344891",
-        points: "22",
-        category: "PLATINUM"
+        name: "Filip", 
+        surname: "Volaric",
+        email: "filip.kresa@gmail.com",
+        password: "fickos123",
+        address: 4,
+        phoneNum: "0641345948",
+        points: "15",
+        category: "GOLD"
       }
       this.reservation.medicine = this.selectedPM.medicine
       this.reservation.totalPrice = this.selectedPM.price * this.reservation.quantity
       this.reservation.date = this.reservation.date.getTime()
 
-
-      // axios
-      //   .post(`${API_URL}/reservations/`, this.reservation)
-      //   .then(response => {
-      //     if (response.status === 200) {
-      //       Swal.fire({
-      //         title: 'Success',
-      //         text: 'Posted reservation!',
-      //         icon: 'success',
-      //         button: null,
-      //         time: 2000
-      //       })
-      //     }
-      //   })
-      Swal.fire({
-        title: 'Success',
-        text: 'Posted reservation!',
-        icon: 'success',
-        button: null,
-        time: 2000
-      })
+      console.log(this.reservation)
+      axios
+        .post(`${API_URL}/reservations/`, this.reservation)
+        .then(response => {
+          if (response.status === 200) {
+            Swal.fire({
+              title: 'Success',
+              text: 'Posted reservation!',
+              icon: 'success',
+            })
+          }
+        })
     }
   },
   mounted() {
