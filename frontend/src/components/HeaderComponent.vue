@@ -114,12 +114,22 @@
               >Offers</router-link
             >
           </li>
+          <li v-if="userRoles.includes(3)"
+            :class="
+              $route.path === '/issue-medicine'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/issue-medicine" class="nav-link"
+              >Issue medicine</router-link
+            >
+          </li>
         </ul>
       </div>
 
       <router-link to="/login" class="btn btn-custom"
         v-if="!isLoggedIn">Login</router-link 
-      > <!--v-if="!isLoggedIn" -->
+      >
       <button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
         Logout
       </button>

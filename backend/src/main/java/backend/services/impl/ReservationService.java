@@ -22,7 +22,7 @@ public class ReservationService implements IReservationService {
 
 	@Override
 	public Reservation findById(Long id) {
-		return reservationRepository.findById(id).orElseGet(null);
+		return reservationRepository.findById(id).orElse(null);
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,18 @@ public class ReservationController {
 		List<Reservation> reservations = reservationService.findAll();
 		
 		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
+	}
+	
+	@GetMapping("/{reservationId}")
+	public ResponseEntity<ReservationDTO> getById(@PathVariable Long reservationId){
+		Reservation r = reservationService.findById(reservationId);
+		
+		ReservationDTO rDTO = new ReservationDTO();
+		if(r == null) {
+			return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
+		}
+		rDTO = new ReservationDTO(r);
+		return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
