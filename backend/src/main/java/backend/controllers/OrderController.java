@@ -84,7 +84,7 @@ public class OrderController {
 		List<MedicineQuantityDTO> medicines = orderDTO.getOrderMedicines();
 		
 		for (MedicineQuantityDTO mq : medicines) {
-			Medicine m = medicineService.findById(mq.getMedicineId());
+			Medicine m = mq.getMedicine();
 			OrderMedicines om = new OrderMedicines();
 			om.setMedicine(m);
 			om.setOrder(o);
@@ -98,7 +98,7 @@ public class OrderController {
 		List<Medicine> meds = pmService.findAllMedicinesInPharmacy(pharmacyId);
 		
 		for (MedicineQuantityDTO mq : medicines) {
-			Medicine m = medicineService.findById(mq.getMedicineId());
+			Medicine m = mq.getMedicine();
 			if (!meds.contains(m)) {
 				PharmacyMedicines pm = new PharmacyMedicines();
 				pm.setMedicine(m);
@@ -121,14 +121,12 @@ public class OrderController {
 		return new ResponseEntity<OrderDTO>(orderDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/view-all-orders/{id}")
+	@GetMapping(value = "/get-all-orders/{id}")
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
-	public ResponseEntity<List<OrderDTO>> viewAllOrders(@PathVariable("id") Long adminId) {
-		System.out.println(adminId);
-		LabAdmin admin = laService.findById(adminId);
-		Pharmacy p = admin.getPharmacy();
+	public ResponseEntity<List<OrderDTO>> viewAllOrders(@PathVariable("id") Long id) {
+		Pharmacy p = pharmacyService.findById(id);
 		
-		List<Order> orders = orderService.findAllFromPharmacyId(p.getId());
+		List<Order> orders = orderService.findAllFromPharmacyId(id);
 		List<OrderDTO> oDTOs = new ArrayList<OrderDTO>();
 		for (Order order : orders) {
 			OrderDTO oDTO = new OrderDTO();

@@ -73,7 +73,7 @@ import Swal from 'sweetalert2'
 const API_URL = config.API_URL;
 
 export default {
-  name: 'OrdersPage',
+  name: 'PostOrderPage',
   components: {
     'medicines-list': MedicinesList,
     Datepicker,
@@ -117,16 +117,8 @@ export default {
       this.selectedMedicines.push(medicineQuantity);
     },
     finishOrder() {
-      var orderMedicines = []
 
-      this.selectedMedicines.map(mq => {
-        orderMedicines.push({
-          medicineId: mq.medicine.id,
-          quantity: mq.quantity
-        })
-      })
-
-      if (orderMedicines.length === 0) {
+      if (this.selectedMedicines.length === 0) {
         Swal.fire({
           title: 'Error',
           text: 'Medicine list for order is empty!',
@@ -144,10 +136,10 @@ export default {
           const postObj = {
             id: 1,
             pharmacy: this.admin.pharmacy,
-            orderMedicines: orderMedicines,
+            orderMedicines: this.selectedMedicines,
             deadline: this.date.getTime()
           }
-
+          
           axios
             .post(`${API_URL}/orders/create-order`, postObj)
             .then(response => {

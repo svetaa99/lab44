@@ -30,7 +30,7 @@ public class OrderDTO {
 		List<OrderMedicines> orderMedicines = o.getOrders();
 		List<MedicineQuantityDTO> mqList = new ArrayList<MedicineQuantityDTO>();
 		for (OrderMedicines om : orderMedicines) {
-			MedicineQuantityDTO mq = new MedicineQuantityDTO(om.getMedicine().getId(), om.getQuantity());
+			MedicineQuantityDTO mq = new MedicineQuantityDTO(om.getMedicine(), om.getQuantity());
 			mqList.add(mq);
 		}
 		
