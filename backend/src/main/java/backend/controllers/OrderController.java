@@ -14,18 +14,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.MedicineQuantityDTO;
 import backend.dto.OrderDTO;
 import backend.dto.SupplierOfferDTO;
+import backend.models.LabAdmin;
 import backend.models.Medicine;
 import backend.models.Order;
 import backend.models.OrderMedicines;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.models.SupplierOffer;
+import backend.services.ILabAdminService;
 import backend.services.IMedicineService;
 import backend.services.IOrderMedicinesService;
 import backend.services.IOrderService;
@@ -56,10 +57,12 @@ public class OrderController {
 	@Autowired
 	private ISupplierOfferService soService;
 	
+	@Autowired
+	private ILabAdminService laService;
+	
 	@PostMapping(value = "/create-order", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
-		System.out.println(orderDTO);
 		if (orderDTO.getOrderMedicines().size() == 0) {
 			return new ResponseEntity<OrderDTO>(HttpStatus.BAD_REQUEST);
 		}
@@ -68,8 +71,14 @@ public class OrderController {
 			return new ResponseEntity<OrderDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
+		Pharmacy pharmacy = orderDTO.getPharmacy();
+		if (!pharmacyService.findAll().contains(pharmacy)) {
+			return new ResponseEntity<OrderDTO>(HttpStatus.NOT_FOUND);
+		}
+		
 		Order o = new Order();
 		o.setDeadline(orderDTO.getDeadline());
+		o.setPharmacy(pharmacy);
 		orderService.save(o);
 		
 		List<MedicineQuantityDTO> medicines = orderDTO.getOrderMedicines();
@@ -84,9 +93,7 @@ public class OrderController {
 			omService.save(om);
 		}
 		
-		// HARDKODED PHARMACY 2
-		
-		Long pharmacyId = (long) 2;
+		Long pharmacyId = pharmacy.getId();
 		
 		List<Medicine> meds = pmService.findAllMedicinesInPharmacy(pharmacyId);
 		
@@ -112,6 +119,27 @@ public class OrderController {
 		}
 		
 		return new ResponseEntity<OrderDTO>(orderDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/view-all-orders/{id}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<List<OrderDTO>> viewAllOrders(@PathVariable("id") Long adminId) {
+		System.out.println(adminId);
+		LabAdmin admin = laService.findById(adminId);
+		Pharmacy p = admin.getPharmacy();
+		
+		List<Order> orders = orderService.findAllFromPharmacyId(p.getId());
+		List<OrderDTO> oDTOs = new ArrayList<OrderDTO>();
+		for (Order order : orders) {
+			OrderDTO oDTO = new OrderDTO();
+			oDTO.setId(order.getId());
+			oDTO.setOrderMedicines(oDTO.createMQList(order));
+			oDTO.setDeadline(order.getDeadline());
+			oDTO.setPharmacy(p);
+			oDTOs.add(oDTO);
+		}
+		
+		return new ResponseEntity<List<OrderDTO>>(oDTOs, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/list-offers/{id}")

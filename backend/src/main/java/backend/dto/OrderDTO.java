@@ -1,20 +1,40 @@
 package backend.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import backend.models.Order;
+import backend.models.OrderMedicines;
+import backend.models.Pharmacy;
 
 public class OrderDTO {
 	
 	private Long id;
+	private Pharmacy pharmacy;
 	private List<MedicineQuantityDTO> orderMedicines;
 	private long deadline;
 	
-	public OrderDTO(Long id, List<MedicineQuantityDTO> orderMedicines, long deadline) {
+	public OrderDTO(Long id, Pharmacy pharmacy, List<MedicineQuantityDTO> orderMedicines, long deadline) {
 		super();
 		this.id = id;
+		this.pharmacy = pharmacy;
 		this.orderMedicines = orderMedicines;
 		this.deadline = deadline;
+	}
+	
+	public OrderDTO() {
+		
+	}
+	
+	public List<MedicineQuantityDTO> createMQList(Order o) {
+		List<OrderMedicines> orderMedicines = o.getOrders();
+		List<MedicineQuantityDTO> mqList = new ArrayList<MedicineQuantityDTO>();
+		for (OrderMedicines om : orderMedicines) {
+			MedicineQuantityDTO mq = new MedicineQuantityDTO(om.getMedicine().getId(), om.getQuantity());
+			mqList.add(mq);
+		}
+		
+		return mqList;
 	}
 
 	public Long getId() {
@@ -23,6 +43,14 @@ public class OrderDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Pharmacy getPharmacy() {
+		return pharmacy;
+	}
+
+	public void setPharmacy(Pharmacy pharmacy) {
+		this.pharmacy = pharmacy;
 	}
 
 	public long getDeadline() {

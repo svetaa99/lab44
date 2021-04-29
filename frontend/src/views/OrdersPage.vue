@@ -84,6 +84,7 @@ export default {
       selectedMedicine: {
         name: "Medicine not selected"
       },
+      admin: {},
       quantity: 1,
       date: "",
       selectedMedicines: [],
@@ -94,6 +95,13 @@ export default {
       .get(`${API_URL}/medicines/all`)
       .then(response => {
         this.medicines = response.data
+      })
+
+    axios
+      .get(`${API_URL}/labadmins/registered-admin`)
+      .then(response => {
+        this.admin = response.data;
+        console.log(this.admin);
       })
   },
   methods: {
@@ -134,7 +142,8 @@ export default {
         })
       } else {
           const postObj = {
-            id: 1, 
+            id: 1,
+            pharmacy: this.admin.pharmacy,
             orderMedicines: orderMedicines,
             deadline: this.date.getTime()
           }

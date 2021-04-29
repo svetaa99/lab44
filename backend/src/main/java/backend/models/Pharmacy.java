@@ -50,10 +50,13 @@ public class Pharmacy {
 	private List<Pharmacist> pharmacists = new ArrayList<Pharmacist>();
 	
 	@OneToMany
-	private List<PharmacyAdmin> pharmacyAdmins = new ArrayList<PharmacyAdmin>();
+	private List<LabAdmin> labAdmins = new ArrayList<LabAdmin>();
 	
 	@OneToMany(mappedBy = "pharmacy")
 	private List<Reservation> reservations;
+	
+	@OneToMany(mappedBy = "pharmacy")
+	private List<Order> orders;
 	
 	public Pharmacy() {
 		
