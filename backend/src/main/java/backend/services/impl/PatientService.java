@@ -26,6 +26,11 @@ public class PatientService implements IPatientService{
 		return patientRepository.findAll(order == 0 ? sortOrder.ascending() : sortOrder.descending());
 	}
 	
+	@Override
+	public Patient findByEmail(String email) {
+		return patientRepository.findByEmailEquals(email);
+	}
+	
 	public List<Patient> findAllByName(String name){
 		return patientRepository.findAllByName(name);
 	}

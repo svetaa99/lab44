@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,12 +91,19 @@ public class PatientController {
 	
 	@GetMapping("/print-allergies/{id}")
 	public ResponseEntity<PatientDTO> getAllergies(@PathVariable Long id) {
-		System.out.println("USOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		Patient p = patientService.findById(id);
 		
 		System.out.println("ALEEEEERG" + p.getAllergies());
 		
 		return null;
+	}
+	
+	@GetMapping("/registered-patient")
+	public ResponseEntity<PatientDTO> getRegisteredPatient() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		Patient p = patientService.findByEmail(token);
+		
+		return new ResponseEntity<PatientDTO>(new PatientDTO(p), HttpStatus.OK);
 	}
 	
 	public List<PatientDTO> turnPatientsToDTO(List<Patient> patients){

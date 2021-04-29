@@ -76,17 +76,6 @@ export default {
   methods: {
     reserve() {
       this.reservation.pharmacy = this.selectedPM.pharmacy
-      this.reservation.patient = {
-        id: 10,
-        name: "Filip", 
-        surname: "Volaric",
-        email: "filip.kresa@gmail.com",
-        password: "fickos123",
-        address: 4,
-        phoneNum: "0641345948",
-        points: "15",
-        category: "GOLD"
-      }
       this.reservation.medicine = this.selectedPM.medicine
       this.reservation.totalPrice = this.selectedPM.price * this.reservation.quantity
       this.reservation.date = this.reservation.date.getTime()
@@ -108,16 +97,21 @@ export default {
   mounted() {
     const arr = window.location.href.split("/");
     const id = arr[arr.length - 1];
+    axios
+      .get(`${API_URL}/patients/registered-patient`)
+      .then(response => {
+        this.reservation.patient = response.data;
+        console.log(this.reservation.patient)
+      })
+      
     axios.get(`${API_URL}/medicines/${id}`).then((response) => {
       this.medicine = response.data;
-
       axios
         .get(`${API_URL}/pharmacy-medicines/get-pharmacies/${this.medicine.id}`)
         .then((response) => {
           this.options = response.data;
           console.log(this.options)
         })
-
     });
   },
 };
