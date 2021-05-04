@@ -6,24 +6,24 @@ import backend.models.Medicine;
 
 public class MedicineQuantityDTO {
 	
-	private Long medicineId;
+	private Medicine medicine;
 	private int quantity;
 	
 	public MedicineQuantityDTO() {
 		
 	}
 	
-	public MedicineQuantityDTO(Long medicineId, int quantity) {
-		this.medicineId = medicineId;
+	public MedicineQuantityDTO(Medicine medicine, int quantity) {
+		this.medicine = medicine;
 		this.quantity = quantity;
 	}
 
-	public Long getMedicineId() {
-		return medicineId;
+	public Medicine getMedicine() {
+		return medicine;
 	}
 
-	public void setMedicineId(Long medicineId) {
-		this.medicineId = medicineId;
+	public void setMedicine(Medicine medicine) {
+		this.medicine = medicine;
 	}
 
 	public int getQuantity() {

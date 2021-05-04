@@ -73,7 +73,7 @@ import Swal from 'sweetalert2'
 const API_URL = config.API_URL;
 
 export default {
-  name: 'OrdersPage',
+  name: 'PostOrderPage',
   components: {
     'medicines-list': MedicinesList,
     Datepicker,
@@ -84,6 +84,7 @@ export default {
       selectedMedicine: {
         name: "Medicine not selected"
       },
+      admin: {},
       quantity: 1,
       date: "",
       selectedMedicines: [],
@@ -94,6 +95,12 @@ export default {
       .get(`${API_URL}/medicines/all`)
       .then(response => {
         this.medicines = response.data
+      })
+
+    axios
+      .get(`${API_URL}/labadmins/registered-admin`)
+      .then(response => {
+        this.admin = response.data;
       })
   },
   methods: {
@@ -109,53 +116,47 @@ export default {
       this.selectedMedicines.push(medicineQuantity);
     },
     finishOrder() {
-      var orderMedicines = []
 
-      this.selectedMedicines.map(mq => {
-        orderMedicines.push({
-          medicineId: mq.medicine.id,
-          quantity: mq.quantity
-        })
-      })
-
-      if (orderMedicines.length === 0) {
+      if (this.selectedMedicines.length === 0) {
         Swal.fire({
           title: 'Error',
           text: 'Medicine list for order is empty!',
           icon: 'error',
           confirmButtonText: 'Back'
         })
-      }
-
-      if (this.date === "") {
+      } else if (this.date === "") {
         Swal.fire({
           title: 'Error',
           text: 'Selected date is empty!',
           icon: 'error',
           confirmButtonText: 'Back'
         })
-      }
-
-      const postObj = {
-        id: 1, 
-        orderMedicines: orderMedicines,
-        deadline: this.date.getTime()
-      }
-
-      axios
-        .post(`${API_URL}/orders/create-order`, postObj)
-        .then(response => {
-          if (response.status === 200) {
-            Swal.fire({
-              title: 'Success!',
-              text: 'Successfully posted order.',
-              icon: 'success',
-              confirmButtonText: 'Continue'
-            })
-
-            window.location.href = '/'
+      } else {
+          const postObj = {
+            id: 1,
+            pharmacy: this.admin.pharmacy,
+            orderMedicines: this.selectedMedicines,
+            deadline: this.date.getTime()
           }
-        })
+
+          axios
+            .post(`${API_URL}/orders/create-order`, postObj)
+            .then(response => {
+              if (response.status === 200) {
+                Swal.fire({
+                  title: 'Success!',
+                  text: 'Successfully posted order.',
+                  icon: 'success',
+                })
+              } else if (response.status === 400) {
+                Swal.fire({
+                  title: 'Error!',
+                  text: 'Error when trying to post order.',
+                  icon: 'order',
+                })
+              }
+            })
+      }
     },
     handleDeleteClick(medicine) {
       for (var i = 0; i < this.selectedMedicines.length; i++) {
@@ -164,7 +165,6 @@ export default {
         }
       }
     }
-
   }
 
 }

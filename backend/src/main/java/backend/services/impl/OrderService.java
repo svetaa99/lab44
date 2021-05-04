@@ -36,4 +36,9 @@ public class OrderService implements IOrderService {
 		orderRepository.delete(obj);
 	}
 
+	@Override
+	public List<Order> findAllFromPharmacyId(Long pharmacyId) {
+		return orderRepository.findByPharmacyIdEquals(pharmacyId);
+	}
+
 }

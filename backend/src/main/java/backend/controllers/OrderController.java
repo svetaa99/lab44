@@ -14,18 +14,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.MedicineQuantityDTO;
 import backend.dto.OrderDTO;
 import backend.dto.SupplierOfferDTO;
+import backend.models.LabAdmin;
 import backend.models.Medicine;
 import backend.models.Order;
 import backend.models.OrderMedicines;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.models.SupplierOffer;
+import backend.services.ILabAdminService;
 import backend.services.IMedicineService;
 import backend.services.IOrderMedicinesService;
 import backend.services.IOrderService;
@@ -56,10 +57,12 @@ public class OrderController {
 	@Autowired
 	private ISupplierOfferService soService;
 	
+	@Autowired
+	private ILabAdminService laService;
+	
 	@PostMapping(value = "/create-order", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
-		System.out.println(orderDTO);
 		if (orderDTO.getOrderMedicines().size() == 0) {
 			return new ResponseEntity<OrderDTO>(HttpStatus.BAD_REQUEST);
 		}
@@ -68,14 +71,20 @@ public class OrderController {
 			return new ResponseEntity<OrderDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
+		Pharmacy pharmacy = orderDTO.getPharmacy();
+		if (!pharmacyService.findAll().contains(pharmacy)) {
+			return new ResponseEntity<OrderDTO>(HttpStatus.NOT_FOUND);
+		}
+		
 		Order o = new Order();
 		o.setDeadline(orderDTO.getDeadline());
+		o.setPharmacy(pharmacy);
 		orderService.save(o);
 		
 		List<MedicineQuantityDTO> medicines = orderDTO.getOrderMedicines();
 		
 		for (MedicineQuantityDTO mq : medicines) {
-			Medicine m = medicineService.findById(mq.getMedicineId());
+			Medicine m = mq.getMedicine();
 			OrderMedicines om = new OrderMedicines();
 			om.setMedicine(m);
 			om.setOrder(o);
@@ -84,14 +93,12 @@ public class OrderController {
 			omService.save(om);
 		}
 		
-		// HARDKODED PHARMACY 2
-		
-		Long pharmacyId = (long) 2;
+		Long pharmacyId = pharmacy.getId();
 		
 		List<Medicine> meds = pmService.findAllMedicinesInPharmacy(pharmacyId);
 		
 		for (MedicineQuantityDTO mq : medicines) {
-			Medicine m = medicineService.findById(mq.getMedicineId());
+			Medicine m = mq.getMedicine();
 			if (!meds.contains(m)) {
 				PharmacyMedicines pm = new PharmacyMedicines();
 				pm.setMedicine(m);
@@ -114,10 +121,34 @@ public class OrderController {
 		return new ResponseEntity<OrderDTO>(orderDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/list-offers/{id}")
+	@GetMapping(value = "/get-all-orders/{id}")
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
-	public ResponseEntity<List<SupplierOfferDTO>> listAllOffers(@PathVariable Long id) {
-		List<SupplierOffer> sos = soService.findAllByOrderId(id);
+	public ResponseEntity<List<OrderDTO>> viewAllOrders(@PathVariable("id") Long id) {
+		Pharmacy p = pharmacyService.findById(id);
+		
+		List<Order> orders = orderService.findAllFromPharmacyId(id);
+		List<OrderDTO> oDTOs = new ArrayList<OrderDTO>();
+		for (Order order : orders) {
+			OrderDTO oDTO = new OrderDTO();
+			oDTO.setId(order.getId());
+			oDTO.setOrderMedicines(oDTO.createMQList(order));
+			oDTO.setDeadline(order.getDeadline());
+			oDTO.setPharmacy(p);
+			oDTOs.add(oDTO);
+		}
+		
+		return new ResponseEntity<List<OrderDTO>>(oDTOs, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/list-offers/{pharmacyId}/{orderId}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<List<SupplierOfferDTO>> listAllOffers(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("orderId") Long orderId) {
+		List<Order> orders = orderService.findAllFromPharmacyId(pharmacyId);
+		if (orders.size() == 0) {
+			return new ResponseEntity<List<SupplierOfferDTO>>(new ArrayList<SupplierOfferDTO>(), HttpStatus.OK);
+		}
+		
+		List<SupplierOffer> sos = soService.findAllByOrderId(orderId);
 		List<SupplierOfferDTO> soDTOlist = new ArrayList<SupplierOfferDTO>();
 		
 		for (SupplierOffer so : sos) {

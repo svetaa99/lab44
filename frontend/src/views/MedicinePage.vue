@@ -76,57 +76,42 @@ export default {
   methods: {
     reserve() {
       this.reservation.pharmacy = this.selectedPM.pharmacy
-      this.reservation.patient = {
-        id: 10,
-        name: "Uros", 
-        surname: "Petric",
-        email: "uki.tricpe@gmail.com",
-        password: "urosplatinium",
-        address: 3,
-        phoneNum: "0651344891",
-        points: "22",
-        category: "PLATINUM"
-      }
       this.reservation.medicine = this.selectedPM.medicine
       this.reservation.totalPrice = this.selectedPM.price * this.reservation.quantity
       this.reservation.date = this.reservation.date.getTime()
 
-
-      // axios
-      //   .post(`${API_URL}/reservations/`, this.reservation)
-      //   .then(response => {
-      //     if (response.status === 200) {
-      //       Swal.fire({
-      //         title: 'Success',
-      //         text: 'Posted reservation!',
-      //         icon: 'success',
-      //         button: null,
-      //         time: 2000
-      //       })
-      //     }
-      //   })
-      Swal.fire({
-        title: 'Success',
-        text: 'Posted reservation!',
-        icon: 'success',
-        button: null,
-        time: 2000
-      })
+      console.log(this.reservation)
+      axios
+        .post(`${API_URL}/reservations/`, this.reservation)
+        .then(response => {
+          if (response.status === 200) {
+            Swal.fire({
+              title: 'Success',
+              text: 'Posted reservation!',
+              icon: 'success',
+            })
+          }
+        })
     }
   },
   mounted() {
     const arr = window.location.href.split("/");
     const id = arr[arr.length - 1];
+    axios
+      .get(`${API_URL}/patients/registered-patient`)
+      .then(response => {
+        this.reservation.patient = response.data;
+        console.log(this.reservation.patient)
+      })
+      
     axios.get(`${API_URL}/medicines/${id}`).then((response) => {
       this.medicine = response.data;
-
       axios
         .get(`${API_URL}/pharmacy-medicines/get-pharmacies/${this.medicine.id}`)
         .then((response) => {
           this.options = response.data;
           console.log(this.options)
         })
-
     });
   },
 };

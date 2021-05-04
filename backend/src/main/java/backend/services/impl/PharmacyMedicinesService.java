@@ -42,7 +42,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	public List<Medicine> findAllMedicinesInPharmacy(Long pharmacyId) {
 		List<PharmacyMedicines> pmList = pharmacyMedicineRepository.findByPharmacyIdEquals(pharmacyId);
 		if (pmList.size() == 0) {
-			return null;
+			return new ArrayList<Medicine>();
 		}
 		
 		List<Medicine> medicines = new ArrayList<Medicine>();
@@ -58,7 +58,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	public List<Pharmacy> findAllPharmaciesWithMedicine(Long medicineId) {
 		List<PharmacyMedicines> pmList = pharmacyMedicineRepository.findByMedicineIdEquals(medicineId);
 		if (pmList.size() == 0) {
-			return null;
+			return new ArrayList<Pharmacy>();
 		}
 		
 		List<Pharmacy> pharmacies = new ArrayList<Pharmacy>();

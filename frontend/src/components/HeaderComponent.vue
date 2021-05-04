@@ -94,12 +94,23 @@
           </li>
           <li v-if="userRoles.includes(4)"
             :class="
-              $route.path === '/orders'
+              $route.path === '/post-order'
                 ? 'nav-item active'
                 : 'nav-item'
             "
           >
-            <router-link to="/orders" class="nav-link"
+            <router-link to="/post-order" class="nav-link"
+              >New order</router-link
+            >
+          </li>
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/all-orders'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/all-orders" class="nav-link"
               >Orders</router-link
             >
           </li>

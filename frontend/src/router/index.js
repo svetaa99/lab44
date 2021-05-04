@@ -14,7 +14,8 @@ import DoctorScheduledVisits from '../components/DoctorScheduledVisits.vue'
 import VisitPage from '../views/VisitPage'
 import PharmacistAppointmentPage from '../views/PharmacistAppointmentPage.vue'
 import PharmacyPharmacistPage from '../views/PharmacyPharmacistPage.vue';
-import OrdersPage from '../views/OrdersPage.vue'
+import PostOrderPage from '../views/PostOrderPage.vue'
+import AllOrdersPage from '../views/AllOrdersPage.vue'
 import SupplierOffersPage from '../views/SupplierOffersPage.vue'
 import IssueComponent from '../components/IssueComponent.vue'
 
@@ -100,9 +101,9 @@ const routes = [
     component: PharmacyPharmacistPage
   },
   {
-    path: '/orders',
-    name: 'OrdersPage',
-    component: OrdersPage
+    path: '/post-order',
+    name: 'PostOrderPage',
+    component: PostOrderPage
   },
   {
     path: '/supplier-offers',
@@ -113,6 +114,11 @@ const routes = [
     path: '/issue-medicine',
     name: 'IsueMedicinePage',
     component: IssueComponent
+  },
+  {
+    path: '/all-orders',
+    name: 'AllOrdersPage',
+    component: AllOrdersPage
   }
 ]
 
