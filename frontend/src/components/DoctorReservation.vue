@@ -9,7 +9,6 @@
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                        <!-- Once we have information about user in session this information will not be static -->
                       <h4>{{patient.name}} {{patient.surname}}</h4>
                       <p class="text-secondary mb-1">{{patient.email}}</p>
                       <p class="text-muted font-size-sm">{{patient.category}}</p>
@@ -18,11 +17,10 @@
                   </div>
                 </div>
               </div>
-            </div>
-            
+            </div>      
             <!-- Search form and table with free terms -->
             <div class="col-md-8">
-              <div class="card mb-3">
+              <div class="card mb-3" v-if="doctorRoles.includes(2)"> <!-- Only dermatologist can make new term -->
                 <div class="card-body">
                   <div class="row">
                     <div class="input-group">
@@ -35,7 +33,6 @@
                   </div>
                   <hr>
                   <table class="table">
-                      <!-- Replace with v-for once you get data from server -->
                     <thead class="thead-dark">
                         <tr>
                         <th scope="col">Date</th>
@@ -57,14 +54,15 @@
                 </div>
                 </div>
                 <div class="card mb-3">
-                    <div class="card-body" v-if="newTermShow" id="newTermDiv">
+                    <div class="card-body" v-if="newTermShow || doctorRoles.includes(3)" id="newTermDiv"> <!-- if dermatist clicked on new term or if doctor is pharmacist since pharmacists do not have terms-->
                         <b-form-datepicker id="datepicker-lg" size="lg" locale="en" v-model="newStartDate"></b-form-datepicker>
                         <hr>
                         <div class="mob"> <label class="text-grey mr-1">From</label> <input class="ml-1" type="time" name="from" v-model="newStartTime"> </div>
                         <hr>
                         <div class="mob mb-2"> <label class="text-grey mr-4">To</label> <input class="ml-1" type="time" name="to" v-model="newFinishTime"> </div>
                         <hr>
-                        <button type="button" class="btn btn-success" v-on:click="saveNewTerm()">Save</button> <button type="button" class="btn btn-outline-danger" id="cancelButton" v-on:click="newTermShow=false">Cancel</button>
+                        <button type="button" class="btn btn-success" v-on:click="saveNewTerm()">Save</button>
+                        <button type="button" class="btn btn-outline-danger" v-if="!doctorRoles.includes(3)" id="cancelButton" v-on:click="newTermShow=false">Cancel</button>
                     </div>
                 </div>
               </div>
@@ -86,7 +84,7 @@ export default {
             visitId: this.$route.params.id,
             newTermShow: false,
             patient: null,  //this data will be hardcoded for now because there is no authentification ATM
-            doctor: null,
+            doctorRoles: [],
             pharmacyId: '',
             newStartDate: '',
             newStartTime: '', //these attributes will be selected by doctor
@@ -146,10 +144,17 @@ export default {
       },
       saveNewTerm: function(){
         //axios request to write new term into database
-        var newTerm = {doctorId: 1, pharmacyId: 1, start: (this.newStartDate + "T" + this.newStartTime), finish: (this.newStartDate + "T" + this.newFinishTime)}  //for now values for doctor id and pharmacy id will be hardcoded, once login is implemented these information will be extracted from session
-        axios
-        .post('http://localhost:8000/doctorterms/createnew', newTerm)
-        .then(response => {this.handleResponse(response.data)})
+        //doctorId and pharmacyId replaced on backend
+        var newTerm = {doctorId: 1, pharmacyId: this.pharmacyId, start: (this.newStartDate + "T" + this.newStartTime), finish: (this.newStartDate + "T" + this.newFinishTime)}
+        if(this.doctorRoles.includes(3)){
+          this.makeReservation();
+        }
+        else{
+          axios
+          .post('http://localhost:8000/doctorterms/createnew', newTerm)
+          .then(response => {this.handleResponse(response.data)})
+        }
+       
       },
       handleResponse: function(respData){
         respData == "Taken term" ? 
@@ -167,7 +172,11 @@ export default {
       },
       makeReservation: function(){
         //dialog for are you sure first - once clicked yes action preforms
-        var newReservation = {patientId: this.patient.id, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish)}
+        //doctorId changes on backend
+        if(this.doctorRoles.includes(3))
+          var newReservation = {patientId: this.patient.id, doctorId: 1, start: this.newStartDate + "T" + this.newStartTime, finish: this.newStartDate + "T" + this.newFinishTime, pharmacy: this.pharmacyId};
+        else
+          var newReservation = {patientId: this.patient.id, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish), pharmacy: this.pharmacyId}
         axios
         .post('http://localhost:8000/appointments/make-appointment', newReservation)
         .then(response => {response.data === "Patient unavailable" ? Swal.fire({
@@ -195,6 +204,14 @@ export default {
         axios
         .get(`http://localhost:8000/appointments/get-user/${this.visitId}`)
         .then(response => {this.patient = response.data; console.log(this.patient)});
+        axios
+        .get(`http://localhost:8000/appointments/get-pharmacy/${this.visitId}`)
+        .then(response => { this.pharmacyId = response.data; })
+
+        const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+        tokenItem.token.roles.map(el => {
+          this.doctorRoles.push(el.id);
+        });
     }
 
 }

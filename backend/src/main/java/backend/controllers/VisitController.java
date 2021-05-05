@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
+import backend.enums.Status;
 import backend.models.Doctor;
 import backend.models.Patient;
 import backend.models.Report;
@@ -70,6 +71,12 @@ public class VisitController {
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> makeAppointment(@RequestBody Visit newReservation){
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		Long doctorId = u.getId();
+		
+		newReservation.setDoctorId(doctorId);
+		newReservation.setStatus(Status.RESERVED);
 		
 		if(!checkTermTaken(newReservation))
 			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
@@ -77,12 +84,8 @@ public class VisitController {
 		visitService.save(newReservation);
 		
 		Patient p = patientService.findById(newReservation.getPatientId());
-		System.out.println("Pacijent null? - " + p + "\nId: " + newReservation.getPatientId() + "\n");
 		String patientsEmail = p.getEmail();
 		
-		String token = SecurityContextHolder.getContext().getAuthentication().getName();
-		User u = userService.findUserByEmail(token);
-		Long doctorId = u.getId();
 		LocalDateTime ldt = newReservation.getStart();
 		
 		notifyPatientViaEmail(patientsEmail, doctorId, ldt, p.getName());
@@ -93,6 +96,12 @@ public class VisitController {
 	@PostMapping(value = "/report-visit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> saveAppointment(@RequestBody Report newReport){
+		System.out.println("ISPIS JEBA TE ON");
+		Visit v = visitService.findById(newReport.getVisitId());
+		v.setStatus(Status.FINISHED);
+		System.out.println("Int: " + Status.FINISHED);
+		visitService.save(v);
+		
 		reportService.save(newReport);
 		return new ResponseEntity<String>("Report saved!", HttpStatus.OK);
 	}
@@ -127,7 +136,9 @@ public class VisitController {
 			LocalDateTime visitStart = visit.getStart();
 			LocalDateTime visitFinish = visit.getFinish();
 			VisitDTO newVisitDTO = new VisitDTO(visitId, visitPatient, visitDoctor, visitStart, visitFinish);
-			visitsDTO.add(newVisitDTO);
+			
+			if(visit.getStatus() == Status.RESERVED)
+				visitsDTO.add(newVisitDTO);
 		}
 		Collections.sort(visitsDTO);
 		return new ResponseEntity<List<VisitDTO>>(visitsDTO,  HttpStatus.OK);
@@ -139,6 +150,14 @@ public class VisitController {
 		Patient p = patientService.findById(v.getPatientId());
 		
 		return new ResponseEntity<PatientDTO>(new PatientDTO(p), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-pharmacy/{visitId}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
+	public ResponseEntity<Long> getPharmacyIdByVisitId(@PathVariable Long visitId){
+		Visit v = visitService.findById(visitId);
+		Long pharmacyId = v.getPharmacy();
+		return new ResponseEntity<Long>(pharmacyId, HttpStatus.OK);
 	}
 	
 	private boolean checkTermTaken(Visit newReservation) {
@@ -157,6 +176,7 @@ public class VisitController {
 			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
 				return false;
 		}
+		//check for doctor as well
 		return true;
 	}
 	

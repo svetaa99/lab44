@@ -25,6 +25,7 @@ import backend.models.User;
 import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.UserService;
+import comparators.DoctorTermsComparator;
 
 @RestController
 @RequestMapping(value = "doctorterms")
@@ -46,23 +47,32 @@ public class DoctorTermsController {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		Long doctorId = u.getId();
-		//Long pharmacyId = (long) 1;
-
-		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId);
+		
+		DoctorTermsComparator dtc = new DoctorTermsComparator();
+		
+		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId).stream()
+				.filter(rv -> rv.getStart().isAfter(LocalDateTime.now())).collect(Collectors.toList());	
+		
+		retVal.sort(dtc);
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/createnew", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')") //DERMATOLOGIST ONLY
 	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm){
 		System.out.println("We got : " + newTerm + "\n\n from client...");
+		
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		Long doctorId = u.getId();
+		
+		newTerm.setDoctorId(doctorId);
 		
 		if(checkIfTakenTerm(newTerm)) {
 			if(checkIfInWorkingHours(newTerm)) {
 				doctorTermsService.save(newTerm);
 				System.out.println("Object saved to db...");
-		
 			}
 			else
 				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
@@ -71,12 +81,19 @@ public class DoctorTermsController {
 			System.out.println("Taken term...");
 			return new ResponseEntity<String>("Taken term", HttpStatus.OK);
 		}
-			
-		return new ResponseEntity<String>(g.toJson(doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId())), HttpStatus.OK);
+		List<DoctorTerms> retVal = doctorTermsService
+				.findByDoctorIdEquals(doctorId)
+				.stream()
+				.filter(dt -> dt.getStart().isAfter(LocalDateTime.now()))
+				.collect(Collectors.toList());
+		
+		DoctorTermsComparator dtc = new DoctorTermsComparator();
+		retVal.sort(dtc);
+		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/search-date-time", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE )
-	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')") //DERMATOLOGIST ONLY
 	public ResponseEntity<String> searchDateTime(@RequestBody SearchDateTime newDateTime){
 
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -103,12 +120,15 @@ public class DoctorTermsController {
 		List<DoctorTerms> doctorsTakenTerms = doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId());
 		LocalDateTime startTime = newTerm.getStart();
 		LocalDateTime finishTime = newTerm.getFinish();
+		
 		for (DoctorTerms doctorTerms : doctorsTakenTerms) {
 			if(startTime.isAfter(doctorTerms.getStart()) && startTime.isBefore(doctorTerms.getFinish())) 
 				return false;
 			else if(finishTime.isAfter(doctorTerms.getStart()) && finishTime.isBefore(doctorTerms.getFinish())) 
 				return false;
-			else if(startTime.isBefore(doctorTerms.getStart()) && finishTime.isAfter(doctorTerms.getFinish()))
+			else if(startTime.isBefore(doctorTerms.getStart()) && finishTime.isAfter(doctorTerms.getFinish())) 
+				return false;
+			else if(startTime.equals(doctorTerms.getStart()) || finishTime.equals(doctorTerms.getFinish()))
 				return false;
 		} 
 		return true;

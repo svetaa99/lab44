@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import backend.enums.Status;
+
 @Entity
 @Table(name="reservations")
 public class Reservation {
@@ -37,6 +39,9 @@ public class Reservation {
 	
 	@Column(name = "total_price")
 	double totalPrice;
+	
+	@Column(name = "status")
+	Status status;
 	
 	public Reservation() {
 		

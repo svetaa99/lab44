@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import backend.enums.Status;
+
 @Entity
 public class Visit {
 	
@@ -26,6 +28,12 @@ public class Visit {
 	
 	@Column(name="finish_time", unique=false, nullable=true)
 	private LocalDateTime finish;
+	
+	@Column(name="pharmacy_id", unique=false, nullable=true) //nullable=false
+	private Long pharmacy;
+	
+	@Column(name="status", unique=false, nullable=true)
+	private Status status;
 
 	public Visit() {
 		
@@ -46,6 +54,18 @@ public class Visit {
 		this.doctorId = doctorId;
 		this.start = start;
 		this.finish = finish;
+	}
+	
+	public Visit(Long id, Long patientId, Long doctorId, LocalDateTime start, LocalDateTime finish, Long pharmacy,
+			Status status) {
+		super();
+		this.id = id;
+		this.patientId = patientId;
+		this.doctorId = doctorId;
+		this.start = start;
+		this.finish = finish;
+		this.pharmacy = pharmacy;
+		this.status = status;
 	}
 
 	public Long getId() {
@@ -86,6 +106,22 @@ public class Visit {
 
 	public void setFinish(LocalDateTime finish) {
 		this.finish = finish;
+	}
+	
+	public Long getPharmacy() {
+		return pharmacy;
+	}
+
+	public void setPharmacy(Long pharmacy) {
+		this.pharmacy = pharmacy;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	@Override

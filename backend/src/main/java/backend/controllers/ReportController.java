@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import backend.enums.Status;
 import backend.models.Medicine;
 import backend.models.MedicineDays;
 import backend.models.MedicineReportDTO;
@@ -56,9 +56,6 @@ public class ReportController {
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<List<MedicineReportDTO>> saveAppointment(@RequestBody Report newReport){
 		
-		//PharmacyMedicines pm = new PharmacyMedicines(); 
-		// Visit has no field in which pharmacy it is held
-		// Once that is changed in the model it will not be hardcoded to 1
 		List<MedicineReportDTO> medDTO = new ArrayList<MedicineReportDTO>();
 		
 		Visit visitReport = visitService.findById(newReport.getVisitId());
@@ -66,7 +63,7 @@ public class ReportController {
 		for (MedicineDays medDays : newReport.getMedicineDays()) {
 			MedicineReportDTO newMedRepDTO = new MedicineReportDTO(medicineService.findById(medDays.getmedicine()));
 			
-			Long pharmacyId = 1l; //visitReport.getPharmacyId();
+			Long pharmacyId = visitReport.getPharmacy();
 			newMedRepDTO.setAvailable(checkAvailable(pharmacyId, medDays.getmedicine())); //if not send notification to lab admin!
 			
 			Long patientId = visitReport.getPatientId();
@@ -79,6 +76,8 @@ public class ReportController {
 		}
 		else {
 			System.out.println("uspesno");
+			visitReport.setStatus(Status.FINISHED);
+			visitService.save(visitReport);
 			reportService.save(newReport);
 		}
 		return new ResponseEntity<List<MedicineReportDTO>>(medDTO, HttpStatus.OK);
