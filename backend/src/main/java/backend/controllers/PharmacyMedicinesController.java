@@ -62,7 +62,6 @@ public class PharmacyMedicinesController {
 	
 	@GetMapping(value = "/get-medicines-by-name/{medicineName}")
 	public ResponseEntity<List<PharmacyMedicinesDTO>> getPMFromMedicineName(@PathVariable("medicineName") String medicineName) {
-		System.out.println(medicineName);
 		List<PharmacyMedicines> pmList = pharmacyMedicineService.findAllByMedicineName(medicineName);
 		List<PharmacyMedicinesDTO> pmDTOs = new ArrayList<PharmacyMedicinesDTO>();
 		
@@ -72,5 +71,12 @@ public class PharmacyMedicinesController {
 		}
 		
 		return new ResponseEntity<List<PharmacyMedicinesDTO>>(pmDTOs, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/get-by-ids/{pharmacyId}/{medicineId}")
+	public ResponseEntity<PharmacyMedicinesDTO> getPMByIds(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("medicineId") Long medicineId) {
+		PharmacyMedicines pm = pharmacyMedicineService.findPharmacyMedicinesByIds(pharmacyId, medicineId);
+		
+		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);
 	}
 }

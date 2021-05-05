@@ -1,5 +1,8 @@
 <template>
   <div>
+
+    <update-medicine-price-modal :pharmacyMedicine="pharmacyMedicine"></update-medicine-price-modal>
+
     <table
       id="dtBasicExample"
       class="table table-striped table-bordered table-sm"
@@ -26,8 +29,19 @@
             <router-link
               :to="`/medicines/${m.id}`"
             >
-            Odaberi
+            Choose
             </router-link>
+          </td>
+          <td v-if="extra == 'update'">
+            <button 
+              type="button" 
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#updateMedicinePriceModal"
+              @click="handleUpdateClick(m)"
+            >
+              Update
+            </button>
           </td>
         </tr>
       </tbody>
@@ -36,11 +50,29 @@
 </template>
 
 <script>
+import UpdateMedicinePriceModal from './UpdateMedicinePriceModal.vue';
+import axios from 'axios'
+import { config } from '@/config.js'
+
+const API_URL = config.API_URL
+
 export default {
   name: "MedicinesList",
+  components: {
+    "update-medicine-price-modal": UpdateMedicinePriceModal
+  },
   props: {
     medicines: Array,
     extra: String,
+  },
+  data() {
+    return {
+      pharmacyMedicine: {
+        medicine: {
+          name: "",
+        },
+      },
+    }
   },
   methods: {
     handleRowDblClick(medicine) {
@@ -49,6 +81,19 @@ export default {
 
     handleInputOnChange() {
       this.$emit('change', this.quantity)
+    },
+
+    handleUpdateClick(medicine) {
+      axios
+      .get(`${API_URL}/labadmins/registered-admin`)
+      .then(response => {
+        const admin = response.data;
+        axios
+          .get(`${API_URL}/pharmacy-medicines/get-by-ids/${admin.pharmacy.id}/${medicine.id}`)
+          .then(response => {
+            this.pharmacyMedicine = response.data;
+          })
+      })
     }
   }
 };

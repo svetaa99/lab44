@@ -73,7 +73,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 
 	@Override
 	public PharmacyMedicines findPharmacyMedicinesByIds(Long pharmacyId, Long medicineId) {
-		return pharmacyMedicineRepository.findByPharmacyIdEqualsAndMedicineIdEquals(pharmacyId, medicineId);
+		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineId(pharmacyId, medicineId);
 	}
 
 	@Override
