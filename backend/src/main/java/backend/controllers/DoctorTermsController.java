@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import backend.models.User;
 import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.UserService;
+import backend.services.impl.VisitService;
 import comparators.DoctorTermsComparator;
 
 @RestController
@@ -38,29 +40,27 @@ public class DoctorTermsController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private VisitService visitService;
+	
 	private static Gson g = new Gson();
 	
-	@GetMapping("/definedterms")
+	@GetMapping("/definedterms/{visitId}")
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
-	public ResponseEntity<String> getDefinedTerms(){
+	public ResponseEntity<String> getDefinedTerms(@PathVariable("visitId") Long visitId){
 		System.out.println("Returning predefined terms for doctor in current session...");
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		Long doctorId = u.getId();
 		
-		DoctorTermsComparator dtc = new DoctorTermsComparator();
-		
-		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId).stream()
-				.filter(rv -> rv.getStart().isAfter(LocalDateTime.now())).collect(Collectors.toList());	
-		
-		retVal.sort(dtc);
+		List<DoctorTerms> retVal = filterAndSortTerms(doctorTermsService.findByDoctorIdEquals(doctorId), visitId);
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/createnew", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/createnew/{visitId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')") //DERMATOLOGIST ONLY
-	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm){
+	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm, @PathVariable("visitId") Long visitId){
 		System.out.println("We got : " + newTerm + "\n\n from client...");
 		
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -139,5 +139,18 @@ public class DoctorTermsController {
 				return true;
 		}
 		return false;
+	}
+	private List<DoctorTerms> filterAndSortTerms(List<DoctorTerms> terms, Long visitId){
+		DoctorTermsComparator dtc = new DoctorTermsComparator();
+		Long pharmacyId = visitService.findById(visitId).getPharmacy();
+		List<DoctorTerms> retVal = terms
+		.stream()
+		.filter(
+				rv -> rv.getStart().isAfter(LocalDateTime.now())
+				&& rv.getPharmacyId() == pharmacyId
+				)
+		.collect(Collectors.toList());
+		retVal.sort(dtc);
+		return retVal;
 	}
 }

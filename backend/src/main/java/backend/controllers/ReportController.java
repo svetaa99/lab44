@@ -82,17 +82,21 @@ public class ReportController {
 		}
 		return new ResponseEntity<List<MedicineReportDTO>>(medDTO, HttpStatus.OK);
 	}
-	private boolean checkAvailable(Long pharmacyId, Long medicineId) {
+	public boolean checkAvailable(Long pharmacyId, Long medicineId) {
 		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(pharmacyId, medicineId);
+		
+		if(pm == null)
+			return false;
+		
 		if(pm.getQuantity() <= 0)
 			return false;
-		else { //move this piece of code to the finish of report saving
+		else {
 			pm.setQuantity(pm.getQuantity() - 1);
 			pmService.save(pm);
 			return true;
 		}
 	}
-	private boolean checkAllergic(Long patientId, Long medicineId) {
+	public boolean checkAllergic(Long patientId, Long medicineId) {
 		Patient p = patientService.findById(patientId);
 		for (Medicine allergy : p.getAllergies()) {
 			if(medicineId == allergy.getId())

@@ -146,15 +146,24 @@ export default {
         //axios request to write new term into database
         //doctorId and pharmacyId replaced on backend
         var newTerm = {doctorId: 1, pharmacyId: this.pharmacyId, start: (this.newStartDate + "T" + this.newStartTime), finish: (this.newStartDate + "T" + this.newFinishTime)}
-        if(this.doctorRoles.includes(3)){
-          this.makeReservation();
-        }
-        else{
-          axios
-          .post('http://localhost:8000/doctorterms/createnew', newTerm)
-          .then(response => {this.handleResponse(response.data)})
-        }
-       
+        if(this.newStartTime < this.newFinishTime){
+          if(this.doctorRoles.includes(3)){
+            this.makeReservation();
+          }
+          else{
+            axios
+            .post(`http://localhost:8000/doctorterms/createnew/${this.pharmacyId}`, newTerm) //add param
+            .then(response => {this.handleResponse(response.data)})
+          }
+       }
+       else{
+         Swal.fire({
+          title: 'Invalid time values',
+          text: 'Finish time is before start time!',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+       }
       },
       handleResponse: function(respData){
         respData == "Taken term" ? 
@@ -197,16 +206,16 @@ export default {
         .then(response => {this.freeTerms = response.data})
       }
     },
-    mounted: function(){
-        axios 
-        .get('http://localhost:8000/doctorterms/definedterms') 
-        .then(response => {this.freeTerms = response.data; console.log(this.freeTerms)});
+    mounted: async function(){
         axios
         .get(`http://localhost:8000/appointments/get-user/${this.visitId}`)
         .then(response => {this.patient = response.data; console.log(this.patient)});
         axios
         .get(`http://localhost:8000/appointments/get-pharmacy/${this.visitId}`)
         .then(response => { this.pharmacyId = response.data; })
+        const a = await axios
+        .get(`http://localhost:8000/doctorterms/definedterms/${this.visitId}`)
+        .then(response => {this.freeTerms = response.data; console.log(this.freeTerms)});
 
         const tokenItem = JSON.parse(localStorage.getItem('jwt'));
         tokenItem.token.roles.map(el => {
