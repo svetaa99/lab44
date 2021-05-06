@@ -18,6 +18,7 @@ import PostOrderPage from '../views/PostOrderPage.vue'
 import AllOrdersPage from '../views/AllOrdersPage.vue'
 import SupplierOffersPage from '../views/SupplierOffersPage.vue'
 import IssueComponent from '../components/IssueComponent.vue'
+import VacationRequestComponent from '../components/VacationRequestComponent.vue'
 
 Vue.use(VueRouter)
 
@@ -119,6 +120,11 @@ const routes = [
     path: '/all-orders',
     name: 'AllOrdersPage',
     component: AllOrdersPage
+  },
+  {
+    path: '/vacation',
+    name: 'VacationRequestComponent',
+    component: VacationRequestComponent
   }
 ]
 

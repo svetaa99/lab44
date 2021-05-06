@@ -242,13 +242,10 @@ public class VisitController {
 	}
 	
 	private boolean checkIfInWorkingHours(Visit newTerm) {
-		System.out.println("\nTERMIN START: " + newTerm.getStart().toLocalTime() + "\nTERMIN KRAJ: " + newTerm.getFinish().toLocalTime());
 		for (WorkHours wh : dtService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacy())) {
-			System.out.println("\nRAD START: " + wh.getStartTime() + "\nRAD KRAJ: " + wh.getFinishTime());
 			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))
 				return true;
 		}			
-		System.out.println("\nRETURNING FALSE");
 		return false;
 	}
 	

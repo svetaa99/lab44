@@ -1,7 +1,7 @@
 <template>
   <div class="container" align="center" style="width: 750px">
     <form class="form-inline">
-      <Datepicker placeholder="Datum" v-model="date" />
+      <datepicker placeholder="Datum" v-model="date"></datepicker>
       <input class="ml-1" type="time" name="from" v-model="time" />
       <button
         type="button"

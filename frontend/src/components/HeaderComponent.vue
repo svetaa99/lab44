@@ -135,6 +135,16 @@
               >Issue medicine</router-link
             >
           </li>
+          <li v-if="userRoles.includes(3) || userRoles.includes(2)"
+            :class="
+              $route.path === '/vacation'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/vacation" class="nav-link"
+              >Vacation</router-link
+            >
+          </li>
         </ul>
       </div>
 
