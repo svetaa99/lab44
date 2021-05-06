@@ -7,24 +7,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.ReservationDTO;
+import backend.dto.UserDTO;
 import backend.models.Medicine;
 import backend.models.Patient;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.models.Reservation;
+import backend.models.User;
 import backend.services.IMedicineService;
 import backend.services.IPatientService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
 import backend.services.IReservationService;
+import backend.services.impl.UserService;
 
 @RestController
 @RequestMapping(value = "reservations")
@@ -46,7 +51,8 @@ public class ReservationController {
 	@Autowired
 	private IPharmacyMedicinesService pmService;
 	
-	
+	@Autowired
+	private UserService us;
 	
 	private List<ReservationDTO> createReservationDTOList(List<Reservation> reservations) {
 		List<ReservationDTO> rDTOs = new ArrayList<ReservationDTO>();
@@ -63,6 +69,36 @@ public class ReservationController {
 		List<Reservation> reservations = reservationService.findAll();
 		
 		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
+	}
+	
+	@GetMapping("/reservations-my")
+	public ResponseEntity<List<ReservationDTO>> getMy() {
+		
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = us.findUserByEmail(token);
+		if (u == null) {
+			System.out.println("Must login");
+		}
+		
+		List<Reservation> reservations = reservationService.findMy(u.getId());
+		
+		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "cancel-reservation/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ReservationDTO> cancelReservation(@PathVariable Long id) {
+		Reservation res = reservationService.findById(id);
+		
+		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(res.getPharmacy().getId(), res.getMedicine().getId());
+		int oldQuantity = pm.getQuantity();
+		
+		int newQuantity = oldQuantity + res.getQuantity();
+		pm.setQuantity(newQuantity);
+		pmService.save(pm);
+		
+		reservationService.delete(res);
+		
+		return new ResponseEntity<ReservationDTO>(HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

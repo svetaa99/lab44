@@ -125,6 +125,28 @@
               >Offers</router-link
             >
           </li>
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '//patient-dermatologist-appointment'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/patient-dermatologist-appointment" class="nav-link"
+              >Dermatologists</router-link
+            >
+          </li>
+          <li v-if="userRoles.length !== 0"
+            :class="
+              $route.path === '/reserved-drugs'
+                ? 'nav-item active'
+                : 'nav-item'
+            "
+          >
+            <router-link to="/reserved-drugs" class="nav-link"
+              >Reserved drugs</router-link
+            >
+          </li>
         </ul>
       </div>
 

@@ -1,6 +1,7 @@
 package backend.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,9 @@ public class UserService implements IService<User>{
 	
 	@Override
 	public User findById(Long id) {
-		return null;
+		if(userService.findById(id) == null)
+			return null;
+		return userService.findById(id).get();
 	}
 
 	@Override
