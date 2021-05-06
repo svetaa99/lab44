@@ -29,7 +29,7 @@ public class Visit {
 	@Column(name="finish_time", unique=false, nullable=true)
 	private LocalDateTime finish;
 	
-	@Column(name="pharmacy_id", unique=false, nullable=true) //nullable=false
+	@Column(name="pharmacy_id", unique=false, nullable=false) 
 	private Long pharmacy;
 	
 	@Column(name="status", unique=false, nullable=true)

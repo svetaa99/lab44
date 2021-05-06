@@ -188,17 +188,30 @@ export default {
           var newReservation = {patientId: this.patient.id, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish), pharmacy: this.pharmacyId}
         axios
         .post('http://localhost:8000/appointments/make-appointment', newReservation)
-        .then(response => {response.data === "Patient unavailable" ? Swal.fire({
-          text: 'Patient is unavailable in given term',
+        .then(response => {
+        if(response.data === "Patient unavailable"){
+          Swal.fire({
+          text: 'Patient is unavailable in given term!',
           icon: 'error',
           confirmButtonText: 'Ok'
-        }) : 
-        Swal.fire({
+        });
+        }
+        else if(response.data === "Not in your working hours"){
+          Swal.fire({
+          text: 'Not in your working hours!',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        });
+        }
+        else{
+          Swal.fire({
           title: 'New appointment added to work calendar',
           icon: 'success',
           confirmButtonText: 'Ok'
-        });})
-      },
+        });
+        }
+      })
+    },
       searchDateTime: function(){
         console.log(this.searchDateTimeObject.searchDate + " " + this.searchDateTimeObject.searchTime);
         axios

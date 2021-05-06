@@ -37,10 +37,13 @@ import backend.dto.VisitDTO;
 import backend.enums.Status;
 import backend.models.Doctor;
 import backend.models.Patient;
+import backend.models.Pharmacist;
 import backend.models.Report;
 import backend.models.User;
 import backend.models.Visit;
+import backend.models.WorkHours;
 import backend.services.impl.DoctorService;
+import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PatientService;
 import backend.services.impl.ReportService;
 import backend.services.impl.UserService;
@@ -66,6 +69,9 @@ public class VisitController {
 	@Autowired
 	private DoctorService doctorService;
 	
+	@Autowired
+	private DoctorTermsService dtService;
+	
 	private static Gson g = new Gson();
 	
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -81,6 +87,14 @@ public class VisitController {
 		if(!checkTermTaken(newReservation))
 			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
 		
+		if(u instanceof Pharmacist) {
+			System.out.println("\n\nJESTE FARMACEUUUT\n\n");
+			if(!checkIfInWorkingHours(newReservation)) {
+				System.out.println("\n\nJESTE FARMACEUUUT\n\n");
+				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
+			}
+		}
+		
 		visitService.save(newReservation);
 		
 		Patient p = patientService.findById(newReservation.getPatientId());
@@ -92,7 +106,7 @@ public class VisitController {
 		
 		return new ResponseEntity<String>(g.toJson(newReservation), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "/report-visit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> saveAppointment(@RequestBody Report newReport){
@@ -225,6 +239,17 @@ public class VisitController {
 		    }catch (MessagingException e){ 
 		    	e.printStackTrace();
 		    }
+	}
+	
+	private boolean checkIfInWorkingHours(Visit newTerm) {
+		System.out.println("\nTERMIN START: " + newTerm.getStart().toLocalTime() + "\nTERMIN KRAJ: " + newTerm.getFinish().toLocalTime());
+		for (WorkHours wh : dtService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacy())) {
+			System.out.println("\nRAD START: " + wh.getStartTime() + "\nRAD KRAJ: " + wh.getFinishTime());
+			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))
+				return true;
+		}			
+		System.out.println("\nRETURNING FALSE");
+		return false;
 	}
 	
 }
