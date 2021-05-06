@@ -6,17 +6,21 @@ public class PharmacyMedicineAddRemoveObject {
 	private Long medicineId;
 	private double price;
 	private int quantity;
+	private long startDate;
+	private long endDate;
 	
 	public PharmacyMedicineAddRemoveObject() {
 		
 	}
 
-	public PharmacyMedicineAddRemoveObject(Long pharmacyId, Long medicineId, double price, int quantity) {
+	public PharmacyMedicineAddRemoveObject(Long pharmacyId, Long medicineId, double price, int quantity, long startDate, long endDate) {
 		super();
 		this.pharmacyId = pharmacyId;
 		this.medicineId = medicineId;
 		this.price = price;
 		this.quantity = quantity;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 	
 	public PharmacyMedicineAddRemoveObject(Long pharmacyId, Long medicineId) {
@@ -75,5 +79,26 @@ public class PharmacyMedicineAddRemoveObject {
 		this.quantity = quantity;
 	}
 	
-	
+	public long getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(long startDate) {
+		this.startDate = startDate;
+	}
+
+	public long getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(long endDate) {
+		this.endDate = endDate;
+	}
+
+	@Override
+	public String toString() {
+		return "PharmacyMedicineAddRemoveObject [pharmacyId=" + pharmacyId + ", medicineId=" + medicineId + ", price="
+				+ price + ", quantity=" + quantity + ", startDate=" + startDate + ", endDate=" + endDate + "]";
+	}
+
 }

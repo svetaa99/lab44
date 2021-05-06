@@ -10,22 +10,26 @@ public class PharmacyMedicinesDTO {
 	private Medicine medicine;
 	private double price;
 	private int quantity;
+	private long startDate;
+	private long endDate;
 	
 	public PharmacyMedicinesDTO() {
 		
 	}
 
-	public PharmacyMedicinesDTO(Long id, Pharmacy pharmacy, Medicine medicine, double price, int quantity) {
+	public PharmacyMedicinesDTO(Long id, Pharmacy pharmacy, Medicine medicine, double price, int quantity, long startDate, long endDate) {
 		super();
 		this.id = id;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
 		this.price = price;
 		this.quantity = quantity;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 	
 	public PharmacyMedicinesDTO(PharmacyMedicines pm) {
-		this(pm.getId(), pm.getPharmacy(), pm.getMedicine(), pm.getPrice(), pm.getQuantity());
+		this(pm.getId(), pm.getPharmacy(), pm.getMedicine(), pm.getPrice(), pm.getQuantity(), pm.getStartDate(), pm.getEndDate());
 	}
 
 	public Long getId() {
@@ -66,6 +70,24 @@ public class PharmacyMedicinesDTO {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	
+	
+
+	public long getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(long startDate) {
+		this.startDate = startDate;
+	}
+
+	public long getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(long endDate) {
+		this.endDate = endDate;
 	}
 
 	@Override

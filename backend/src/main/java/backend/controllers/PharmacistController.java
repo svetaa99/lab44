@@ -49,7 +49,7 @@ public class PharmacistController {
 	}
 	
 	@GetMapping("/sort/rating/{type}/{id}")
-	private ResponseEntity<List<PharmacistDTO>> getSortedByRating(@PathVariable String type, @PathVariable Long id) {
+	public ResponseEntity<List<PharmacistDTO>> getSortedByRating(@PathVariable String type, @PathVariable Long id) {
 
 		List<Pharmacist> pharmacists = (List<Pharmacist>) pharmacistService.sortByRating(type, id);
 		List<PharmacistDTO> pharmacistsDTO = createPharmacistDTOList(pharmacists);

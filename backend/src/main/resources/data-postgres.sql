@@ -18,12 +18,10 @@ insert into medicine(name, type, specification) values ('Lek1', 1, 'neeekaaa spe
 insert into medicine(name, type, specification) values ('Lek2', 2, 'sdfsefs');
 insert into medicine(name, type, specification) values ('Lek3', 2, 'uiyuoirtl');
 
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (1, 1, 100, 100);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (1, 2, 120, 100);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (1, 3, 90, 100);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (2, 3, 70, 10);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (3, 3, 70, 6);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity) values (3, 1, 200, 26);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1622930400000, 1625522400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 2, 120, 100, 1622930400000, 1625522400000 );
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1622930400000, 1625522400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1622930400000, 1625522400000);
 
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (1, 'Mika', 'Mikic', 'mika22@gmail.com', 'mika123', 5, '011100100');
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (2, 'Djuka', 'Djukic', 'djuka22@gmail.com', 'djuka123', 5, '011101101');

@@ -2,7 +2,7 @@
   <div>
     <h1>{{pharmacy.name}}</h1>
     <MedicinesSearch v-model="searchName" @clicked="onSearchClick"/>
-    <MedicinesList :medicines="this.medicines"/>
+    <MedicinesList :medicines="this.medicines" :extra="extra"/>
   </div>
 </template>
 
@@ -25,6 +25,7 @@ export default {
       pharmacy: {},
       medicines: [],
       searchName: '',
+      extra: 'update',
     }
   },
   mounted() {

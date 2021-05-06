@@ -1,13 +1,18 @@
 package backend.controllers;
 
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.PharmacyDTO;
@@ -60,7 +64,7 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/all")
-	private ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
+	public ResponseEntity<List<PharmacyDTO>> getAllPharmacies() {
 		List<Pharmacy> pharmacies = pharmacyService.findAll();
 		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
 		
@@ -68,7 +72,7 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/{id}")
-	private ResponseEntity<PharmacyDTO> getById(@PathVariable Long id) {
+	public ResponseEntity<PharmacyDTO> getById(@PathVariable Long id) {
 		Pharmacy pharmacy = pharmacyService.findById(id);
 		if (pharmacy.equals(null)) {
 			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
@@ -80,7 +84,7 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/search/{name}")
-	private ResponseEntity<List<PharmacyDTO>> getAllByName(@PathVariable String name) {
+	public ResponseEntity<List<PharmacyDTO>> getAllByName(@PathVariable String name) {
 		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.findAllByName(name);
 		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
 		
@@ -88,7 +92,7 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/filter/{rating}")
-	private ResponseEntity<List<PharmacyDTO>> getAllByRate(@PathVariable double rating) {
+	public ResponseEntity<List<PharmacyDTO>> getAllByRate(@PathVariable double rating) {
 		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.findAllByRating(rating);
 		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
 		
@@ -96,7 +100,7 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/sort/price/{type}")
-	private ResponseEntity<List<PharmacyDTO>> getAllSortedByPrice(@PathVariable String type) {
+	public ResponseEntity<List<PharmacyDTO>> getAllSortedByPrice(@PathVariable String type) {
 
 		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.sortByPharmacistPrice(type);
 		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
@@ -105,7 +109,7 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/sort/rating/{type}")
-	private ResponseEntity<List<PharmacyDTO>> getAllSortedByRating(@PathVariable String type) {
+	public ResponseEntity<List<PharmacyDTO>> getAllSortedByRating(@PathVariable String type) {
 
 		List<Pharmacy> pharmacies = (List<Pharmacy>) pharmacyService.sortByRating(type);
 		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
@@ -114,7 +118,7 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/freeTerms/{time}")
-	private ResponseEntity<List<Pharmacy>> getAllPharmaciesByTime(@PathVariable LocalTime time) {
+	public ResponseEntity<List<Pharmacy>> getAllPharmaciesByTime(@PathVariable LocalTime time) {
 		List<WorkHours> wh = whService.getPharmaciesByTime(time);
 		System.out.println("sizeeeee: " + wh.size());
 		List<Pharmacy> pharmacies = new ArrayList<Pharmacy>();
@@ -125,7 +129,8 @@ public class PharmacyController {
 	}
 	
 	@PostMapping(value = "/add-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	private ResponseEntity<PharmacyMedicinesDTO> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<PharmacyMedicinesDTO> addMedicineToPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
 		Pharmacy pharmacy = pharmacyService.findById(obj.getPharmacyId());
 		if (pharmacy.equals(null)) {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.NOT_FOUND);
@@ -135,27 +140,57 @@ public class PharmacyController {
 		if (medicine.equals(null)) {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.NOT_FOUND);
 		}
+		
+		double price = obj.getPrice();
+		if (price < 0) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
 		int quantity = obj.getQuantity();
+		if (quantity < 1) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
 		
 		PharmacyMedicines pm = new PharmacyMedicines();
 		pm.setPharmacy(pharmacy);
 		pm.setMedicine(medicine);
 		pm.setQuantity(quantity);
 		
+		long startDate = 0, endDate = 0;
+		
+		if (obj.getStartDate() == 0 || obj.getEndDate() == 0) {
+			Calendar calendar = Calendar.getInstance();
+			startDate = calendar.getTimeInMillis();
+			calendar.add(Calendar.MONTH, 1);
+			endDate = calendar.getTimeInMillis();
+		} else {
+			if (obj.getStartDate() > obj.getEndDate() || obj.getStartDate() < 0 || obj.getEndDate() < 0) {
+				return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+			}
+			
+			startDate = obj.getStartDate();
+			endDate = obj.getEndDate();
+		}
+		
+		pm.setStartDate(startDate);
+		pm.setEndDate(endDate);
+		
 		pm = pmService.save(pm);
 		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping(value = "/delete-medicine")
-	private ResponseEntity<PharmacyMedicinesDTO> deleteMedicineFromPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {	
+	@DeleteMapping(value = "/delete-medicine", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<PharmacyMedicinesDTO> deleteMedicineFromPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {	
 		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
 		pmService.delete(pm);
 		
 		return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "/update-quantity")
-	private ResponseEntity<PharmacyMedicinesDTO> updateMedicineQuantityInPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
+	@PutMapping(value = "/update-quantity", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<PharmacyMedicinesDTO> updateMedicineQuantityInPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
 		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
 		pm.setQuantity(obj.getQuantity());
 		
@@ -163,4 +198,27 @@ public class PharmacyController {
 		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/update-price", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<PharmacyMedicinesDTO> updateMedicinePrice(@RequestBody PharmacyMedicineAddRemoveObject obj) {
+		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
+		double price = obj.getPrice();
+		if (price < 0) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
+		long startDate = obj.getStartDate();
+		long endDate = obj.getEndDate();
+		
+		if (startDate > endDate || startDate < 0 || endDate < 0) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
+		pm.setPrice(price);
+		pm.setStartDate(startDate);
+		pm.setEndDate(endDate);
+		pmService.save(pm);
+		
+		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);
+	}
 }

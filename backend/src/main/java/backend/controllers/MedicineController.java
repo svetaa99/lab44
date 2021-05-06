@@ -36,7 +36,7 @@ public class MedicineController {
 	}
 
 	@GetMapping("/all")
-	private ResponseEntity<List<MedicineDTO>> getAllMedicines() {
+	public ResponseEntity<List<MedicineDTO>> getAllMedicines() {
 		List<Medicine> medicines = medicineService.findAll();
 		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
 		
@@ -44,7 +44,7 @@ public class MedicineController {
 	}
 	
 	@GetMapping("/search/{name}")
-	private ResponseEntity<List<MedicineDTO>> getAllByName(@PathVariable String name) {
+	public ResponseEntity<List<MedicineDTO>> getAllByName(@PathVariable String name) {
 		List<Medicine> medicines = (List<Medicine>) medicineService.findAllByName(name);
 		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
 		
@@ -52,7 +52,7 @@ public class MedicineController {
 	}
 	
 	@GetMapping("/{id}")
-	private ResponseEntity<MedicineDTO> getById(@PathVariable Long id) {
+	public ResponseEntity<MedicineDTO> getById(@PathVariable Long id) {
 		Medicine medicine = medicineService.findById(id);
 		if (medicine.equals(null)) {
 			return new ResponseEntity<MedicineDTO>(HttpStatus.NOT_FOUND);
