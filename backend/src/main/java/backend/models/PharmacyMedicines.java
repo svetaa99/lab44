@@ -30,18 +30,25 @@ public class PharmacyMedicines {
 	@Column(name = "quantity", columnDefinition = "Int default '0'")
 	int quantity;
 	
+	@Column
+	long startDate;
+
+	@Column
+	long endDate;
 	
 	public PharmacyMedicines() {
 		
 	}
 
-	public PharmacyMedicines(Long id, Pharmacy pharmacy, Medicine medicine, double price, int quantity) {
+	public PharmacyMedicines(Long id, Pharmacy pharmacy, Medicine medicine, double price, int quantity, long startDate, long endDate) {
 		super();
 		this.id = id;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
 		this.price = price;
 		this.quantity = quantity;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 
 	public Long getId() {
@@ -83,6 +90,22 @@ public class PharmacyMedicines {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public long getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(long startDate) {
+		this.startDate = startDate;
+	}
+
+	public long getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(long endDate) {
+		this.endDate = endDate;
 	}
 	
 	

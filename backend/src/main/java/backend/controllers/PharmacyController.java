@@ -1,7 +1,11 @@
 package backend.controllers;
 
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,12 +140,40 @@ public class PharmacyController {
 		if (medicine.equals(null)) {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.NOT_FOUND);
 		}
+		
+		double price = obj.getPrice();
+		if (price < 0) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
 		int quantity = obj.getQuantity();
+		if (quantity < 1) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
 		
 		PharmacyMedicines pm = new PharmacyMedicines();
 		pm.setPharmacy(pharmacy);
 		pm.setMedicine(medicine);
 		pm.setQuantity(quantity);
+		
+		long startDate = 0, endDate = 0;
+		
+		if (obj.getStartDate() == 0 || obj.getEndDate() == 0) {
+			Calendar calendar = Calendar.getInstance();
+			startDate = calendar.getTimeInMillis();
+			calendar.add(Calendar.MONTH, 1);
+			endDate = calendar.getTimeInMillis();
+		} else {
+			if (obj.getStartDate() > obj.getEndDate() || obj.getStartDate() < 0 || obj.getEndDate() < 0) {
+				return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+			}
+			
+			startDate = obj.getStartDate();
+			endDate = obj.getEndDate();
+		}
+		
+		pm.setStartDate(startDate);
+		pm.setEndDate(endDate);
 		
 		pm = pmService.save(pm);
 		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.CREATED);
@@ -175,7 +207,16 @@ public class PharmacyController {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
+		long startDate = obj.getStartDate();
+		long endDate = obj.getEndDate();
+		
+		if (startDate > endDate || startDate < 0 || endDate < 0) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
 		pm.setPrice(price);
+		pm.setStartDate(startDate);
+		pm.setEndDate(endDate);
 		pmService.save(pm);
 		
 		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);

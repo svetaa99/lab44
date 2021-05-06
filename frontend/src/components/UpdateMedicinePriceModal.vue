@@ -21,20 +21,42 @@
           </button>
         </div>
         <div class="modal-body">
-          <h3>{{pharmacyMedicine.medicine.name}}</h3>
-          <input
-            type="number"
-            placeholder="Price"
-            min="1"
-            v-model="pharmacyMedicine.price"
-          >
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="handleUpdateClick"
-          >
-            Update
-          </button>
+          <div class="container">
+            <div class="row">
+              <div class="col col-lg-12">
+                <h3>{{pharmacyMedicine.medicine.name}}</h3>
+              </div>
+            </div>
+            <div class="row justify-content-md-center">
+              <div class="col col-lg-12">
+                Price:
+                <input
+                  type="number"
+                  placeholder="Price"
+                  min="1"
+                  v-model="pharmacyMedicine.price"
+                >
+              </div>
+            </div> <br/>
+            <div class="row">
+              <div class="col col-lg-6">
+                Start date:
+                <Datepicker placeholder="Date" v-model="pharmacyMedicine.startDate"/>
+              </div>
+              <div class="col col-lg-6">
+                End date:
+                <Datepicker placeholder="Date" v-model="pharmacyMedicine.endDate"/>
+              </div>
+            </div> <br/>
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="handleUpdateClick"
+            >
+
+              Update
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -43,24 +65,37 @@
 
 <script>
 import Swal from 'sweetalert2'
+import Datepicker from "vuejs-datepicker";
 import axios from 'axios'
 import { config } from '@/config.js'
 
 const API_URL = config.API_URL
 
 export default {
+  components: {
+    Datepicker,
+  },
   props: {
     pharmacyMedicine: Object
   },
   methods: {
     handleUpdateClick() {
+      console.log(this.pharmacyMedicine.startDate.constructor.name)
+      const startDate = this.pharmacyMedicine.startDate.constructor.name == "Number" ? 
+          this.pharmacyMedicine.startDate : this.pharmacyMedicine.startDate.getTime()
+
+      const endDate = this.pharmacyMedicine.endDate.constructor.name == "Number" ? 
+          this.pharmacyMedicine.endDate : this.pharmacyMedicine.endDate.getTime()
+
       const putObj = {
         pharmacyId: this.pharmacyMedicine.pharmacy.id,
         medicineId: this.pharmacyMedicine.medicine.id,
         price: this.pharmacyMedicine.price,
         quantity: this.pharmacyMedicine.quantity,
+        startDate: startDate,
+        endDate: endDate,
       }
-
+      console.log(putObj)
       axios
         .put(`${API_URL}/pharmacies/update-price`, putObj)
         .then(response => {
