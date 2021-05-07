@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="container" align="center" style="width: 200px">
       <form class="form-inline">
         <button type="button" class="btn btn-primary" v-on:click="sortPrice()">
