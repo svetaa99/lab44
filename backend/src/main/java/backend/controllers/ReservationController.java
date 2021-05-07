@@ -70,6 +70,10 @@ public class ReservationController {
 	
 	@Autowired
 	private PharmacistService pharmacistService;
+
+	@Autowired
+	private UserService us;
+
 	
 	private List<ReservationDTO> createReservationDTOList(List<Reservation> reservations) {
 		List<ReservationDTO> rDTOs = new ArrayList<ReservationDTO>();
@@ -100,6 +104,7 @@ public class ReservationController {
 		rDTO = new ReservationDTO(r);
 		return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
 	}
+	
 	@GetMapping("/confirm/{reservationId}")
 	@PreAuthorize("hasRole('PHARMACIST')")
 	public ResponseEntity<ReservationDTO> confirmReservation(@PathVariable Long reservationId){
@@ -114,6 +119,36 @@ public class ReservationController {
 		reservationService.delete(r);
 		
 		return new ResponseEntity<ReservationDTO>(new ReservationDTO(r), HttpStatus.OK);
+	}
+	
+	@GetMapping("/reservations-my")
+	public ResponseEntity<List<ReservationDTO>> getMy() {
+		
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = us.findUserByEmail(token);
+		if (u == null) {
+			System.out.println("Must login");
+		}
+		
+		List<Reservation> reservations = reservationService.findMy(u.getId());
+		
+		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "cancel-reservation/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ReservationDTO> cancelReservation(@PathVariable Long id) {
+		Reservation res = reservationService.findById(id);
+		
+		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(res.getPharmacy().getId(), res.getMedicine().getId());
+		int oldQuantity = pm.getQuantity();
+		
+		int newQuantity = oldQuantity + res.getQuantity();
+		pm.setQuantity(newQuantity);
+		pmService.save(pm);
+		
+		reservationService.delete(res);
+		
+		return new ResponseEntity<ReservationDTO>(HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

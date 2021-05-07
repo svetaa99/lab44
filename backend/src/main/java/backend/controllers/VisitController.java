@@ -126,6 +126,7 @@ public class VisitController {
 		List<Visit> appointments = visitService.findByDoctorIdEquals(doctorId);
 		return new ResponseEntity<String>(g.toJson(appointments), HttpStatus.OK);
 	}
+	
 	@GetMapping("/patient/{patientId}")
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> getAppointmentsForPatient(@PathVariable Long patientId){

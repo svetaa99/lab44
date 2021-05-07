@@ -34,5 +34,10 @@ public class ReservationService implements IReservationService {
 	public void delete(Reservation obj) {
 		reservationRepository.delete(obj);
 	}
-
+	
+	@Override
+	public List<Reservation> findMy(Long patientId) {
+		return reservationRepository.findAllByPatientId(patientId);
+	}
+	
 }

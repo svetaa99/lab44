@@ -5,7 +5,7 @@
   >
     <div class="container">
       <router-link to="/" class="navbar-brand">
-        <img height="50" width="50em" src="../assets/logo.png"/>
+        <img height="50" width="50em" src="../assets/logo.png" />
         Laboni
       </router-link>
       <button
@@ -20,16 +20,22 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
+      <!-- Navbar -->
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-4 mb-lg-0">
+          <!-- Home -->
           <li :class="$route.path === '/' ? 'nav-item active' : 'nav-item'">
             <router-link to="/" class="nav-link">Home</router-link>
           </li>
+
+          <!-- About -->
           <li
             :class="$route.path === '/about' ? 'nav-item active' : 'nav-item'"
           >
             <router-link to="/about" class="nav-link">About</router-link>
           </li>
+
+          <!-- Pharmacies -->
           <li
             :class="
               $route.path === '/pharmacies' ? 'nav-item active' : 'nav-item'
@@ -39,82 +45,108 @@
               >Pharmacies</router-link
             >
           </li>
+
+          <!-- Patients -->
           <li
             :class="
               $route.path === '/employee-patients'
                 ? 'nav-item active'
                 : 'nav-item'
             "
-          v-if="userRoles.includes(2) || userRoles.includes(3) || userRoles.includes(4)">
+            v-if="
+              userRoles.includes(2) ||
+              userRoles.includes(3) ||
+              userRoles.includes(4)
+            "
+          >
             <router-link to="/employee-patients" class="nav-link"
               >Patients</router-link
             >
           </li>
+
+          <!-- Medicines -->
           <li
             :class="
               $route.path === '/medicines' ? 'nav-item active' : 'nav-item'
             "
-          v-if="userRoles.includes(1) || userRoles.includes(2) || userRoles.includes(3) || userRoles.includes(4)">
+            v-if="
+              userRoles.includes(1) ||
+              userRoles.includes(2) ||
+              userRoles.includes(3) ||
+              userRoles.includes(4)
+            "
+          >
             <router-link to="/medicines" class="nav-link"
               >Medicines</router-link
             >
           </li>
-          <li
-            :class="
-              $route.path === '/patient-pharmacist-appointment'
-                ? 'nav-item active'
-                : 'nav-item'
-            "
-          v-if="userRoles.includes(1)">
-            <router-link to="/patient-pharmacist-appointment" class="nav-link"
-              >Pharmacist appointment</router-link
+
+          <!-- Appointments -->
+          <li class="nav-item dropdown" v-if="userRoles.includes(1)">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
+              Appointments
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <router-link
+                to="/patient-pharmacist-appointment"
+                class="dropdown-item"
+                >Pharmacist</router-link
+              >
+              <router-link
+                to="/patient-dermatologist-appointment"
+                class="dropdown-item"
+                >Dermatologist</router-link
+              >
+            </div>
           </li>
+
+          <!-- Employee appointments -->
           <li
             :class="
               $route.path === '/employee-appointments'
                 ? 'nav-item active'
                 : 'nav-item'
             "
-          v-if="userRoles.includes(2) || userRoles.includes(3)">
+            v-if="userRoles.includes(2) || userRoles.includes(3)"
+          >
             <router-link to="/employee-appointments" class="nav-link"
               >Appointments</router-link
             >
           </li>
-          <li v-if="userRoles.length !== 0"
+
+          <!-- New order -->
+          <li
+            v-if="userRoles.includes(4)"
             :class="
-              $route.path === '/profile'
-                ? 'nav-item active'
-                : 'nav-item'
-            "
-          >
-            <router-link to="/profile" class="nav-link"
-              >Profile</router-link
-            >
-          </li>
-          <li v-if="userRoles.includes(4)"
-            :class="
-              $route.path === '/post-order'
-                ? 'nav-item active'
-                : 'nav-item'
+              $route.path === '/post-order' ? 'nav-item active' : 'nav-item'
             "
           >
             <router-link to="/post-order" class="nav-link"
               >New order</router-link
             >
           </li>
-          <li v-if="userRoles.includes(4)"
+
+          <!-- Orders -->
+          <li
+            v-if="userRoles.includes(4)"
             :class="
-              $route.path === '/all-orders'
-                ? 'nav-item active'
-                : 'nav-item'
+              $route.path === '/all-orders' ? 'nav-item active' : 'nav-item'
             "
           >
-            <router-link to="/all-orders" class="nav-link"
-              >Orders</router-link
-            >
+            <router-link to="/all-orders" class="nav-link">Orders</router-link>
           </li>
-          <li v-if="userRoles.includes(4)"
+
+          <!-- Offers -->
+          <li
+            v-if="userRoles.includes(4)"
             :class="
               $route.path === '/supplier-offers'
                 ? 'nav-item active'
@@ -144,6 +176,25 @@
             <router-link to="/vacation" class="nav-link"
               >Vacation</router-link
             >
+
+          <!-- Reserved drugs -->
+          <li
+            v-if="userRoles.length !== 0"
+            :class="
+              $route.path === '/reserved-drugs' ? 'nav-item active' : 'nav-item'
+            "
+          >
+            <router-link to="/reserved-drugs" class="nav-link"
+              >Reserved drugs</router-link
+            >
+          </li>
+
+          <!-- Profile -->
+          <li
+            v-if="userRoles.length !== 0"
+            :class="$route.path === '/profile' ? 'nav-item active' : 'nav-item'"
+          >
+            <router-link to="/profile" class="nav-link">Profile</router-link>
           </li>
         </ul>
       </div>
@@ -154,6 +205,7 @@
       <button v-if="isLoggedIn" @click="logout()" class="btn btn-custom">
         Logout
       </button>
+
     </div>
   </nav>
 </template>
@@ -163,7 +215,6 @@ export default {
   data() {
     return {
       userRoles: [],
-      isLoggedIn: false,
     };
   },
   methods: {
@@ -184,7 +235,7 @@ export default {
       new Date().getTime() < tokenItem.expiry ;
 
     console.log(this.userRoles);
-  }
+  },
 };
 </script>
 

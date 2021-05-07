@@ -1,65 +1,67 @@
 <template>
   <div>
+    <update-medicine-price-modal
+      :pharmacyMedicine="pharmacyMedicine"
+    ></update-medicine-price-modal>
 
-    <update-medicine-price-modal :pharmacyMedicine="pharmacyMedicine"></update-medicine-price-modal>
+    <div class="container">
+      <table
+        id="dtBasicExample"
+        class="table table-striped table-bordered table-sm"
+        cellspacing="0"
+        width="100%"
+      >
+        <thead>
+          <tr>
+            <th class="th-sm">Name</th>
+            <th class="th-sm">Type</th>
+            <th class="th-sm">Specification</th>
 
-    <table
-      id="dtBasicExample"
-      class="table table-striped table-bordered table-sm"
-      cellspacing="0"
-      width="100%"
-    >
-      <thead>
-        <tr>
-          <th class="th-sm">Name</th>
-          <th class="th-sm">Type</th>
-          <th class="th-sm">Specification</th>
-          
-          <th v-if="extra == ''"></th>
-          <th v-if="extra == 'quantity'">Quantity</th>
-
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="m in this.medicines" :key="m.id" v-on:dblclick="handleRowDblClick(m)">
-          <td>{{ m.name }}</td>
-          <td>{{ m.type }}</td>
-          <td>{{ m.specification }}</td>
-          <td v-if="extra == 'add'">
-            <router-link
-              :to="`/medicines/${m.id}`"
-            >
-            Choose
-            </router-link>
-          </td>
-          <td v-if="extra == 'update'">
-            <button 
-              type="button" 
-              class="btn btn-primary"
-              data-toggle="modal"
-              data-target="#updateMedicinePriceModal"
-              @click="handleUpdateClick(m)"
-            >
-              Update
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <th v-if="extra == ''"></th>
+            <th v-if="extra == 'quantity'">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="m in this.medicines"
+            :key="m.id"
+            v-on:dblclick="handleRowDblClick(m)"
+          >
+            <td>{{ m.name }}</td>
+            <td>{{ m.type }}</td>
+            <td>{{ m.specification }}</td>
+            <td v-if="extra == 'add'">
+              <router-link :to="`/medicines/${m.id}`"> Choose </router-link>
+            </td>
+            <td v-if="extra == 'update'">
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#updateMedicinePriceModal"
+                @click="handleUpdateClick(m)"
+              >
+                Update
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <script>
-import UpdateMedicinePriceModal from './UpdateMedicinePriceModal.vue';
-import axios from 'axios'
-import { config } from '@/config.js'
+import UpdateMedicinePriceModal from "./UpdateMedicinePriceModal.vue";
+import axios from "axios";
+import { config } from "@/config.js";
 
-const API_URL = config.API_URL
+const API_URL = config.API_URL;
 
 export default {
   name: "MedicinesList",
   components: {
-    "update-medicine-price-modal": UpdateMedicinePriceModal
+    "update-medicine-price-modal": UpdateMedicinePriceModal,
   },
   props: {
     medicines: Array,
@@ -72,33 +74,32 @@ export default {
           name: "",
         },
       },
-    }
+    };
   },
   methods: {
     handleRowDblClick(medicine) {
-      this.$emit('clicked', medicine)
+      this.$emit("clicked", medicine);
     },
 
     handleInputOnChange() {
-      this.$emit('change', this.quantity)
+      this.$emit("change", this.quantity);
     },
 
     handleUpdateClick(medicine) {
-      axios
-      .get(`${API_URL}/labadmins/registered-admin`)
-      .then(response => {
+      axios.get(`${API_URL}/labadmins/registered-admin`).then((response) => {
         const admin = response.data;
         axios
-          .get(`${API_URL}/pharmacy-medicines/get-by-ids/${admin.pharmacy.id}/${medicine.id}`)
-          .then(response => {
+          .get(
+            `${API_URL}/pharmacy-medicines/get-by-ids/${admin.pharmacy.id}/${medicine.id}`
+          )
+          .then((response) => {
             this.pharmacyMedicine = response.data;
-          })
-      })
-    }
-  }
+          });
+      });
+    },
+  },
 };
 </script>
 
 <style>
-
 </style>

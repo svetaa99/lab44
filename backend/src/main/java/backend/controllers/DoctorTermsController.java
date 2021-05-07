@@ -1,6 +1,7 @@
 package backend.controllers;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import backend.dto.DermatologistTermDTO;
+import backend.dto.PharmacyDTO;
 import backend.models.DoctorTerms;
+import backend.models.Pharmacy;
 import backend.models.SearchDateTime;
 import backend.models.User;
 import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
+import backend.services.impl.PharmacyService;
 import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
 import comparators.DoctorTermsComparator;
@@ -36,6 +41,9 @@ public class DoctorTermsController {
 
 	@Autowired
 	private DoctorTermsService doctorTermsService;
+	
+	@Autowired
+	private PharmacyService pharmacyService;
 	
 	@Autowired
 	private UserService userService;
@@ -114,6 +122,34 @@ public class DoctorTermsController {
 		System.out.println("Pretragom nadjeno: " + retVal.size());
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
+	}
+	
+	@GetMapping("/dermatologist-all")
+	public ResponseEntity<List<DermatologistTermDTO>> getDermatologistFreeTerms() {
+		List<DoctorTerms> appointments = doctorTermsService.findAllFutureTerms();
+		List<DermatologistTermDTO> dtsDTO = new ArrayList<>();
+		for (DoctorTerms doctorTerm : appointments) {
+			User dermatologist = userService.findById(doctorTerm.getDoctorId());
+			DermatologistTermDTO dtDTO = new DermatologistTermDTO(doctorTerm.getId(), dermatologist.getName(), dermatologist.getSurname(), pharmacyService.findById(doctorTerm.getPharmacyId()), pharmacyService.findById(doctorTerm.getPharmacyId()).getpharmacistPrice(), doctorTerm.getStart());
+			dtsDTO.add(dtDTO);
+		}
+		return new ResponseEntity<List<DermatologistTermDTO>>(dtsDTO, HttpStatus.OK);
+	}
+	
+//	@GetMapping("/sort/price/{type}")
+//	private ResponseEntity<List<DermatologistTermDTO>> getAllSortedByPrice(@PathVariable String type) {
+//		List<DoctorTerms> dt = doctorTermsService.sortByDermatologistPrice(type);
+//		return new ResponseEntity<List<DermatologistTermDTO>>(createDermatologistTermDTOList(dt), HttpStatus.OK);
+//	}
+	
+	private List<DermatologistTermDTO> createDermatologistTermDTOList(List<DoctorTerms> dt) {
+		List<DermatologistTermDTO> dtsDTO = new ArrayList<>();
+		for (DoctorTerms doctorTerm : dt) {
+			User dermatologist = userService.findById(doctorTerm.getDoctorId());
+			DermatologistTermDTO dtDTO = new DermatologistTermDTO(doctorTerm.getId(), dermatologist.getName(), dermatologist.getSurname(), pharmacyService.findById(doctorTerm.getPharmacyId()), pharmacyService.findById(doctorTerm.getPharmacyId()).getpharmacistPrice(), doctorTerm.getStart());
+			dtsDTO.add(dtDTO);
+		}
+		return dtsDTO;
 	}
 	
 	private boolean checkIfTakenTerm(DoctorTerms newTerm) {

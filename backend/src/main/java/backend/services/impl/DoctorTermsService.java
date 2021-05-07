@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backend.models.DoctorTerms;
+import backend.models.Pharmacy;
+import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.repositories.DoctorTermsRepository;
 import backend.repositories.WorkHoursRepository;
@@ -44,8 +46,20 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 		doctorTermsRepository.delete(obj);
 	}
 	
+	public List<DoctorTerms> findAllFutureTerms(){
+		return doctorTermsRepository.findAll();
+	}
+	
 	public List<WorkHours> findWorkingHoursForDoctorByIdAndPharmacyId(Long doctorId, Long pharmacyId){
 		return workHoursRepository.findByDoctorIdAndPharmacyId(doctorId, pharmacyId);
 	}
+	
+//	public List<DoctorTerms> sortByDermatologistPrice(String type) {
+//		if (type.equals("asc")) {
+//			return doctorTermsRepository.findByOrderByPriceAsc();
+//		} else {
+//			return doctorTermsRepository.findByOrderByPriceDesc();
+//		}
+//	}
 	
 }

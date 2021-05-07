@@ -19,6 +19,9 @@ import AllOrdersPage from '../views/AllOrdersPage.vue'
 import SupplierOffersPage from '../views/SupplierOffersPage.vue'
 import IssueComponent from '../components/IssueComponent.vue'
 import VacationRequestComponent from '../components/VacationRequestComponent.vue'
+import AppointmentToDermatologistPage from '../views/AppointmentToDermatologistPage.vue'
+import ReservedDrugs from '../views/ReservedDrugsPage.vue'
+
 
 Vue.use(VueRouter)
 
@@ -125,7 +128,17 @@ const routes = [
     path: '/vacation',
     name: 'VacationRequestComponent',
     component: VacationRequestComponent
-  }
+  },
+  {
+    path: '/patient-dermatologist-appointment',
+    name: 'AppointmentToDermatologistPage',
+    component: AppointmentToDermatologistPage
+  },
+  {
+    path: '/reserved-drugs',
+    name: 'ReservedDrugs',
+    component: ReservedDrugs
+  },
 ]
 
 const router = new VueRouter({
