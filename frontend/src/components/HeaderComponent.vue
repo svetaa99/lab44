@@ -135,6 +135,16 @@
               >Issue medicine</router-link
             >
           </li>
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/dermatologist-scheduling'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/dermatologist-scheduling" class="nav-link"
+              >Dermatologist schedules</router-link
+            >
+          </li>
         </ul>
       </div>
 

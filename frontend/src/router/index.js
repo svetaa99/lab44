@@ -18,6 +18,7 @@ import PostOrderPage from '../views/PostOrderPage.vue'
 import AllOrdersPage from '../views/AllOrdersPage.vue'
 import SupplierOffersPage from '../views/SupplierOffersPage.vue'
 import IssueComponent from '../components/IssueComponent.vue'
+import DermatologistSchedulingPage from '../views/DermatologistSchedulingPage.vue'
 
 Vue.use(VueRouter)
 
@@ -119,7 +120,12 @@ const routes = [
     path: '/all-orders',
     name: 'AllOrdersPage',
     component: AllOrdersPage
-  }
+  },
+  {
+    path: '/dermatologist-scheduling',
+    name: 'DermatologistSchedulingPage',
+    component: DermatologistSchedulingPage
+  },
 ]
 
 const router = new VueRouter({
