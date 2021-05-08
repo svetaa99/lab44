@@ -183,6 +183,10 @@ public class PharmacyController {
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<PharmacyMedicinesDTO> deleteMedicineFromPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {	
 		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
+		if (pm == null) {
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.NOT_FOUND);
+		}
+		
 		pmService.delete(pm);
 		
 		return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.OK);
