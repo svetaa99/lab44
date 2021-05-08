@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
-import backend.dto.PharmacyDTO;
 import backend.models.DoctorTerms;
-import backend.models.Pharmacy;
 import backend.models.SearchDateTime;
 import backend.models.User;
 import backend.models.WorkHours;
@@ -66,6 +64,22 @@ public class DoctorTermsController {
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
 	
+	@GetMapping("/definedterms-admin/{pharmacyId}/{doctorId}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<String> getDefinedTermsAdmin(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("doctorId") Long doctorId) {
+		List<DoctorTerms> terms = doctorTermsService.findByDoctorIdEquals(doctorId);
+		List<DoctorTerms> retVal = terms
+				.stream()
+				.filter(
+					rv -> rv.getStart().isAfter(LocalDateTime.now())
+					&& rv.getPharmacyId() == pharmacyId
+				)
+				.collect(Collectors.toList());
+		
+		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
+			
+	}
+	
 	@PostMapping(value = "/createnew/{visitId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')") //DERMATOLOGIST ONLY
 	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm, @PathVariable("visitId") Long visitId){
@@ -93,6 +107,33 @@ public class DoctorTermsController {
 				.findByDoctorIdEquals(doctorId)
 				.stream()
 				.filter(dt -> dt.getStart().isAfter(LocalDateTime.now()))
+				.collect(Collectors.toList());
+		
+		DoctorTermsComparator dtc = new DoctorTermsComparator();
+		retVal.sort(dtc);
+		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/createnew-admin", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<String> saveNewTermAdmin(@RequestBody DoctorTerms newTerm) {
+		if(checkIfTakenTerm(newTerm)) {
+			if(checkIfInWorkingHours(newTerm)) {
+				doctorTermsService.save(newTerm);
+				System.out.println("Object saved to db...");
+			}
+			else
+				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
+		}
+		else {
+			System.out.println("Taken term...");
+			return new ResponseEntity<String>("Taken term", HttpStatus.OK);
+		}
+		
+		List<DoctorTerms> retVal = doctorTermsService
+				.findByDoctorIdEquals(newTerm.getDoctorId())
+				.stream()
+				.filter(dt -> dt.getStart().isAfter(LocalDateTime.now()) && dt.getPharmacyId().equals(newTerm.getPharmacyId()))
 				.collect(Collectors.toList());
 		
 		DoctorTermsComparator dtc = new DoctorTermsComparator();
