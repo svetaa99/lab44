@@ -33,7 +33,7 @@
             <td v-if="extra == 'add'">
               <router-link :to="`/medicines/${m.id}`"> Choose </router-link>
             </td>
-            <td v-if="extra == 'update'">
+            <td v-if="extra == 'update' && userRoles.includes(4)">
               <button
                 type="button"
                 class="btn btn-primary"
@@ -74,7 +74,14 @@ export default {
           name: "",
         },
       },
+      userRoles: [],
     };
+  },
+  mounted() {
+    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+    tokenItem.token.roles.map(el => {
+      this.userRoles.push(el.id);
+    });
   },
   methods: {
     handleRowDblClick(medicine) {
