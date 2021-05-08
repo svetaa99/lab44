@@ -22,6 +22,7 @@ import VacationRequestComponent from '../components/VacationRequestComponent.vue
 import AppointmentToDermatologistPage from '../views/AppointmentToDermatologistPage.vue'
 import ReservedDrugs from '../views/ReservedDrugsPage.vue'
 import DermatologistSchedulingPage from '../views/DermatologistSchedulingPage.vue'
+import CreatePharmacistPage from '../views/CreatePharmacistPage.vue'
 
 Vue.use(VueRouter)
 
@@ -143,6 +144,11 @@ const routes = [
     path: '/dermatologist-scheduling',
     name: 'DermatologistSchedulingPage',
     component: DermatologistSchedulingPage
+  },
+  {
+    path: '/create-pharmacist',
+    name: 'CreatePharmacistPage',
+    component: CreatePharmacistPage
   },
 ]
 

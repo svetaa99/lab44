@@ -8,20 +8,24 @@ public class PharmacistDTO {
 	private Long id;
 	private String name;
 	private String surname;
+	private String email;
 	private Long address;
+	private String phoneNum;
 	private double rating;
 	private Pharmacy pharmacy;
 	
 	public PharmacistDTO(Pharmacist p) {
-		this(p.getId(), p.getName(), p.getSurname(), p.getAddress(), p.getRating(), p.getPharmacy());
+		this(p.getId(), p.getName(), p.getSurname(), p.getEmail(), p.getAddress(), p.getPhoneNum(), p.getRating(), p.getPharmacy());
 	}
 
-	public PharmacistDTO(Long id, String name, String surname, Long address, double rating, Pharmacy pharmacy) {
+	public PharmacistDTO(Long id, String name, String surname, String email, Long address, String phoneNum, double rating, Pharmacy pharmacy) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
+		this.email = email;
 		this.address = address;
+		this.phoneNum = phoneNum;
 		this.rating = rating;
 		this.pharmacy = pharmacy;
 	}
@@ -50,6 +54,14 @@ public class PharmacistDTO {
 		this.surname = surname;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public Long getAddress() {
 		return address;
 	}
@@ -58,6 +70,14 @@ public class PharmacistDTO {
 		this.address = address;
 	}
 	
+	public String getPhoneNum() {
+		return phoneNum;
+	}
+
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
+	}
+
 	public double getRating() {
 		return rating;
 	}
