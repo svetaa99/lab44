@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg navbar-dark bg-primary"
+    class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top py-1"
     aria-label="Eighth navbar example"
   >
     <div class="container">
@@ -28,13 +28,6 @@
             <router-link to="/" class="nav-link">Home</router-link>
           </li>
 
-          <!-- About -->
-          <li
-            :class="$route.path === '/about' ? 'nav-item active' : 'nav-item'"
-          >
-            <router-link to="/about" class="nav-link">About</router-link>
-          </li>
-
           <!-- Pharmacies -->
           <li
             :class="
@@ -43,6 +36,17 @@
           >
             <router-link to="/pharmacies" class="nav-link"
               >Pharmacies</router-link
+            >
+          </li>
+
+          <!-- Medicines -->
+          <li
+            :class="
+              $route.path === '/medicines' ? 'nav-item active' : 'nav-item'
+            "
+          >
+            <router-link to="/medicines" class="nav-link"
+              >Medicines</router-link
             >
           </li>
 
@@ -61,23 +65,6 @@
           >
             <router-link to="/employee-patients" class="nav-link"
               >Patients</router-link
-            >
-          </li>
-
-          <!-- Medicines -->
-          <li
-            :class="
-              $route.path === '/medicines' ? 'nav-item active' : 'nav-item'
-            "
-            v-if="
-              userRoles.includes(1) ||
-              userRoles.includes(2) ||
-              userRoles.includes(3) ||
-              userRoles.includes(4)
-            "
-          >
-            <router-link to="/medicines" class="nav-link"
-              >Medicines</router-link
             >
           </li>
 
@@ -257,8 +244,15 @@ body {
 }
 
 .navbar {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
 .btn-custom,
 .btn-custom:visited {
   background-color: #2c56a0 !important;
