@@ -22,9 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
+import backend.dto.PharmacyDTO;
+import backend.dto.ReservationDTO;
+import backend.enums.Status;
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
 import backend.models.User;
+import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PharmacyService;
@@ -77,7 +81,33 @@ public class DoctorTermsController {
 				.collect(Collectors.toList());
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
+	}
 			
+	@GetMapping("/reserve-dermatologist/{termId}")
+	public ResponseEntity<DoctorTerms> reserveFreeTerm(@PathVariable("termId") Long termId) {
+		// Get patient from token
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
+		// Get term from id
+		DoctorTerms doctorTerm = doctorTermsService.findById(termId);
+		
+		// Make appointment
+		Visit newVisit = new Visit();
+		newVisit.setPatientId(u.getId());
+		newVisit.setDoctorId(doctorTerm.getDoctorId());
+		newVisit.setStart(doctorTerm.getStart());
+		newVisit.setFinish(doctorTerm.getFinish());
+		newVisit.setPharmacy(doctorTerm.getPharmacyId());
+		newVisit.setStatus(Status.RESERVED);
+		
+		visitService.save(newVisit);
+		
+		doctorTermsService.delete(doctorTerm);
+		
+		// TODO: Notify via email
+		
+		return new ResponseEntity<DoctorTerms>(HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/createnew/{visitId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

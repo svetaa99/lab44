@@ -36,6 +36,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
 export default {
   props: {
     reservedDrugs: Array,

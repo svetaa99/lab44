@@ -135,7 +135,7 @@ public class ReservationController {
 		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "cancel-reservation/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("cancel-reservation/{id}")
 	public ResponseEntity<ReservationDTO> cancelReservation(@PathVariable Long id) {
 		Reservation res = reservationService.findById(id);
 		

@@ -11,7 +11,7 @@
             <div class="card-body">
               <div class="d-flex flex-column align-items-center text-center">
                 <div class="mt-1">
-                  <h4>{{ user.name }} {{user.surname}}</h4>
+                  <h4>{{ user.name }} {{ user.surname }}</h4>
                   <p class="text-secondary mb-1"></p>
                   <button
                     type="button"
@@ -36,6 +36,26 @@
             </table>
             <button class="btn btn-outline-primary">Loyality program</button>
           </div>
+          <br>
+          <div class="card mt-3">
+            <table class="table">
+              <thead>
+                <th>
+                  Appointments
+                </th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <button class="btn btn-primary">Pharmacy</button>
+                  </td>
+                  <td>
+                    <button @click="$router.push('my-dermatologist-reservations')" class="btn btn-primary">Dermatologist</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="col-md-8">
           <div class="card mb-3">
@@ -44,28 +64,28 @@
                 <div class="col-sm-3">
                   <h6 class="mb-0">Name</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">{{user.name}}</div>
+                <div class="col-sm-9 text-secondary">{{ user.name }}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0">Surname</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">{{user.surname}}</div>
+                <div class="col-sm-9 text-secondary">{{ user.surname }}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0">Email</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">{{user.email}}</div>
+                <div class="col-sm-9 text-secondary">{{ user.email }}</div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0">Phone number</h6>
                 </div>
-                <div class="col-sm-9 text-secondary">{{user.phoneNum}}</div>
+                <div class="col-sm-9 text-secondary">{{ user.phoneNum }}</div>
               </div>
             </div>
           </div>
@@ -118,11 +138,11 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { config } from '@/config.js'
+import axios from "axios";
+import { config } from "@/config.js";
 import ProfileEditModalComponent from "../components/ProfileEditModalComponent.vue";
 
-const API_URL = config.API_URL
+const API_URL = config.API_URL;
 
 export default {
   components: {
@@ -131,13 +151,14 @@ export default {
   data() {
     return {
       user: {},
-    }
+    };
   },
   mounted() {
-    axios
-      .get(`${API_URL}/users/user`)
-      .then(response => {this.user = response.data; console.log(this.user)})
-  }
+    axios.get(`${API_URL}/users/user`).then((response) => {
+      this.user = response.data;
+      console.log(this.user);
+    });
+  },
 };
 </script>
 

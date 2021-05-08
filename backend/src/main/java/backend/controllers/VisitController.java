@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.PatientDTO;
+import backend.dto.ReservationDTO;
 import backend.dto.VisitDTO;
 import backend.enums.Status;
 import backend.models.Doctor;
@@ -110,7 +111,6 @@ public class VisitController {
 	@PostMapping(value = "/report-visit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> saveAppointment(@RequestBody Report newReport){
-		System.out.println("ISPIS JEBA TE ON");
 		Visit v = visitService.findById(newReport.getVisitId());
 		v.setStatus(Status.FINISHED);
 		System.out.println("Int: " + Status.FINISHED);
@@ -118,6 +118,40 @@ public class VisitController {
 		
 		reportService.save(newReport);
 		return new ResponseEntity<String>("Report saved!", HttpStatus.OK);
+	}
+	
+	@GetMapping("/to-dermatologists")
+	public ResponseEntity<List<VisitDTO>> getMyAppointmentsToDermatologists() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
+		List<Visit> appointments = visitService.findByPatientIdEquals(u.getId());
+		List<Visit> myAppointments = new ArrayList<Visit>();
+		
+		for (Visit appointment : appointments) {
+			if (appointment.getStatus().equals(Status.RESERVED)) {
+				myAppointments.add(appointment);
+			}
+		}
+		
+		List<VisitDTO> visitsDTO = new ArrayList<>();
+		for (Visit visit : myAppointments) {
+			VisitDTO visitDTO = new VisitDTO(visit.getId(), patientService.findById(visit.getPatientId()), doctorService.findById(visit.getDoctorId()), visit.getStart(), visit.getFinish());
+			visitsDTO.add(visitDTO);
+		}
+		
+		return new ResponseEntity<List<VisitDTO>>(visitsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping("/cancel-my-reservation-to-dermatologists/{id}")
+	public ResponseEntity<VisitDTO> cancelAppointment(@PathVariable Long id) {
+		Visit visit = visitService.findById(id);
+		
+		visit.setStatus(Status.CANCELED);
+		
+		visitService.save(visit);
+		
+		return new ResponseEntity<VisitDTO>(HttpStatus.OK);
 	}
 
 	@GetMapping("/doctor/{doctorId}")

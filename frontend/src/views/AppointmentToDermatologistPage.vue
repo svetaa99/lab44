@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppointmentDermatologistComponent
-      v-bind:dermatologistTerms="this.dermatologistTerms"
+      v-bind:dermatologistTerms="this.dermatologistTerms" @clicked="updateTerms"
     />
   </div>
 </template>
@@ -26,6 +26,11 @@ export default {
         console.log(this.dermatologistTerms);
       });
   },
+  methods: {
+    updateTerms(dermatologistTerms) {
+      this.dermatologistTerms = dermatologistTerms
+    }
+  }
 };
 </script>
 

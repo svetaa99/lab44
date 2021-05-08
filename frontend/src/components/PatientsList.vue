@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>List of patients</h1>
     <br>
     <div class="container" align="center" style="width: 350px">
