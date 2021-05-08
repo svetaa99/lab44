@@ -53,8 +53,14 @@
               class="btn btn-primary"
               @click="handleUpdateClick"
             >
-
               Update
+            </button> <br/><br/>
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              @click="handleDeleteClick"
+            >
+              Delete medicine
             </button>
           </div>
         </div>
@@ -80,7 +86,6 @@ export default {
   },
   methods: {
     handleUpdateClick() {
-      console.log(this.pharmacyMedicine.startDate.constructor.name)
       const startDate = this.pharmacyMedicine.startDate.constructor.name == "Number" ? 
           this.pharmacyMedicine.startDate : this.pharmacyMedicine.startDate.getTime()
 
@@ -95,7 +100,7 @@ export default {
         startDate: startDate,
         endDate: endDate,
       }
-      console.log(putObj)
+
       axios
         .put(`${API_URL}/pharmacies/update-price`, putObj)
         .then(response => {
@@ -115,6 +120,40 @@ export default {
             })
           }
         })
+    },
+    handleDeleteClick() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to undo this operation. Medicine will be deleted permanently.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel'
+      }).then(result => {
+        if (result.isConfirmed) {
+          const deleteObj = {
+            pharmacyId: this.pharmacyMedicine.pharmacy.id, 
+            medicineId: this.pharmacyMedicine.medicine.id
+          }
+          console.log(deleteObj)
+          axios
+            .delete(`${API_URL}/pharmacies/delete-medicine`, {data: deleteObj})
+            .then(response => {
+              if (response.status === 200) {
+                Swal.fire({
+                  title: 'Success',
+                  text: 'Successfully deleted medicine!',
+                  icon: 'success',
+                  confirmButtonText: 'Ok'
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    window.location.reload()
+                  }
+                })
+              }
+            })
+        }
+      })
     }
   }
 };
