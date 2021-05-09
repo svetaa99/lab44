@@ -1,5 +1,7 @@
 package backend.dto;
 
+import java.time.LocalTime;
+
 import backend.models.Pharmacist;
 import backend.models.Pharmacy;
 
@@ -13,6 +15,10 @@ public class PharmacistDTO {
 	private String phoneNum;
 	private double rating;
 	private Pharmacy pharmacy;
+	private String startTime;
+	private String finishTime;
+	
+	public PharmacistDTO() {}
 	
 	public PharmacistDTO(Pharmacist p) {
 		this(p.getId(), p.getName(), p.getSurname(), p.getEmail(), p.getAddress(), p.getPhoneNum(), p.getRating(), p.getPharmacy());
@@ -28,6 +34,21 @@ public class PharmacistDTO {
 		this.phoneNum = phoneNum;
 		this.rating = rating;
 		this.pharmacy = pharmacy;
+	}
+	
+	public PharmacistDTO(Long id, String name, String surname, String email, Long address, String phoneNum, double rating, Pharmacy pharmacy,
+			String startTime, String finishTime) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.address = address;
+		this.phoneNum = phoneNum;
+		this.rating = rating;
+		this.pharmacy = pharmacy;
+		this.startTime = startTime;
+		this.finishTime = finishTime;
 	}
 
 	public Long getId() {
@@ -92,6 +113,22 @@ public class PharmacistDTO {
 
 	public void setPharmacy(Pharmacy pharmacy) {
 		this.pharmacy = pharmacy;
+	}
+	
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(String finishTime) {
+		this.finishTime = finishTime;
 	}
 
 	@Override
