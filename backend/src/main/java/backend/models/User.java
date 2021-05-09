@@ -3,6 +3,7 @@ package backend.models;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +31,6 @@ public class User implements UserDetails {
 	 */
 	private static final long serialVersionUID = -1145944638748587516L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
 	protected Long id;
 
 	@Column(name="name", unique=false, nullable=false)
@@ -51,7 +51,7 @@ public class User implements UserDetails {
 	@Column(name="phone_num", unique=false, nullable=true)
 	protected String phoneNum;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -137,6 +137,10 @@ public class User implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
 		return this.roles;
+	}
+	
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override

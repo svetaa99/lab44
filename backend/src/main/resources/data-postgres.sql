@@ -34,6 +34,7 @@ insert into pharmacist (id, name, surname, email, password, address, phone_num, 
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (6, 'Djordje', 'Volas', 'djokica@gmail.com', 'djoka123', 5, '011201201', 7, 1);
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (7, 'Stefan', 'Stefanovic', 'stefke@gmail.com', 'stefi123', 5, '011202202', 6, 1);
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (8, 'Marko', 'Markovic', 'markelof@gmail.com', 'mare123', 5, '011203203', 9, 2);
+insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (9, 'Sara', 'Neskovic', 'sara@gmail.com', 'sara123', 5, '0112032123', 10, 3);
 
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,1);
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,2);

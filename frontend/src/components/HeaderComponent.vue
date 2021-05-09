@@ -183,6 +183,8 @@
           >
             <router-link to="/profile" class="nav-link">Profile</router-link>
           </li>
+
+          <!-- Dermatologist scheduling by admin -->
           <li v-if="userRoles.includes(4)"
             :class="
               $route.path === '/dermatologist-scheduling'
@@ -191,6 +193,18 @@
             ">
             <router-link to="/dermatologist-scheduling" class="nav-link"
               >Dermatologist schedules</router-link
+            >
+          </li>
+
+          <!-- Creating pharmacist -->
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/create-pharmacist'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/create-pharmacist" class="nav-link"
+              >Create pharmacist</router-link
             >
           </li>
         </ul>
