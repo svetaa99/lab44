@@ -27,25 +27,22 @@ public class WorkHoursService implements IService<WorkHours> {
 
 	@Override
 	public List<WorkHours> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return workHoursRepository.findAll();
 	}
 
 	@Override
 	public WorkHours findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return workHoursRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public WorkHours save(WorkHours obj) {
-		// TODO Auto-generated method stub
-		return null;
+		return workHoursRepository.save(obj);
 	}
 
 	@Override
 	public void delete(WorkHours obj) {
-		// TODO Auto-generated method stub
+		workHoursRepository.delete(obj);
 		
 	}
 }

@@ -31,13 +31,14 @@ export default {
   methods: {
     register(user) {
       user.pharmacy = this.admin.pharmacy
+      console.log(user)
       axios
         .post(`${API_URL}/pharmacist/create-new`, user)
         .then(response => {
           if (response.status === 201) {
             Swal.fire({
               title: 'Success',
-              text: 'Successfully registrated new pharmacist',
+              text: 'Successfully registered new pharmacist',
               icon: 'success',
               confirmButtonText: 'Ok'
             })

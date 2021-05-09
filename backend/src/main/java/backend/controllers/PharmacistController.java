@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,11 @@ import backend.models.Pharmacist;
 import backend.models.Pharmacy;
 import backend.models.Role;
 import backend.models.User;
+import backend.models.WorkHours;
 import backend.services.IPharmacistService;
 import backend.services.IPharmacyService;
 import backend.services.impl.UserService;
+import backend.services.impl.WorkHoursService;
 
 @RestController
 @RequestMapping(value = "pharmacist")
@@ -38,6 +41,9 @@ public class PharmacistController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private WorkHoursService whService;
 	
 	private static Gson g = new Gson();
 	
@@ -86,6 +92,13 @@ public class PharmacistController {
 			return new ResponseEntity<String>("Empty field.", HttpStatus.BAD_REQUEST);
 		}
 		
+		LocalTime startTime = LocalTime.parse(obj.getStartTime());
+		LocalTime finishTime = LocalTime.parse(obj.getFinishTime());
+		
+		if (finishTime.isBefore(startTime)) {
+			return new ResponseEntity<String>("Invalid start and finish work hours.", HttpStatus.BAD_REQUEST);
+		}
+		
 		p.setId(size + 1l);
 		p.setName(obj.getName());
 		p.setSurname(obj.getSurname());
@@ -106,6 +119,13 @@ public class PharmacistController {
 		p.setRoles(roles);
 		
 		pharmacistService.save(p);
+		
+		WorkHours wh = new WorkHours();
+		wh.setDoctor(p);
+		wh.setPharmacy(obj.getPharmacy());
+		wh.setStartTime(startTime);
+		wh.setFinishTime(finishTime);
+		whService.save(wh);
 		
 		return new ResponseEntity<String>(g.toJson(new PharmacistDTO(p)), HttpStatus.CREATED);
 	}
