@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import backend.dto.PharmacistDTO;
 import backend.dto.PharmacyDTO;
 import backend.models.Pharmacist;
@@ -36,6 +38,8 @@ public class PharmacistController {
 	
 	@Autowired
 	private UserService userService;
+	
+	private static Gson g = new Gson();
 	
 	private List<PharmacistDTO> createPharmacistDTOList(List<Pharmacist> pharmacists) {
 		
@@ -65,11 +69,22 @@ public class PharmacistController {
 	
 	@PostMapping(value = "/create-new", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
-	public ResponseEntity<PharmacistDTO> createNewPharmacist(@RequestBody PharmacistDTO obj) {
+	public ResponseEntity<String> createNewPharmacist(@RequestBody PharmacistDTO obj) {
 		Pharmacist p = new Pharmacist();
 		
 		List<User> allP = userService.findAll();
 		int size = allP.size();
+		
+		for (User user : allP) {
+			if (user.getEmail().equals(obj.getEmail())) {
+				return new ResponseEntity<String>("Already existing email.", HttpStatus.BAD_REQUEST);
+			}
+		}
+		
+		if (obj.getName().equals("") || obj.getSurname().equals("") || obj.getEmail().equals("") || obj.getPhoneNum().equals("") || 
+				obj.getAddress() == 0l) {
+			return new ResponseEntity<String>("Empty field.", HttpStatus.BAD_REQUEST);
+		}
 		
 		p.setId(size + 1l);
 		p.setName(obj.getName());
@@ -92,7 +107,7 @@ public class PharmacistController {
 		
 		pharmacistService.save(p);
 		
-		return new ResponseEntity<PharmacistDTO>(new PharmacistDTO(p), HttpStatus.CREATED);
+		return new ResponseEntity<String>(g.toJson(new PharmacistDTO(p)), HttpStatus.CREATED);
 	}
 	
 }
