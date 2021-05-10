@@ -49,5 +49,16 @@ public class PharmacistService implements IPharmacistService {
 			return pharmacistRepository.findAllByPharmacyIdOrderByRatingDesc(pharmacistId);
 		}
 	}
+
+	@Override
+	public List<Pharmacist> findAllByNameOrSurname(String name, String surname) {
+		if (name == null) {
+			return pharmacistRepository.findBySurnameContainingIgnoreCase(surname);
+		} else if (surname == null) {
+			return pharmacistRepository.findByNameContainingIgnoreCase(name);
+		} else {
+			return pharmacistRepository.findByNameAndSurnameIgnoreCase(name, surname);
+		}
+	}
 	
 }

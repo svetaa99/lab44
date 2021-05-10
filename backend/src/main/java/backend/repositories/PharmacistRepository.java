@@ -9,10 +9,16 @@ import backend.models.Pharmacy;
 
 public interface PharmacistRepository extends JpaRepository<Pharmacist, Long> {
 	
-	public List<Pharmacist> findAllByPharmacyIdEquals(Long pharmacistId);
+	List<Pharmacist> findAllByPharmacyIdEquals(Long pharmacistId);
 	
-	public List<Pharmacist> findAllByPharmacyIdOrderByRatingAsc(Long pharmacistId);
+	List<Pharmacist> findAllByPharmacyIdOrderByRatingAsc(Long pharmacistId);
 	
-	public List<Pharmacist> findAllByPharmacyIdOrderByRatingDesc(Long pharmacistId);
+	List<Pharmacist> findAllByPharmacyIdOrderByRatingDesc(Long pharmacistId);
+	
+	List<Pharmacist> findByNameContainingIgnoreCase(String name);
+	
+	List<Pharmacist> findBySurnameContainingIgnoreCase(String surname);
+	
+	List<Pharmacist> findByNameAndSurnameIgnoreCase(String name, String surname);
 
 }
