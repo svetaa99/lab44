@@ -35,4 +35,15 @@ public class DermatologistService implements IDermatologistService {
 		dermaRepository.delete(obj);
 	}
 
+	@Override
+	public List<Dermatologist> findAllByNameOrSurname(String name, String surname) {
+		if (name == null) {
+			return dermaRepository.findBySurnameContainingIgnoreCase(surname);
+		} else if (surname == null) {
+			return dermaRepository.findByNameContainingIgnoreCase(name);
+		} else {
+			return dermaRepository.findByNameAndSurname(name, surname);
+		}
+	}
+
 }

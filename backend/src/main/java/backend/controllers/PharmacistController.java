@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.sun.mail.iap.Response;
 
 import backend.dto.PharmacistDTO;
 import backend.dto.PharmacyDTO;
@@ -57,6 +58,15 @@ public class PharmacistController {
 		}
 		
 		return pharmacistsDTO;
+	}
+	
+	@GetMapping(value = "/all")
+	@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN', 'PHARMACIST')")
+	public ResponseEntity<List<PharmacistDTO>> getAllPharmacists() {
+		List<Pharmacist> pList = pharmacistService.findAll();
+		List<PharmacistDTO> pDTOs = createPharmacistDTOList(pList);
+		
+		return new ResponseEntity<List<PharmacistDTO>>(pDTOs, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/{id}")
