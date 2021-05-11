@@ -1,0 +1,59 @@
+<template>
+  <div>
+    <DoctorSearchComponent @clicked="handleSearchClick" />
+    <DoctorFilterComponent :doctorType="'dermatologist'" @clicked="handleFilterClick" />
+    <DoctorListComponent :doctors="dermatologists" />
+  </div>
+</template>
+
+<script>
+import DoctorSearchComponent from '@/components/DoctorSearchComponent.vue'
+import DoctorFilterComponent from '@/components/DoctorFilterComponent.vue'
+import axios from 'axios'
+import { config } from "@/config.js";
+import DoctorListComponent from '../components/DoctorListComponent.vue';
+
+const API_URL = config.API_URL;
+
+export default {
+  components: {
+    DoctorSearchComponent,
+    DoctorFilterComponent,
+    DoctorListComponent,
+  },
+  data() {
+    return {
+      dermatologists: [],
+    }
+  },
+  mounted() {
+    axios
+      .get(`${API_URL}/dermatologists/all`)
+      .then(response => {
+        this.dermatologists = response.data;
+      })
+  },
+  methods: {
+    handleSearchClick(search) {
+      axios
+        .post(`${API_URL}/dermatologists/search`, search)
+        .then(response => {
+          this.dermatologists = response.data
+        })
+    },
+    handleFilterClick(filter) {
+      const {params, values} = filter
+
+      axios
+        .post(`${API_URL}/dermatologists/filter/${params}/${values}`, this.dermatologists)
+        .then(response => {
+          this.dermatologists = response.data
+        })
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>

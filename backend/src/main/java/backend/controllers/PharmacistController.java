@@ -77,30 +77,35 @@ public class PharmacistController {
 		
 		List<Pharmacist> pharmacists = pharmacistService.findAllByNameOrSurname(name, surname);
 		
+		if (name.equals("") && surname.equals("")) {
+			return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacistService.findAll()), HttpStatus.OK);
+		}
+		
 		return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacists), HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/filter/{param}/{value}")
-	public ResponseEntity<List<PharmacistDTO>> filterPharmacists(@RequestBody List<PharmacistDTO> searchList, @PathVariable("param") String param, @PathVariable("value") String value) {
-		List<PharmacistDTO> retVal = null;
+	@PostMapping(value = "/filter/{params}/{values}")
+	public ResponseEntity<List<PharmacistDTO>> filterPharmacists(@RequestBody List<PharmacistDTO> searchList, @PathVariable("params") String parameterList, @PathVariable("values") String valueList) {
+		List<PharmacistDTO> retVal = searchList;
 		
-		if (param.equals("rating")) {
-			retVal = searchList
-					.stream()
-					.filter(p -> p.getRating() == Double.parseDouble(value))
-					.collect(Collectors.toList());
-		} else if (param.equals("pharmacy")) {
-			retVal = searchList
-					.stream()
-					.filter(p -> p.getPharmacy().getId() == Integer.parseInt(value))
-					.collect(Collectors.toList());
-		}
+		String[] params = parameterList.split("\\+");
+		String[] values = valueList.split("\\+");
 		
-		if (retVal == null) {
-			return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacistService.findAll()), HttpStatus.OK);
+		if (params[0].equals("true")) {
+			retVal = retVal
+					.stream()
+					.filter(p -> p.getRating() == Double.parseDouble(values[0]))
+					.collect(Collectors.toList());
+		} else if (params[1].equals("true")) {
+			retVal = retVal
+					.stream()
+					.filter(p -> p.getPharmacy().getId() == Integer.parseInt(values[1]))
+					.collect(Collectors.toList());
 		} else {
-			return new ResponseEntity<List<PharmacistDTO>>(retVal, HttpStatus.OK);
+			return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacistService.findAll()), HttpStatus.OK);
 		}
+		
+		return new ResponseEntity<List<PharmacistDTO>>(retVal, HttpStatus.OK);
 		
 	}
 	

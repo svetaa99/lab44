@@ -2,6 +2,7 @@ package backend.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.DermatologistDTO;
-import backend.dto.PharmacistDTO;
+import backend.dto.DermatologistFilterObject;
+import backend.dto.FilterObject;
 import backend.models.Dermatologist;
 import backend.services.IDermatologistService;
 import backend.services.IPharmacyService;
@@ -59,25 +61,30 @@ public class DermatologistController {
 		
 		List<Dermatologist> derms = dermaService.findAllByNameOrSurname(name, surname);
 		
+		if (name.equals("") && surname.equals("")) {
+			return new ResponseEntity<List<DermatologistDTO>>(createDTOList(dermaService.findAll()), HttpStatus.OK);
+		}
+		
 		return new ResponseEntity<List<DermatologistDTO>>(createDTOList(derms), HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/filter/{param}/{value}")
-	public ResponseEntity<List<DermatologistDTO>> filterDermatologists(@RequestBody List<DermatologistDTO> searchList, @PathVariable("param") String param, @PathVariable("value") String value) {
-		List<DermatologistDTO> retVal = null;
+	@PostMapping(value = "/filter/{params}/{values}")
+	public ResponseEntity<List<DermatologistDTO>> filterDermatologists(@RequestBody List<DermatologistDTO> searchList, @PathVariable("params") String parameterList, @PathVariable("values") String valueList) {
+		List<DermatologistDTO> retVal = searchList;
 		
-		if (param.equals("pharmacy")) {
-			retVal = searchList
+		String[] params = parameterList.split("\\+");
+		String[] values = valueList.split("\\+");
+		
+		if (params[1].equals("true")) {
+			retVal = retVal
 					.stream()
-					.filter(d -> d.getPharmacies().contains(pharmacyService.findById(Long.parseLong(value))))
+					.filter(d -> d.getPharmacies().contains(pharmacyService.findById(Long.parseLong(values[1]))))
 					.collect(Collectors.toList());
+		} else {
+			return new ResponseEntity<List<DermatologistDTO>>(createDTOList(dermaService.findAll()), HttpStatus.OK);
 		}
 		
-		if (retVal == null) {
-			return new ResponseEntity<List<DermatologistDTO>>(createDTOList(dermaService.findAll()), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<List<DermatologistDTO>>(retVal, HttpStatus.OK);
-		}
+		return new ResponseEntity<List<DermatologistDTO>>(retVal, HttpStatus.OK);
 	}
 	
 }
