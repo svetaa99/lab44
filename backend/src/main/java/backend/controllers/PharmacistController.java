@@ -3,6 +3,7 @@ package backend.controllers;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.sun.mail.iap.Response;
 
 import backend.dto.PharmacistDTO;
 import backend.dto.PharmacyDTO;
@@ -57,6 +59,54 @@ public class PharmacistController {
 		}
 		
 		return pharmacistsDTO;
+	}
+	
+	@GetMapping(value = "/all")
+	@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN', 'PHARMACIST')")
+	public ResponseEntity<List<PharmacistDTO>> getAllPharmacists() {
+		List<Pharmacist> pList = pharmacistService.findAll();
+		List<PharmacistDTO> pDTOs = createPharmacistDTOList(pList);
+		
+		return new ResponseEntity<List<PharmacistDTO>>(pDTOs, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<PharmacistDTO>> searchPharmacists(@RequestBody PharmacistDTO obj) {
+		String name = obj.getName();
+		String surname = obj.getSurname();
+		
+		List<Pharmacist> pharmacists = pharmacistService.findAllByNameOrSurname(name, surname);
+		
+		if (name.equals("") && surname.equals("")) {
+			return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacistService.findAll()), HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacists), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/filter/{params}/{values}")
+	public ResponseEntity<List<PharmacistDTO>> filterPharmacists(@RequestBody List<PharmacistDTO> searchList, @PathVariable("params") String parameterList, @PathVariable("values") String valueList) {
+		List<PharmacistDTO> retVal = searchList;
+		
+		String[] params = parameterList.split("\\+");
+		String[] values = valueList.split("\\+");
+		
+		if (params[0].equals("true")) {
+			retVal = retVal
+					.stream()
+					.filter(p -> p.getRating() == Double.parseDouble(values[0]))
+					.collect(Collectors.toList());
+		} else if (params[1].equals("true")) {
+			retVal = retVal
+					.stream()
+					.filter(p -> p.getPharmacy().getId() == Integer.parseInt(values[1]))
+					.collect(Collectors.toList());
+		} else {
+			return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacistService.findAll()), HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<List<PharmacistDTO>>(retVal, HttpStatus.OK);
+		
 	}
 	
 	@GetMapping(value = "/{id}")

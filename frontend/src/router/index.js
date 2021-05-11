@@ -24,6 +24,8 @@ import ReservedDrugs from '../views/ReservedDrugsPage.vue'
 import DermatologistSchedulingPage from '../views/DermatologistSchedulingPage.vue'
 import DermatologistAppointment from '../views/DermatologistAppointmentPage.vue'
 import CreatePharmacistPage from '../views/CreatePharmacistPage.vue'
+import DermatologistSearchAndFilterPage from '../views/DermatologistSearchAndFilterPage.vue'
+import PharmacistSearchAndFilterPage from '../views/PharmacistSearchAndFilterPage.vue'
 
 Vue.use(VueRouter)
 
@@ -147,6 +149,16 @@ const routes = [
     path: '/create-pharmacist',
     name: 'CreatePharmacistPage',
     component: CreatePharmacistPage
+  },
+  {
+    path: '/dermatologist-search-and-filter',
+    name: 'DermatologistSearchAndFilterPage',
+    component: DermatologistSearchAndFilterPage
+  },
+  {
+    path: '/pharmacist-search-and-filter',
+    name: 'PharmacistSearchAndFilterPage',
+    component: PharmacistSearchAndFilterPage
   },
 ]
 

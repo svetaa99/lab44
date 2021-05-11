@@ -207,6 +207,30 @@
               >Create pharmacist</router-link
             >
           </li>
+
+          <!-- Dermatologist search and filter -->
+          <li v-if="userRoles.includes(4) || userRoles.includes(1)"
+            :class="
+              $route.path === '/dermatologist-search-and-filter'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/dermatologist-search-and-filter" class="nav-link"
+              >Dermatologists view</router-link
+            >
+          </li>
+
+          <!-- Pharmacist search and filter -->
+          <li v-if="userRoles.includes(4) || userRoles.includes(1)"
+            :class="
+              $route.path === '/pharmacist-search-and-filter'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/pharmacist-search-and-filter" class="nav-link"
+              >Pharmacists view</router-link
+            >
+          </li>
         </ul>
       </div>
 
