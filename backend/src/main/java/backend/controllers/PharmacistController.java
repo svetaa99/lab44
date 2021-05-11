@@ -3,6 +3,7 @@ package backend.controllers;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,30 @@ public class PharmacistController {
 		List<Pharmacist> pharmacists = pharmacistService.findAllByNameOrSurname(name, surname);
 		
 		return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacists), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/filter/{param}/{value}")
+	public ResponseEntity<List<PharmacistDTO>> filterPharmacists(@RequestBody List<PharmacistDTO> searchList, @PathVariable("param") String param, @PathVariable("value") String value) {
+		List<PharmacistDTO> retVal = null;
+		
+		if (param.equals("rating")) {
+			retVal = searchList
+					.stream()
+					.filter(p -> p.getRating() == Double.parseDouble(value))
+					.collect(Collectors.toList());
+		} else if (param.equals("pharmacy")) {
+			retVal = searchList
+					.stream()
+					.filter(p -> p.getPharmacy().getId() == Integer.parseInt(value))
+					.collect(Collectors.toList());
+		}
+		
+		if (retVal == null) {
+			return new ResponseEntity<List<PharmacistDTO>>(createPharmacistDTOList(pharmacistService.findAll()), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<PharmacistDTO>>(retVal, HttpStatus.OK);
+		}
+		
 	}
 	
 	@GetMapping(value = "/{id}")

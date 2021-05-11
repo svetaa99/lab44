@@ -12,5 +12,5 @@ public interface DermatologistRepository extends JpaRepository<Dermatologist, Lo
 	
 	List<Dermatologist> findBySurnameContainingIgnoreCase(String surname);
 	
-	List<Dermatologist> findByNameAndSurname(String name, String surname);
+	List<Dermatologist> findByNameAndSurnameIgnoreCase(String name, String surname);
 }

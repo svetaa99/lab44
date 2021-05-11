@@ -42,7 +42,7 @@ public class DermatologistService implements IDermatologistService {
 		} else if (surname == null) {
 			return dermaRepository.findByNameContainingIgnoreCase(name);
 		} else {
-			return dermaRepository.findByNameAndSurname(name, surname);
+			return dermaRepository.findByNameAndSurnameIgnoreCase(name, surname);
 		}
 	}
 

@@ -19,6 +19,20 @@ public class Dermatologist extends Doctor {
 	@ManyToMany(mappedBy = "dermatologists")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Pharmacy> pharmacies;
+	
+	
+
+	public List<Pharmacy> getPharmacies() {
+		return pharmacies;
+	}
+
+
+
+	public void setPharmacies(List<Pharmacy> pharmacies) {
+		this.pharmacies = pharmacies;
+	}
+
+
 
 	@Override
 	public String toString() {
