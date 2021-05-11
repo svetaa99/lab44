@@ -43,7 +43,6 @@
 <script>
 import axios from "axios";
 import { config } from "@/config.js";
-import Swal from "sweetalert2";
 
 const API_URL = config.API_URL;
 
@@ -58,19 +57,7 @@ export default {
   },
   methods: {
     reserve: function(termId) {
-      axios
-        .get(`${API_URL}/doctorterms/reserve-dermatologist/${termId}`)
-        .then((response) => {
-          this.dermatologistTerms = response.data;
-          this.$emit("clicked", this.dermatologistTerms);
-        });
-      Swal.fire({
-        title: "Successfully",
-        text: "Appointment made successfully",
-        icon: "success",
-        button: null,
-        timer: 2000,
-      });
+      this.$emit("clicked", termId);
     },
     sortPrice: function () {
       this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";

@@ -84,7 +84,7 @@ public class DoctorTermsController {
 	}
 			
 	@GetMapping("/reserve-dermatologist/{termId}")
-	public ResponseEntity<DoctorTerms> reserveFreeTerm(@PathVariable("termId") Long termId) {
+	public ResponseEntity<List<DermatologistTermDTO>> reserveFreeTerm(@PathVariable("termId") Long termId) {
 		// Get patient from token
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
@@ -105,9 +105,17 @@ public class DoctorTermsController {
 		
 		doctorTermsService.delete(doctorTerm);
 		
+		List<DoctorTerms> appointments = doctorTermsService.findAllFutureTerms();
+		List<DermatologistTermDTO> dtsDTO = new ArrayList<>();
+		for (DoctorTerms doctorTerm1 : appointments) {
+			User dermatologist = userService.findById(doctorTerm1.getDoctorId());
+			DermatologistTermDTO dtDTO = new DermatologistTermDTO(doctorTerm1.getId(), dermatologist.getName(), dermatologist.getSurname(), pharmacyService.findById(doctorTerm1.getPharmacyId()), pharmacyService.findById(doctorTerm1.getPharmacyId()).getpharmacistPrice(), doctorTerm1.getStart());
+			dtsDTO.add(dtDTO);
+		}
+		
 		// TODO: Notify via email
 		
-		return new ResponseEntity<DoctorTerms>(HttpStatus.OK);
+		return new ResponseEntity<List<DermatologistTermDTO>>(dtsDTO, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/createnew/{visitId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
