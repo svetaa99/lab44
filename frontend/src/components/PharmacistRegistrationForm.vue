@@ -102,8 +102,8 @@
               name="from" 
               v-model="user.startTime"
             >
-            <div v-if="!validation.address" class="text-danger">
-              Please insert a valid address.
+            <div v-if="!validation.startTime" class="text-danger">
+              Please insert a valid start time.
             </div>
           </div>
 
@@ -115,8 +115,8 @@
               name="from" 
               v-model="user.finishTime"
             >
-            <div v-if="!validation.address" class="text-danger">
-              Please insert a valid address.
+            <div v-if="!validation.finishTime" class="text-danger">
+              Please insert a valid finish time.
             </div>
           </div>
       

@@ -14,22 +14,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.sun.mail.iap.Response;
 
 import backend.dto.PharmacistDTO;
-import backend.dto.PharmacyDTO;
 import backend.models.Pharmacist;
-import backend.models.Pharmacy;
 import backend.models.Role;
 import backend.models.User;
 import backend.models.WorkHours;
 import backend.services.IPharmacistService;
-import backend.services.IPharmacyService;
+import backend.services.impl.DoctorTermsService;
 import backend.services.impl.UserService;
 import backend.services.impl.WorkHoursService;
 
@@ -47,15 +45,29 @@ public class PharmacistController {
 	@Autowired
 	private WorkHoursService whService;
 	
+	@Autowired
+	private DoctorTermsService doctorTermsService;
+	
 	private static Gson g = new Gson();
 	
 	private List<PharmacistDTO> createPharmacistDTOList(List<Pharmacist> pharmacists) {
 		
 		List<PharmacistDTO> pharmacistsDTO = new ArrayList<PharmacistDTO>();
 		
-		for (Pharmacist pharmacist : pharmacists) {
-			PharmacistDTO pharmacistDTO = new PharmacistDTO(pharmacist);
-			pharmacistsDTO.add(pharmacistDTO);
+		for (Pharmacist p : pharmacists) {
+			List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getPharmacy().getId());
+			PharmacistDTO pDTO = null;
+			
+			if (whList.size() == 0) {
+				pDTO = new PharmacistDTO(p);
+			} else {
+				WorkHours wh = whList.get(0);
+				pDTO = new PharmacistDTO(p.getId(), p.getName(), p.getSurname(), p.getEmail(), p.getAddress(), 
+						p.getPhoneNum(), p.getRating(), p.getPharmacy(), wh.getStartTime().toString(), wh.getFinishTime().toString());
+				
+			}
+			
+			pharmacistsDTO.add(pDTO);
 		}
 		
 		return pharmacistsDTO;
@@ -178,6 +190,37 @@ public class PharmacistController {
 		whService.save(wh);
 		
 		return new ResponseEntity<String>(g.toJson(new PharmacistDTO(p)), HttpStatus.CREATED);
+	}
+	
+	@PutMapping(value = "/update-work-hours/{id}")
+	public ResponseEntity<String> updateWorkHours(@RequestBody WorkHoursDTO obj, @PathVariable("id") Long doctorId) {
+		LocalTime startTime = LocalTime.parse(obj.getStartTime());
+		LocalTime finishTime = LocalTime.parse(obj.getFinishTime());
+		Pharmacist p = pharmacistService.findById(doctorId);
+		
+		if (p == null) {
+			return new ResponseEntity<String>("No doctor found.", HttpStatus.BAD_REQUEST);
+		}
+		
+		if (startTime.isAfter(finishTime)) {
+			return new ResponseEntity<String>("Start time must be before finish time.", HttpStatus.BAD_REQUEST);
+		}
+		
+		List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getPharmacy().getId());
+		WorkHours wh = null;
+		
+		if (whList.size() == 0) {
+			wh = new WorkHours(p, p.getPharmacy(), startTime, finishTime);
+		} else {
+			wh = whList.get(0);			
+		}
+		
+		wh.setStartTime(startTime);
+		wh.setFinishTime(finishTime);
+		
+		whService.save(wh);
+		
+		return new ResponseEntity<String>(g.toJson(new WorkHoursDTO(wh)), HttpStatus.OK);
 	}
 	
 }
