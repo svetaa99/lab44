@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <DoctorSearchComponent @clicked="handleSearchClick" />
+  <div class="container">
+    <DoctorSearchComponent :doctorType="'pharmacist'" @clicked="handleSearchClick" />
     <DoctorFilterComponent :doctorType="'pharmacist'" @clicked="handleFilterClick" />
-    <DoctorListComponent :doctors="pharmacists" />
+    <DoctorListComponent :doctorType="'pharmacist'" :doctors="pharmacists" />
   </div>
 </template>
 
@@ -31,6 +31,7 @@ export default {
       .get(`${API_URL}/pharmacist/all`)
       .then(response => {
         this.pharmacists = response.data;
+        console.log(response.data)
       })
   },
   methods: {
