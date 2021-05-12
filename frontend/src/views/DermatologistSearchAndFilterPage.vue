@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <DoctorSearchComponent @clicked="handleSearchClick" />
+  <div class="container">
+    <DoctorSearchComponent :doctorType="'dermatologist'" @clicked="handleSearchClick" />
     <DoctorFilterComponent :doctorType="'dermatologist'" @clicked="handleFilterClick" />
-    <DoctorListComponent :doctors="dermatologists" />
+    <DoctorListComponent :doctorType="'dermatologist'" :doctors="dermatologists" />
   </div>
 </template>
 

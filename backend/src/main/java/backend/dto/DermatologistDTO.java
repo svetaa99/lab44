@@ -36,6 +36,7 @@ public class DermatologistDTO {
 		this.name = name;
 		this.surname = surname;
 		this.address = address;
+		this.email = email;
 		this.pharmacies = pharmacies;
 	}
 

@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="padding-top padding-bottom">
+    <h3>Search {{doctorType}}:</h3>
     <input
       class="ml-1"
       type="text"
@@ -20,6 +21,9 @@
 
 <script>
 export default {
+  props: {
+    doctorType: String,
+  },
   data() {
     return {
       search: {
@@ -37,5 +41,7 @@ export default {
 </script>
 
 <style>
-
+  .padding-top {
+    padding-top: 10px;
+  }
 </style>

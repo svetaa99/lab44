@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="padding-bottom">
     <h3>Filter by:</h3>
     <div v-if="doctorType === 'pharmacist'">
-      <p>Rating:</p>
-      <select v-model="filter.rating">
+      <label for="rating" class="form-label">Rating</label><br/>
+      <select id="rating" v-model="filter.rating">
         <option value=-1>None</option>
         <option value="10">10</option>
         <option value="9">9</option>
@@ -14,12 +14,15 @@
       </select>
     </div>
 
-    <p>Pharmacy</p>
-    <select v-model="filter.pharmacy">
-      <option value=-1>All</option>
-      <option v-for="p in pharmacies" :key="p.id" :value="p.id">{{p.name}}</option>
-    </select>
-
+    <br/>
+    
+    <div class="padding-bottom">
+      <label for="pharmacy" class="form-label">Pharmacy</label><br/>
+      <select id="pharmacy" v-model="filter.pharmacy">
+        <option value=-1>All</option>
+        <option v-for="p in pharmacies" :key="p.id" :value="p.id">{{p.name}}</option>
+      </select>
+    </div>
     <button type="button" class="btn btn-primary" @click="handleFilterClick">Filter</button>
   </div>
 </template>
