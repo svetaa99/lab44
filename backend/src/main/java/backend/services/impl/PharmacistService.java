@@ -37,8 +37,8 @@ public class PharmacistService implements IPharmacistService {
 	}
 	
 	@Override
-	public List<Pharmacist> findAllByPharmacy(Long pharmacistId) {
-		return pharmacistRepository.findAllByPharmacyIdEquals(pharmacistId);
+	public List<Pharmacist> findAllByPharmacy(Long pharmacyId) {
+		return pharmacistRepository.findAllByPharmacyIdEquals(pharmacyId);
 	}
 	
 	@Override

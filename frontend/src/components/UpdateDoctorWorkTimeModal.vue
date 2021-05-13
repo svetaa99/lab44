@@ -32,8 +32,10 @@
             class="ml-1"
             v-model="pharmacist.finishTime"
           >
-
+          <br/> <br/>
           <button type="button" class="btn btn-primary" @click="handleSetClick">Set new work time</button>
+          <br/> <br/>
+          <button type="button" class="btn btn-outline-danger" @click="handleRemoveClick">Remove doctor from pharmacy</button>
         </div>
       </div>
     </div>
@@ -70,7 +72,35 @@ export default {
             icon:'success'
           })
         })
-    }
+    },
+    handleRemoveClick() {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'You won\'t be able to undo this operation. Doctor will be removed permanently.',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel'
+        }).then(result => {
+          if (result.isConfirmed) {
+            axios
+              .delete(`${API_URL}/labadmins/remove-pharmacist/${this.pharmacist.id}`)
+              .then(response => {
+                if (response.status === 200) {
+                  Swal.fire({
+                    title: 'Success',
+                    text: 'Successfully deleted pharmacist',
+                    icon: 'success'
+                  }).then(result => {
+                    if (result.isConfirmed) {
+                      window.location.reload()
+                    }
+                  })
+                }
+              })
+          }
+        })
+    },
   }
 }
 </script>

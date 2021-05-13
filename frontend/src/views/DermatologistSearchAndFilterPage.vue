@@ -24,14 +24,29 @@ export default {
   data() {
     return {
       dermatologists: [],
+      userRoles: [],
     }
   },
   mounted() {
-    axios
-      .get(`${API_URL}/dermatologists/all`)
-      .then(response => {
-        this.dermatologists = response.data;
-      })
+    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+    tokenItem.token.roles.map(el => {
+      this.userRoles.push(el.id);
+    });
+
+    if (this.userRoles.includes(4)) {
+        axios
+          .get(`${API_URL}/labadmins/all-dermatologists`)
+          .then(response => {
+            this.dermatologists = response.data;
+            console.log(response.data)
+          })
+      } else {
+        axios
+          .get(`${API_URL}/dermatologists/all`)
+          .then(response => {
+            this.dermatologists = response.data;
+          })
+      }
   },
   methods: {
     handleSearchClick(search) {

@@ -19,7 +19,7 @@
           <td>{{d.surname}}</td>
           <td>{{d.email}}</td>
           <td v-if="doctorType == 'pharmacist'">{{d.rating}}</td>
-          <td v-if="doctorType == 'pharmacist'">{{d.pharmacy.name}}</td>
+          <td v-if="doctorType == 'pharmacist'">{{d.pharmacy ? d.pharmacy.name : "Not employed"}}</td>
           <td v-if="doctorType == 'dermatologist'">{{printPharmacies(d)}}</td>
           <td v-if="userRoles.includes(4)">
             <button 

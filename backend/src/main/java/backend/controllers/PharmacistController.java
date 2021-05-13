@@ -55,16 +55,20 @@ public class PharmacistController {
 		List<PharmacistDTO> pharmacistsDTO = new ArrayList<PharmacistDTO>();
 		
 		for (Pharmacist p : pharmacists) {
-			List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getPharmacy().getId());
 			PharmacistDTO pDTO = null;
-			
-			if (whList.size() == 0) {
-				pDTO = new PharmacistDTO(p);
-			} else {
-				WorkHours wh = whList.get(0);
-				pDTO = new PharmacistDTO(p.getId(), p.getName(), p.getSurname(), p.getEmail(), p.getAddress(), 
-						p.getPhoneNum(), p.getRating(), p.getPharmacy(), wh.getStartTime().toString(), wh.getFinishTime().toString());
+			if (p.getPharmacy() != null) {
+				List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getPharmacy().getId());
 				
+				if (whList.size() == 0) {
+					pDTO = new PharmacistDTO(p);
+				} else {
+					WorkHours wh = whList.get(0);
+					pDTO = new PharmacistDTO(p.getId(), p.getName(), p.getSurname(), p.getEmail(), p.getAddress(), 
+							p.getPhoneNum(), p.getRating(), p.getPharmacy(), wh.getStartTime().toString(), wh.getFinishTime().toString());
+					
+				}
+			} else {
+				pDTO = new PharmacistDTO(p);				
 			}
 			
 			pharmacistsDTO.add(pDTO);

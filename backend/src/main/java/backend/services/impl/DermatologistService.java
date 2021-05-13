@@ -46,4 +46,9 @@ public class DermatologistService implements IDermatologistService {
 		}
 	}
 
+	@Override
+	public List<Dermatologist> findAllByPharmacy(Long pharmacyId) {
+		return dermaRepository.findByPharmaciesContaining(pharmacyId);
+	}
+
 }

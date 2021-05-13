@@ -9,7 +9,7 @@ import backend.models.Pharmacy;
 
 public interface PharmacistRepository extends JpaRepository<Pharmacist, Long> {
 	
-	List<Pharmacist> findAllByPharmacyIdEquals(Long pharmacistId);
+	List<Pharmacist> findAllByPharmacyIdEquals(Long pharmacyId);
 	
 	List<Pharmacist> findAllByPharmacyIdOrderByRatingAsc(Long pharmacistId);
 	

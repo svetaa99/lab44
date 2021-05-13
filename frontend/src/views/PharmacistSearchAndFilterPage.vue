@@ -23,16 +23,30 @@ export default {
   },
   data() {
     return {
-      pharmacists: []
+      pharmacists: [],
+      userRoles: [],
     }
   },
   mounted() {
-    axios
-      .get(`${API_URL}/pharmacist/all`)
-      .then(response => {
-        this.pharmacists = response.data;
-        console.log(response.data)
-      })
+    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+    tokenItem.token.roles.map(el => {
+      this.userRoles.push(el.id);
+    });
+
+    if (this.userRoles.includes(4)) {
+        axios
+          .get(`${API_URL}/labadmins/all-pharmacists`)
+          .then(response => {
+            this.pharmacists = response.data;
+            console.log(response.data)
+          })
+      } else {
+        axios
+          .get(`${API_URL}/pharmacist/all`)
+          .then(response => {
+            this.pharmacists = response.data;
+          })
+      }
   },
   methods: {
     handleSearchClick(search) {
