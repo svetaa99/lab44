@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="updateDoctorModalTitle">Edit {{pharmacist.name}}</h5>
+          <h5 class="modal-title" id="updateDoctorModalTitle">Edit {{doctor.name}}</h5>
           <button
             type="button"
             class="close"
@@ -24,13 +24,13 @@
           <input
             type="time"
             class="ml-1"
-            v-model="pharmacist.startTime"
+            v-model="doctor.startTime"
           >
 
           <input
             type="time"
             class="ml-1"
-            v-model="pharmacist.finishTime"
+            v-model="doctor.finishTime"
           >
           <br/> <br/>
           <button type="button" class="btn btn-primary" @click="handleSetClick">Set new work time</button>
@@ -51,40 +51,42 @@ const API_URL = config.API_URL;
 
 export default {
   props: {
-    pharmacist: Object,
+    doctor: Object,
+    doctorRole: Number,
   },
   methods: {
     handleSetClick() {
       const putObject = {
-        startTime: this.pharmacist.startTime,
-        finishTime: this.pharmacist.finishTime,
+        startTime: this.doctor.startTime,
+        finishTime: this.doctor.finishTime,
       }
 
       axios
-        .put(`${API_URL}/pharmacist/update-work-hours/${this.pharmacist.id}`, putObject)
+        .put(`${API_URL}/pharmacist/update-work-hours/${this.doctor.id}`, putObject)
         .then(response => {
           const {startTime, finishTime} = response.data
-          this.pharmacist.startTime = startTime
-          this.pharmacist.finishTime = finishTime
+          this.doctor.startTime = startTime
+          this.doctor.finishTime = finishTime
           Swal.fire({
             title: 'Success',
-            text: 'Successfully updated work time of the pharmacist.',
+            text: 'Successfully updated work time of the doctor.',
             icon:'success'
           })
         })
     },
     handleRemoveClick() {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: 'You won\'t be able to undo this operation. Doctor will be removed permanently.',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Confirm',
-          cancelButtonText: 'Cancel'
-        }).then(result => {
-          if (result.isConfirmed) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to undo this operation. Doctor will be removed permanently.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel'
+      }).then(result => {
+        if (result.isConfirmed) {
+          if (this.doctorRole === 3) {
             axios
-              .delete(`${API_URL}/labadmins/remove-pharmacist/${this.pharmacist.id}`)
+              .delete(`${API_URL}/labadmins/remove-pharmacist/${this.doctor.id}`)
               .then(response => {
                 if (response.status === 200) {
                   Swal.fire({
@@ -98,8 +100,27 @@ export default {
                   })
                 }
               })
+
+          } else {
+            axios
+              .delete(`${API_URL}/labadmins/remove-dermatologist/${this.doctor.id}`)
+              .then(response => {
+                if (response.status === 200) {
+                  Swal.fire({
+                    title: 'Success',
+                    text: 'Successfully deleted dermatologist',
+                    icon: 'success'
+                  }).then(result => {
+                    if (result.isConfirmed) {
+                      window.location.reload()
+                    }
+                  })
+                }
+              })
+
           }
-        })
+        }
+      })
     },
   }
 }

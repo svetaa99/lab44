@@ -23,7 +23,7 @@ public class PharmacistService implements IPharmacistService {
 
 	@Override
 	public Pharmacist findById(Long id) {
-		return pharmacistRepository.findById(id).orElseGet(null);
+		return pharmacistRepository.findById(id).orElse(null);
 	}
 
 	@Override

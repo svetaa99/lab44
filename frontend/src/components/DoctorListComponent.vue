@@ -1,6 +1,6 @@
 <template>
   <div>
-    <update-doctor-work-time-modal :pharmacist="selectedDoctor"></update-doctor-work-time-modal>
+    <update-doctor-work-time-modal :doctorRole="doctorRole" :doctor="selectedDoctor"></update-doctor-work-time-modal>
 
     <table width="80%" class="table table-striped table-bordered table-sm">
       <thead>
@@ -8,9 +8,9 @@
           <th class="th-sm">Name</th>
           <th class="th-sm">Surname</th>
           <th class="th-sm">Email</th>
-          <th v-if="doctorType == 'pharmacist'">Rating</th>
-          <th v-if="doctorType == 'pharmacist'">Pharmacy name</th>
-          <th v-if="doctorType == 'dermatologist'">Pharmacies</th>
+          <th v-if="doctorRole == 3">Rating</th>
+          <th v-if="doctorRole == 3">Pharmacy name</th>
+          <th v-if="doctorRole == 2">Pharmacies</th>
         </tr>
       </thead>
       <tbody>
@@ -18,9 +18,9 @@
           <td>{{d.name}}</td>
           <td>{{d.surname}}</td>
           <td>{{d.email}}</td>
-          <td v-if="doctorType == 'pharmacist'">{{d.rating}}</td>
-          <td v-if="doctorType == 'pharmacist'">{{d.pharmacy ? d.pharmacy.name : "Not employed"}}</td>
-          <td v-if="doctorType == 'dermatologist'">{{printPharmacies(d)}}</td>
+          <td v-if="doctorRole == 3">{{d.rating}}</td>
+          <td v-if="doctorRole == 3">{{d.pharmacy ? d.pharmacy.name : "Not employed"}}</td>
+          <td v-if="doctorRole == 2">{{printPharmacies(d)}}</td>
           <td v-if="userRoles.includes(4)">
             <button 
               type="button"
@@ -44,7 +44,7 @@ export default {
   },
   props: {
     doctors: Array,
-    doctorType: String,
+    doctorRole: Number,
   },
   data() {
     return {

@@ -1,7 +1,7 @@
 <template>
   <div class="padding-bottom">
     <h3>Filter by:</h3>
-    <div v-if="doctorType === 'pharmacist'">
+    <div v-if="doctorRole === 3">
       <label for="rating" class="form-label">Rating</label><br/>
       <select id="rating" v-model="filter.rating">
         <option value=-1>None</option>
@@ -35,7 +35,7 @@ const API_URL = config.API_URL;
 
 export default {
   props: {
-    doctorType: String,
+    doctorRole: Number,
   },
   data() {
     return {

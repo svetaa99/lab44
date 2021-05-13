@@ -30,6 +30,7 @@ import backend.models.WorkHours;
 import backend.services.IDermatologistService;
 import backend.services.ILabAdminService;
 import backend.services.IPharmacistService;
+import backend.services.IPharmacyService;
 import backend.services.impl.DoctorTermsService;
 
 @RestController
@@ -47,6 +48,9 @@ public class LabAdminController {
 	
 	@Autowired
 	private IDermatologistService dermatologistService;
+	
+	@Autowired
+	private IPharmacyService pharmacyService;
 	
 	@Autowired
 	private DoctorTermsService doctorTermsService;
@@ -144,6 +148,31 @@ public class LabAdminController {
 		p.getPharmacists().remove(pharmacist);
 		pharmacist.setPharmacy(null);
 		pharmacistService.save(pharmacist);
+		
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/remove-dermatologist/{id}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<String> removeDermatologistFromPharmacy(@PathVariable("id") Long doctorId) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin la = laService.findByEmail(token);
+		Pharmacy p = la.getPharmacy();
+		
+		Dermatologist d = dermatologistService.findById(doctorId);
+		if (d == null) {
+			return new ResponseEntity<String>("No dermatologist with this id found", HttpStatus.BAD_REQUEST);
+		}
+		
+		if (!d.getPharmacies().contains(p)) {
+			return new ResponseEntity<String>("Dermatologist not found in this pharmacy", HttpStatus.BAD_REQUEST);
+		}
+		
+		p.getDermatologists().remove(d);
+		d.getPharmacies().remove(p);
+		
+		dermatologistService.save(d);
+		pharmacyService.save(p);
 		
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}

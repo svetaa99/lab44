@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <DoctorSearchComponent :doctorType="'pharmacist'" @clicked="handleSearchClick" />
-    <DoctorFilterComponent :doctorType="'pharmacist'" @clicked="handleFilterClick" />
-    <DoctorListComponent :doctorType="'pharmacist'" :doctors="pharmacists" />
+    <DoctorSearchComponent :doctorRole="3" @clicked="handleSearchClick" />
+    <DoctorFilterComponent :doctorRole="3" @clicked="handleFilterClick" />
+    <DoctorListComponent :doctorRole="3" :doctors="pharmacists" />
   </div>
 </template>
 

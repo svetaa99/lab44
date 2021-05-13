@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Pharmacy {
 	
@@ -42,6 +44,7 @@ public class Pharmacy {
 	@OneToMany(mappedBy = "pharmacy")
 	private List<PharmacyMedicines> pharmacyMedicines;
 	
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name="pharmacy_dermatologists", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dermatologist_id", referencedColumnName = "id"))
 	private List<Dermatologist> dermatologists = new ArrayList<Dermatologist>();
@@ -120,13 +123,13 @@ public class Pharmacy {
 		this.pharmacistPrice = pharmacistPrice;
 	}
 
-//	public List<Dermatologist> getDermatologists() {
-//		return dermatologists;
-//	}
-//
-//	public void setDermatologists(List<Dermatologist> dermatologists) {
-//		this.dermatologists = dermatologists;
-//	}
+	public List<Dermatologist> getDermatologists() {
+		return dermatologists;
+	}
+
+	public void setDermatologists(List<Dermatologist> dermatologists) {
+		this.dermatologists = dermatologists;
+	}
 
 	public List<Pharmacist> getPharmacists() {
 		return pharmacists;

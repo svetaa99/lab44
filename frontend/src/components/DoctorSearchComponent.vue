@@ -1,6 +1,6 @@
 <template>
   <div class="padding-top padding-bottom">
-    <h3>Search {{doctorType}}:</h3>
+    <h3>Search {{doctorRole == 2 ? 'dermatologist' : 'pharmacist'}}:</h3>
     <input
       class="ml-1"
       type="text"
@@ -22,7 +22,7 @@
 <script>
 export default {
   props: {
-    doctorType: String,
+    doctorRole: Number,
   },
   data() {
     return {
