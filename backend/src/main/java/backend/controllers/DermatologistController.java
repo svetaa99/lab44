@@ -1,5 +1,6 @@
 package backend.controllers;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +20,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import backend.dto.DermatologistDTO;
 import backend.dto.DermatologistFilterObject;
 import backend.dto.FilterObject;
+import backend.dto.WorkHoursDTO;
 import backend.models.Dermatologist;
+import backend.models.LabAdmin;
+import backend.models.Pharmacy;
+import backend.models.WorkHours;
 import backend.services.IDermatologistService;
+import backend.services.ILabAdminService;
 import backend.services.IPharmacyService;
+import backend.services.impl.WorkHoursService;
 
 @RestController
 @RequestMapping(value = "dermatologists")
@@ -35,6 +45,14 @@ public class DermatologistController {
 	
 	@Autowired
 	private IPharmacyService pharmacyService;
+	
+	@Autowired
+	private ILabAdminService laService;
+	
+	@Autowired
+	private WorkHoursService whService;
+	
+	private static Gson g = new Gson();
 	
 	private List<DermatologistDTO> createDTOList(List<Dermatologist> derms) {
 		List<DermatologistDTO> dDTOs = new ArrayList<DermatologistDTO>();
@@ -87,4 +105,34 @@ public class DermatologistController {
 		return new ResponseEntity<List<DermatologistDTO>>(retVal, HttpStatus.OK);
 	}
 	
+	@PostMapping("/add-to-pharmacy/{doctorId}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<DermatologistDTO> addToPharmacy(@RequestBody WorkHoursDTO whDTO, @PathVariable("doctorId") Long doctorId) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin la = laService.findByEmail(token);
+		Pharmacy p = la.getPharmacy();
+		Dermatologist dermatologist = dermaService.findById(doctorId);
+		
+		if (dermatologist == null) {
+			return new ResponseEntity<DermatologistDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if (p.getDermatologists().contains(dermatologist)) {
+			return new ResponseEntity<DermatologistDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
+		p.getDermatologists().add(dermatologist);
+		dermatologist.getPharmacies().add(p);
+		
+		pharmacyService.save(p);
+		dermaService.save(dermatologist);
+		
+		LocalTime startTime = LocalTime.parse(whDTO.getStartTime());
+		LocalTime finishTime = LocalTime.parse(whDTO.getFinishTime());
+		
+		WorkHours wh = new WorkHours(dermatologist, p, startTime, finishTime);
+		whService.save(wh);
+		
+		return new ResponseEntity<DermatologistDTO>(new DermatologistDTO(dermatologist), HttpStatus.OK);		
+	}
 }

@@ -1,4 +1,4 @@
-package backend.controllers;
+package backend.dto;
 
 import backend.models.WorkHours;
 

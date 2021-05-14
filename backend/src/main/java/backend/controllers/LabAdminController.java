@@ -32,6 +32,7 @@ import backend.services.ILabAdminService;
 import backend.services.IPharmacistService;
 import backend.services.IPharmacyService;
 import backend.services.impl.DoctorTermsService;
+import backend.services.impl.WorkHoursService;
 
 @RestController
 @RequestMapping(value = "labadmins")
@@ -55,6 +56,8 @@ public class LabAdminController {
 	@Autowired
 	private DoctorTermsService doctorTermsService;
 	
+	@Autowired
+	private WorkHoursService whService;
 	
 	private List<PharmacistDTO> createPharmacistDTOList(List<Pharmacist> pharmacists) {
 		
@@ -173,6 +176,11 @@ public class LabAdminController {
 		
 		dermatologistService.save(d);
 		pharmacyService.save(p);
+		
+		List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getId());
+		WorkHours wh = whList.get(0);
+		
+		whService.delete(wh);
 		
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}

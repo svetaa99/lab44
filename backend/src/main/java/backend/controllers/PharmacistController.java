@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.PharmacistDTO;
+import backend.dto.WorkHoursDTO;
 import backend.models.Pharmacist;
 import backend.models.Role;
 import backend.models.User;
