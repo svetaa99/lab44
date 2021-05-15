@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
-import backend.dto.PharmacyDTO;
-import backend.dto.ReservationDTO;
 import backend.enums.Status;
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;

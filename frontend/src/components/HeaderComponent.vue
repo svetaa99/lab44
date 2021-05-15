@@ -144,6 +144,8 @@
               >Offers</router-link
             >
           </li>
+
+          <!-- Medicine issue -->
           <li v-if="userRoles.includes(3)"
             :class="
               $route.path === '/issue-medicine'
@@ -154,6 +156,8 @@
               >Issue medicine</router-link
             >
           </li>
+
+          <!-- Vacation request -->
           <li v-if="userRoles.includes(3) || userRoles.includes(2)"
             :class="
               $route.path === '/vacation'
@@ -229,6 +233,18 @@
             ">
             <router-link to="/pharmacist-search-and-filter" class="nav-link"
               >Pharmacists view</router-link
+            >
+          </li>
+
+          <!-- Work calendar -->
+          <li v-if="userRoles.includes(2) || userRoles.includes(3)"
+            :class="
+              $route.path === '/work-calendar'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/work-calendar" class="nav-link"
+              >Calendar</router-link
             >
           </li>
         </ul>

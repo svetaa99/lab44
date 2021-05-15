@@ -2,7 +2,6 @@ package backend.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.DermatologistDTO;
-import backend.dto.DermatologistFilterObject;
-import backend.dto.FilterObject;
 import backend.models.Dermatologist;
 import backend.services.IDermatologistService;
 import backend.services.IPharmacyService;
