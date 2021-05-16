@@ -1,10 +1,9 @@
 <template>
-  <WorkCalendarComponent :events="events"/>
+  <WorkCalendarComponent v-bind:events="this.events"/>
   
 </template>
 
 <script>
-import axios from "axios";
 import { config } from "@/config.js";
 
 import WorkCalendarComponent from "@/components/WorkCalendarComponent.vue"
@@ -17,7 +16,6 @@ export default {
             events: [],
         }
     },
-
 }
 </script>
 

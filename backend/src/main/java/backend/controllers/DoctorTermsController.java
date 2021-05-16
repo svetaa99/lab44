@@ -56,7 +56,6 @@ public class DoctorTermsController {
 	@GetMapping("/definedterms/{visitId}")
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> getDefinedTerms(@PathVariable("visitId") Long visitId){
-		System.out.println("Returning predefined terms for doctor in current session...");
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		Long doctorId = u.getId();
