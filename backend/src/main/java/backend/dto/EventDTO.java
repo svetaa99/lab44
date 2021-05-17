@@ -16,6 +16,8 @@ public class EventDTO {
 	
 	private String color;
 	
+	private boolean timed;
+	
 	public EventDTO() {
 		
 	}
@@ -24,21 +26,24 @@ public class EventDTO {
 		this.name = "Appointment\n" + visit.getpatient().getName() + " " + visit.getpatient().getSurname();
 		this.start = visit.getStart();
 		this.end = visit.getFinish();
-		this.color = "red";
+		this.color = "#03C6FC";
+		this.timed = false;
 	}
 	
 	public EventDTO(Vacation vacation) {
 		this.name = vacation.getType().equals(VacationType.ABSENCE) ? "Vacation" : "Absence";
-		this.start = vacation.getStart().atTime(0, 0);
-		this.end = vacation.getFinish().atTime(0,0);
-		this.color = this.name.equals("Vacation") ? "green" : "orange"; 
+		this.start = vacation.getStart().atStartOfDay();
+		this.end = vacation.getFinish().atStartOfDay();
+		this.color = this.name.equals("Vacation") ? "#24FC03" : "#FC5A03"; 
+		this.timed = true;
 	}
 	
-	public EventDTO(String name, LocalDateTime start, LocalDateTime end, String color) {
+	public EventDTO(String name, LocalDateTime start, LocalDateTime end, String color, boolean timed) {
 		this.name = name;
 		this.start = start;
 		this.end = end;
 		this.color = color;
+		this.timed = timed;
 	}
 
 	public String getName() {
@@ -71,6 +76,14 @@ public class EventDTO {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+	
+	public boolean isTimed() {
+		return timed;
+	}
+
+	public void setTimed(boolean timed) {
+		this.timed = timed;
 	}
 
 	@Override

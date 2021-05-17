@@ -1,5 +1,5 @@
 <template>
-    <div data-app>
+    <div data-app class="container" align="center" style="width: 80%">
         <v-row class="fill-height">
     <v-col>
       <v-sheet height="64">
@@ -81,6 +81,7 @@
           color="primary"
           :events="events"
           :event-color="getEventColor"
+          :event-text-color="getTextColor"
           :type="type"
           @click:event="showEvent"
           @click:more="viewDay"
@@ -154,9 +155,6 @@ import axios from "axios";
     }),
     mounted () {
       //this.$refs.calendar.checkChange()
-      <v-alert
-        type="success"
-       ></v-alert>
     },
     methods: {
       viewDay ({ date }) {
@@ -165,6 +163,9 @@ import axios from "axios";
       },
       getEventColor (event) {
         return event.color
+      },
+      getTextColor(){
+        return "FFFFFF"
       },
       setToday () {
         this.focus = ''
@@ -203,7 +204,6 @@ import axios from "axios";
         .get('http://localhost:8000/events/all')
         .then((response) => {
             this.events = response.data;
-            this.events.forEach(ev => console.log(ev.color));
             console.log(this.events);
         })
     },
