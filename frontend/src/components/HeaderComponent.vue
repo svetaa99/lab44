@@ -231,6 +231,18 @@
               >Pharmacists view</router-link
             >
           </li>
+
+          <!-- Add dermatologist to pharmacy -->
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/add-dermatologist-to-pharmacy'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/add-dermatologist-to-pharmacy" class="nav-link"
+              >Add dermatologist</router-link
+            >
+          </li>
         </ul>
       </div>
 

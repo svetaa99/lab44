@@ -26,6 +26,7 @@ import DermatologistAppointment from '../views/DermatologistAppointmentPage.vue'
 import CreatePharmacistPage from '../views/CreatePharmacistPage.vue'
 import DermatologistSearchAndFilterPage from '../views/DermatologistSearchAndFilterPage.vue'
 import PharmacistSearchAndFilterPage from '../views/PharmacistSearchAndFilterPage.vue'
+import AddDermatologistToPharmacyPage from '../views/AddDermatologistToPharmacyPage.vue'
 
 Vue.use(VueRouter)
 
@@ -159,6 +160,11 @@ const routes = [
     path: '/pharmacist-search-and-filter',
     name: 'PharmacistSearchAndFilterPage',
     component: PharmacistSearchAndFilterPage
+  },
+  {
+    path: '/add-dermatologist-to-pharmacy',
+    name: 'AddDermatologistToPharmacyPage',
+    component: AddDermatologistToPharmacyPage
   },
 ]
 

@@ -21,7 +21,7 @@
           <td v-if="doctorRole == 3">{{d.rating}}</td>
           <td v-if="doctorRole == 3">{{d.pharmacy ? d.pharmacy.name : "Not employed"}}</td>
           <td v-if="doctorRole == 2">{{printPharmacies(d)}}</td>
-          <td v-if="userRoles.includes(4)">
+          <td v-if="userRoles.includes(4) && action == 'update'">
             <button 
               type="button"
               class="btn btn-primary" 
@@ -29,6 +29,13 @@
               data-target="#updateDoctorModal"
               @click="handleUpdateClick(d)">Update</button>
           </td>
+          <td v-if="userRoles.includes(4) && action == 'add'">
+            <button 
+              type="button"
+              class="btn btn-primary" 
+              @click="handleAddClick(d)">Add</button>
+          </td>
+
         </tr>
       </tbody>
     </table>
@@ -45,6 +52,7 @@ export default {
   props: {
     doctors: Array,
     doctorRole: Number,
+    action: String,
   },
   data() {
     return {
@@ -76,6 +84,9 @@ export default {
     },
     handleUpdateClick(doctor) {
       this.selectedDoctor = doctor
+    },
+    handleAddClick(doctor) {
+      this.$emit('clicked', doctor);
     }
   }
 }

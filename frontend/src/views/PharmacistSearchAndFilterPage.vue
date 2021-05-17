@@ -2,7 +2,7 @@
   <div class="container">
     <DoctorSearchComponent :doctorRole="3" @clicked="handleSearchClick" />
     <DoctorFilterComponent :doctorRole="3" @clicked="handleFilterClick" />
-    <DoctorListComponent :doctorRole="3" :doctors="pharmacists" />
+    <DoctorListComponent :doctorRole="3" :doctors="pharmacists" :action="'update'" />
   </div>
 </template>
 

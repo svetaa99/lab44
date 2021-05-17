@@ -1,17 +1,17 @@
 <template>
   <div class="container">
-    <DoctorSearchComponent :doctorType="'dermatologist'" @clicked="handleSearchClick" />
-    <DoctorFilterComponent :doctorType="'dermatologist'" @clicked="handleFilterClick" />
-    <DoctorListComponent :doctorType="'dermatologist'" :doctors="dermatologists" />
+    <DoctorSearchComponent :doctorRole="2" @clicked="handleSearchClick" />
+    <DoctorFilterComponent :doctorRole="2" @clicked="handleFilterClick" />
+    <DoctorListComponent :doctorRole="2" :doctors="dermatologists" :action="'update'" />
   </div>
 </template>
 
 <script>
 import DoctorSearchComponent from '@/components/DoctorSearchComponent.vue'
 import DoctorFilterComponent from '@/components/DoctorFilterComponent.vue'
+import DoctorListComponent from '../components/DoctorListComponent.vue';
 import axios from 'axios'
 import { config } from "@/config.js";
-import DoctorListComponent from '../components/DoctorListComponent.vue';
 
 const API_URL = config.API_URL;
 
