@@ -13,6 +13,8 @@ public class DermatologistDTO {
 	private String email;
 	private Long address;
 	private List<Pharmacy> pharmacies;
+	private String startTime;
+	private String finishTime;
 	
 	public DermatologistDTO() {
 		
@@ -38,6 +40,19 @@ public class DermatologistDTO {
 		this.address = address;
 		this.email = email;
 		this.pharmacies = pharmacies;
+	}
+	
+	public DermatologistDTO(Long id, String name, String surname, Long address, String email, List<Pharmacy> pharmacies, 
+			String startTime, String finishTime) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.address = address;
+		this.email = email;
+		this.pharmacies = pharmacies;
+		this.startTime = startTime;
+		this.finishTime = finishTime;
 	}
 
 	public Long getId() {
@@ -86,6 +101,22 @@ public class DermatologistDTO {
 
 	public void setPharmacies(List<Pharmacy> pharmacies) {
 		this.pharmacies = pharmacies;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(String finishTime) {
+		this.finishTime = finishTime;
 	}
 	
 

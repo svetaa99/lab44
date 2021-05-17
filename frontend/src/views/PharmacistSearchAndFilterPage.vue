@@ -38,7 +38,6 @@ export default {
           .get(`${API_URL}/labadmins/all-pharmacists`)
           .then(response => {
             this.pharmacists = response.data;
-            console.log(response.data)
           })
       } else {
         axios

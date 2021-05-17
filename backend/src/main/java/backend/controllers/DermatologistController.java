@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,11 +29,13 @@ import backend.dto.FilterObject;
 import backend.dto.WorkHoursDTO;
 import backend.models.Dermatologist;
 import backend.models.LabAdmin;
+import backend.models.Pharmacist;
 import backend.models.Pharmacy;
 import backend.models.WorkHours;
 import backend.services.IDermatologistService;
 import backend.services.ILabAdminService;
 import backend.services.IPharmacyService;
+import backend.services.impl.DoctorTermsService;
 import backend.services.impl.WorkHoursService;
 
 @RestController
@@ -51,6 +54,9 @@ public class DermatologistController {
 	
 	@Autowired
 	private WorkHoursService whService;
+	
+	@Autowired
+	private DoctorTermsService doctorTermsService;
 	
 	private static Gson g = new Gson();
 	
@@ -134,5 +140,41 @@ public class DermatologistController {
 		whService.save(wh);
 		
 		return new ResponseEntity<DermatologistDTO>(new DermatologistDTO(dermatologist), HttpStatus.OK);		
+	}
+	
+	@PutMapping(value = "/update-work-hours/{id}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<String> updateWorkHours(@RequestBody WorkHoursDTO obj, @PathVariable("id") Long doctorId) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin la = laService.findByEmail(token);
+		Pharmacy p = la.getPharmacy();
+		
+		LocalTime startTime = LocalTime.parse(obj.getStartTime());
+		LocalTime finishTime = LocalTime.parse(obj.getFinishTime());
+		Dermatologist d = dermaService.findById(doctorId);
+		
+		if (d == null) {
+			return new ResponseEntity<String>("No doctor found.", HttpStatus.BAD_REQUEST);
+		}
+		
+		if (startTime.isAfter(finishTime)) {
+			return new ResponseEntity<String>("Start time must be before finish time.", HttpStatus.BAD_REQUEST);
+		}
+		
+		List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getId());
+		WorkHours wh = null;
+		
+		if (whList.size() == 0) {
+			wh = new WorkHours(d, p, startTime, finishTime);
+		} else {
+			wh = whList.get(0);			
+		}
+		
+		wh.setStartTime(startTime);
+		wh.setFinishTime(finishTime);
+		
+		whService.save(wh);
+		
+		return new ResponseEntity<String>(g.toJson(new WorkHoursDTO(wh)), HttpStatus.OK);
 	}
 }

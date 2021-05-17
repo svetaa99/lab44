@@ -60,19 +60,33 @@ export default {
         startTime: this.doctor.startTime,
         finishTime: this.doctor.finishTime,
       }
-
-      axios
-        .put(`${API_URL}/pharmacist/update-work-hours/${this.doctor.id}`, putObject)
-        .then(response => {
-          const {startTime, finishTime} = response.data
-          this.doctor.startTime = startTime
-          this.doctor.finishTime = finishTime
-          Swal.fire({
-            title: 'Success',
-            text: 'Successfully updated work time of the doctor.',
-            icon:'success'
+      if (this.doctorRole === 3) {
+        axios
+          .put(`${API_URL}/pharmacist/update-work-hours/${this.doctor.id}`, putObject)
+          .then(response => {
+            const {startTime, finishTime} = response.data
+            this.doctor.startTime = startTime
+            this.doctor.finishTime = finishTime
+            Swal.fire({
+              title: 'Success',
+              text: 'Successfully updated work time of the doctor.',
+              icon:'success'
+            })
           })
-        })
+      } else if (this.doctorRole === 2) {
+        axios
+          .put(`${API_URL}/dermatologists/update-work-hours/${this.doctor.id}`, putObject)
+          .then(response => {
+            const {startTime, finishTime} = response.data
+            this.doctor.startTime = startTime
+            this.doctor.finishTime = finishTime
+            Swal.fire({
+              title: 'Success',
+              text: 'Successfully updated work time of the doctor.',
+              icon:'success'
+            })
+          })
+      }
     },
     handleRemoveClick() {
       Swal.fire({

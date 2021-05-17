@@ -198,6 +198,7 @@ public class PharmacistController {
 	}
 	
 	@PutMapping(value = "/update-work-hours/{id}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<String> updateWorkHours(@RequestBody WorkHoursDTO obj, @PathVariable("id") Long doctorId) {
 		LocalTime startTime = LocalTime.parse(obj.getStartTime());
 		LocalTime finishTime = LocalTime.parse(obj.getFinishTime());

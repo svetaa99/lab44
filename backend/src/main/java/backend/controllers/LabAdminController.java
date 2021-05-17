@@ -87,10 +87,19 @@ public class LabAdminController {
 	}
 	
 	private List<DermatologistDTO> createDTOList(List<Dermatologist> derms) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin la = laService.findByEmail(token);
+		Pharmacy p = la.getPharmacy();
+		
 		List<DermatologistDTO> dDTOs = new ArrayList<DermatologistDTO>();
 		
 		for (Dermatologist dermatologist : derms) {
-			dDTOs.add(new DermatologistDTO(dermatologist));
+			List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getId());
+			WorkHours wh = whList.get(0);
+			DermatologistDTO dDTO = new DermatologistDTO(dermatologist);
+			dDTO.setStartTime(wh.getStartTime().toString());
+			dDTO.setFinishTime(wh.getFinishTime().toString());
+			dDTOs.add(dDTO);
 		}
 		
 		return dDTOs;
