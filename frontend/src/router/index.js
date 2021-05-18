@@ -98,7 +98,7 @@ const routes = [
     component: PharmacistAppointmentPage
   },
   {
-    path: '/pharmacies/:id/pharmacists',
+    path: '/pharmacies/:id/pharmacists/:date/:time',
     name: 'PharmacyPharmacistPage',
     component: PharmacyPharmacistPage
   },

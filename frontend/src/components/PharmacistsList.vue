@@ -24,7 +24,7 @@
           <td>{{ pharmacist.surname }}</td>
           <td>{{ pharmacist.rating }}</td>
           <td>
-            <button class="btn btn-primary" v-on:click="reserve()">Choose</button>
+            <button class="btn btn-primary" v-on:click="reserve(pharmacist.id)">Choose</button>
           </td>
         </tr>
       </tbody>
@@ -43,6 +43,8 @@ export default {
   props: {
     pharmacists: Array,
     id: String,
+    date: String,
+    time: String,
   },
   data() {
     return {
@@ -59,14 +61,21 @@ export default {
           this.$emit("clicked", this.pharmacists);
         });
     },
-    reserve() {
-      Swal.fire({
+    reserve(id) {
+      var newReservation = {doctorId: id, pharmacy: this.$route.params.id, start: this.date + "T" + this.time}
+      
+      axios
+      .post(`${API_URL}/appointments/make-appointment-patient`, newReservation)
+      .then(
+        Swal.fire({
         title: 'Successfully',
         text: 'Appointment made successfully',
         icon: 'success',
         button: null,
         timer: 2000
       })
+      )
+      
     }
   }
 };

@@ -88,9 +88,7 @@ public class VisitController {
 			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
 		
 		if(u instanceof Pharmacist) {
-			System.out.println("\n\nJESTE FARMACEUUUT\n\n");
 			if(!checkIfInWorkingHours(newReservation)) {
-				System.out.println("\n\nJESTE FARMACEUUUT\n\n");
 				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
 			}
 		}
@@ -105,6 +103,22 @@ public class VisitController {
 		notifyPatientViaEmail(patientsEmail, doctorId, ldt, p.getName());
 		
 		return new ResponseEntity<String>(g.toJson(newReservation), HttpStatus.OK);
+	}
+	
+	@PostMapping(value="/make-appointment-patient", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('PATIENT')")
+	public ResponseEntity<String> makeAppointmentPatient(@RequestBody Visit newReservation){
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		Long patientId = u.getId();
+		
+		newReservation.setPatientId(patientId);
+		newReservation.setFinish(newReservation.getStart().plusHours(1));
+		newReservation.setStatus(Status.RESERVED);
+		
+		visitService.save(newReservation);
+		System.out.println(newReservation);
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/report-visit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

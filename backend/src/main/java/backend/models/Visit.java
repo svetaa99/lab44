@@ -146,7 +146,11 @@ public class Visit {
 			return false;
 		return true;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Visit [id=" + id + ", patientId=" + patientId + ", doctorId=" + doctorId + ", start=" + start
+				+ ", finish=" + finish + ", pharmacy=" + pharmacy + ", status=" + status + "]";
+	}
 	
 }

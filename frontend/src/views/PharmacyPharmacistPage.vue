@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container"></div>
-    <pharmacists-list :id="id" :pharmacists="this.pharmacists"></pharmacists-list>
+    <pharmacists-list :id="id" :date="this.date" :time="this.time" :pharmacists="this.pharmacists"></pharmacists-list>
     <br />
     <!-- lista farmaceuta -->
   </div>
@@ -21,11 +21,15 @@ export default {
     return {
       pharmacists: [],
       id: "",
+      time: "",
+      date: "",
     };
   },
   mounted() {
     const arr = window.location.href.split("/");
-    const id = arr[arr.length - 2];
+    const id = arr[arr.length - 4];
+    this.time = arr[arr.length - 1];
+    this.date = arr[arr.length - 2];
     this.id = id;
     axios.get(`${API_URL}/pharmacist/${id}`).then((response) => {
       this.pharmacists = response.data;

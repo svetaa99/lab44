@@ -118,13 +118,17 @@ public class PharmacyController {
 	}
 	
 	@GetMapping("/freeTerms/{time}")
-	public ResponseEntity<List<Pharmacy>> getAllPharmaciesByTime(@PathVariable LocalTime time) {
+	public ResponseEntity<List<Pharmacy>> getAllPharmaciesByTime(@PathVariable("time") String timeS) {
+		LocalTime time = LocalTime.parse(timeS);
 		List<WorkHours> wh = whService.getPharmaciesByTime(time);
-		System.out.println("sizeeeee: " + wh.size());
+		
 		List<Pharmacy> pharmacies = new ArrayList<Pharmacy>();
 		for (WorkHours workHours : wh) {
-			pharmacies.add(workHours.getPharmacy());
+			if(!pharmacies.contains(workHours.getPharmacy())) {
+				pharmacies.add(workHours.getPharmacy());
+			}
 		}
+		System.out.println("sizeeeee: " + pharmacies.size());
 		return new ResponseEntity<List<Pharmacy>>(pharmacies, HttpStatus.OK);
 	}
 	

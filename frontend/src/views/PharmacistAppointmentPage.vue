@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="container" align="center" style="width: 450px">
-      <date-time-component v-model="pharmacies" @clicked="updatePharmacies"></date-time-component>
+      <date-time-component :pharmacies="this.pharmacies" @clicked="updatePharmacies"></date-time-component>
       <!-- <pharmacies-search></pharmacies-search> -->
     </div>
     <br />
-    <pharmacies-list :appointment="true" :pharmacies="this.pharmacies"></pharmacies-list>
+    <pharmacies-list :appointment="true" :date="this.date" :time="this.time" :pharmacies="this.pharmacies"></pharmacies-list>
   </div>
 </template>
 
@@ -25,6 +25,8 @@ export default {
   data() {
     return {
       pharmacies: [],
+      date: "",
+      time: "",
     };
   },
   mounted() {
@@ -33,8 +35,11 @@ export default {
     });
   },
   methods: {
-    updatePharmacies(pharmacies) {
+    updatePharmacies(retObj) {
+      const {date, time, pharmacies} = retObj
       this.pharmacies = pharmacies
+      this.date = date
+      this.time = time
     }
   }
 };

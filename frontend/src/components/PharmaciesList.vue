@@ -24,7 +24,7 @@
             Prikazi
             </router-link>
             <router-link v-if="appointment"
-              :to="`/pharmacies/${pharmacy.id}/pharmacists`"
+              :to="`/pharmacies/${pharmacy.id}/pharmacists/${date}/${time}`"
             >
             Choose
             </router-link>
@@ -45,6 +45,8 @@ export default {
   props: {
     pharmacies: Array,
     appointment: Boolean,
+    date: String,
+    time: String,
   },
   data () {
     return {

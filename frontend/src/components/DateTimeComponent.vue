@@ -1,7 +1,7 @@
 <template>
   <div class="container" align="center" style="width: 750px">
     <form class="form-inline">
-      <Datepicker placeholder="Datum" v-model="date" />
+      <b-form-datepicker id="datepicker-lg" size="lg" locale="en" v-model="date"></b-form-datepicker>
       <input class="ml-1" type="time" name="from" v-model="time" />
       <button
         type="button"
@@ -43,9 +43,14 @@ export default {
   },
   methods: {
     searchPharmacy: function () {
+      
       axios.get(`${API_URL}/pharmacies/freeTerms/${this.time}`).then((response) => {
-        this.pharmacies = response.data;
-        this.$emit("clicked", this.pharmacies);
+        const retObj = {
+          date: this.date,
+          time: this.time,
+          pharmacies: response.data
+        }
+        this.$emit("clicked", retObj);
       })
     },
     sortPrice: function () {
