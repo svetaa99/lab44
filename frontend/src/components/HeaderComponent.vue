@@ -243,6 +243,18 @@
               >Add dermatologist</router-link
             >
           </li>
+
+          <!-- Vacation requests page -->
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/vacation-requests'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/vacation-requests" class="nav-link"
+              >Vacation requests</router-link
+            >
+          </li>
         </ul>
       </div>
 

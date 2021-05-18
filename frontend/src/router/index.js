@@ -27,6 +27,7 @@ import CreatePharmacistPage from '../views/CreatePharmacistPage.vue'
 import DermatologistSearchAndFilterPage from '../views/DermatologistSearchAndFilterPage.vue'
 import PharmacistSearchAndFilterPage from '../views/PharmacistSearchAndFilterPage.vue'
 import AddDermatologistToPharmacyPage from '../views/AddDermatologistToPharmacyPage.vue'
+import VacationRequestsPage from '../views/VacationRequestsPage.vue'
 
 Vue.use(VueRouter)
 
@@ -166,6 +167,11 @@ const routes = [
     name: 'AddDermatologistToPharmacyPage',
     component: AddDermatologistToPharmacyPage
   },
+  {
+    path: '/vacation-requests',
+    name: 'VacationRequestsPage',
+    component: VacationRequestsPage
+  }
 ]
 
 const router = new VueRouter({
