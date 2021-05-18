@@ -35,6 +35,12 @@
               class="btn btn-primary" 
               @click="handleAddClick(d)">Add</button>
           </td>
+          <td v-if="userRoles.includes(4) && action == 'select'">
+            <button 
+              type="button"
+              class="btn btn-primary" 
+              @click="handleSelectClick(d)">Select</button>
+          </td>
 
         </tr>
       </tbody>
@@ -86,6 +92,9 @@ export default {
       this.selectedDoctor = doctor
     },
     handleAddClick(doctor) {
+      this.$emit('clicked', doctor);
+    },
+    handleSelectClick(doctor) {
       this.$emit('clicked', doctor);
     }
   }

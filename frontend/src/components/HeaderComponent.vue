@@ -109,40 +109,26 @@
             >
           </li>
 
-          <!-- New order -->
-          <li
-            v-if="userRoles.includes(4)"
-            :class="
-              $route.path === '/post-order' ? 'nav-item active' : 'nav-item'
-            "
-          >
-            <router-link to="/post-order" class="nav-link"
-              >New order</router-link
+          <!-- Orders and offers -->
+          <li class="nav-item dropdown" v-if="userRoles.includes(4)">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-          </li>
+              Orders and offers
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <router-link to="/post-order" class="dropdown-item">New order</router-link>
 
-          <!-- Orders -->
-          <li
-            v-if="userRoles.includes(4)"
-            :class="
-              $route.path === '/all-orders' ? 'nav-item active' : 'nav-item'
-            "
-          >
-            <router-link to="/all-orders" class="nav-link">Orders</router-link>
-          </li>
+              <router-link to="/all-orders" class="dropdown-item">Orders</router-link>
 
-          <!-- Offers -->
-          <li
-            v-if="userRoles.includes(4)"
-            :class="
-              $route.path === '/supplier-offers'
-                ? 'nav-item active'
-                : 'nav-item'
-            "
-          >
-            <router-link to="/supplier-offers" class="nav-link"
-              >Offers</router-link
-            >
+              <router-link to="/supplier-offers" class="dropdown-item">Offers</router-link>
+            </div>
           </li>
 
           <!-- Medicine issue -->
@@ -200,52 +186,30 @@
             >
           </li>
 
-          <!-- Creating pharmacist -->
-          <li v-if="userRoles.includes(4)"
-            :class="
-              $route.path === '/create-pharmacist'
-                ? 'nav-item active'
-                : 'nav-item'
-            ">
-            <router-link to="/create-pharmacist" class="nav-link"
-              >Create pharmacist</router-link
+          <!-- Create, search and filter doctors -->
+          <li class="nav-item dropdown" v-if="userRoles.includes(4) || userRoles.includes(1)">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
+              Doctors
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <router-link v-if="userRoles.includes(4)" to="/create-pharmacist" class="dropdown-item">Create pharmacist</router-link>
+
+              <router-link v-if="userRoles.includes(4)" to="/add-dermatologist-to-pharmacy" class="dropdown-item">Add dermatologist</router-link>
+
+              <router-link to="/dermatologist-search-and-filter" class="dropdown-item">Dermatologists view</router-link>
+
+              <router-link to="/pharmacist-search-and-filter" class="dropdown-item">Pharmacists view</router-link>
+            </div>
           </li>
 
-          <!-- Dermatologist search and filter -->
-          <li v-if="userRoles.includes(4) || userRoles.includes(1)"
-            :class="
-              $route.path === '/dermatologist-search-and-filter'
-                ? 'nav-item active'
-                : 'nav-item'
-            ">
-            <router-link to="/dermatologist-search-and-filter" class="nav-link"
-              >Dermatologists view</router-link
-            >
-          </li>
-
-          <!-- Pharmacist search and filter -->
-          <li v-if="userRoles.includes(4) || userRoles.includes(1)"
-            :class="
-              $route.path === '/pharmacist-search-and-filter'
-                ? 'nav-item active'
-                : 'nav-item'
-            ">
-            <router-link to="/pharmacist-search-and-filter" class="nav-link"
-              >Pharmacists view</router-link
-            >
-          </li>
-          <!-- Add dermatologist to pharmacy -->
-          <li v-if="userRoles.includes(4)"
-            :class="
-              $route.path === '/add-dermatologist-to-pharmacy'
-                ? 'nav-item active'
-                : 'nav-item'
-            ">
-            <router-link to="/add-dermatologist-to-pharmacy" class="nav-link"
-              >Add dermatologist</router-link>
-          </li>
-          
           <!-- Work calendar -->
           <li v-if="userRoles.includes(2) || userRoles.includes(3)"
             :class="

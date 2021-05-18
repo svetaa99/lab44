@@ -1,28 +1,8 @@
 <template>
     <div class="container">
-      <table>
-        <th>
-          <td>Name</td>
-          <td>Surname</td>
-          <td>Email</td>
-        </th>
-        <tr v-for="d in dermatologists" :key="d.id">
-          <td>{{d.name}}</td>
-          <td>{{d.surname}}</td>
-          <td>{{d.email}}</td>
-          <td>
-            <button
-              type="button"
-              class="btn btn-primary"
-              @click="handleSelectClick(d)"
-            >
-              Select
-            </button>
-          </td>
-        </tr>
-      </table>
+      <DoctorListComponent :doctors="dermatologists" :doctorRole="2" :action="'select'" @clicked="handleSelectClick"/>
 
-      <div class="col-md-8">
+      <div>
               <div class="card mb-3"> <!-- Only dermatologist can make new term -->
                 <div class="card-body">
                   <hr>
@@ -64,10 +44,14 @@
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { config } from '@/config.js'
+import DoctorListComponent from '../components/DoctorListComponent.vue'
 
 const API_URL = config.API_URL
 
 export default {
+  components: {
+    DoctorListComponent,
+  },
   data() {
     return {
       admin: {},
@@ -87,9 +71,10 @@ export default {
       })
 
     axios
-      .get(`${API_URL}/dermatologists/all`)
+      .get(`${API_URL}/labadmins/all-dermatologists`)
       .then(response => {
         this.dermatologists = response.data;
+        console.log(response.data)
       })
 
     
