@@ -32,6 +32,7 @@ import WorkCalendar from '../views/WorkCalendar.vue'
 import VacationRequestsPage from '../views/VacationRequestsPage.vue'
 import PharmacistVisitPage from '../views/PharmacistVisitPage.vue'
 import DermatologistVisitPage from '../views/DermatologistVisitPage.vue'
+import DemandedMedicinesPage from '../views/DemandedMedicinesPage.vue'
 
 Vue.use(VueRouter)
 
@@ -195,6 +196,11 @@ const routes = [
     path: '/vacation-requests',
     name: 'VacationRequestsPage',
     component: VacationRequestsPage
+  },
+  {
+    path: '/demanded-medicines',
+    name: 'DemandedMedicinesPage',
+    component: DemandedMedicinesPage
   }
 ]
 
