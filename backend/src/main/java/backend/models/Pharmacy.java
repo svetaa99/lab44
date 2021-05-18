@@ -61,6 +61,9 @@ public class Pharmacy {
 	@OneToMany(mappedBy = "pharmacy")
 	private List<Order> orders;
 	
+	@OneToMany(mappedBy = "pharmacy")
+	private List<DemandMedicine> demands;
+	
 	public Pharmacy() {
 		
 	}

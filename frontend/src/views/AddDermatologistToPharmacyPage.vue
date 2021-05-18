@@ -2,7 +2,7 @@
   <div class="container">
     <h1>Add dermatologist to the pharmacy</h1>
     <br/>
-    <h3>Choose doctor</h3>
+    <h3>Choose available doctor</h3>
     <DoctorListComponent :doctorRole="2" :doctors="doctors" :action="'add'" @clicked="addDermatologist"/>
     <div v-if="Object.keys(selectedDoctor).length !== 0">
       <br/>

@@ -36,6 +36,9 @@ public class Medicine {
 	@OneToMany(mappedBy = "medicine")
 	private List<OrderMedicines> orders;
 	
+	@OneToMany(mappedBy = "medicine")
+	private List<DemandMedicine> demands;
+	
 	public Medicine() {}
 
 	public Medicine(Long id, String name, MedicineTypes type, String specification) {
