@@ -27,6 +27,7 @@ import CreatePharmacistPage from '../views/CreatePharmacistPage.vue'
 import DermatologistSearchAndFilterPage from '../views/DermatologistSearchAndFilterPage.vue'
 import PharmacistSearchAndFilterPage from '../views/PharmacistSearchAndFilterPage.vue'
 import AddDermatologistToPharmacyPage from '../views/AddDermatologistToPharmacyPage.vue'
+import WorkCalendar from '../views/WorkCalendar.vue'
 
 Vue.use(VueRouter)
 
@@ -166,6 +167,11 @@ const routes = [
     name: 'AddDermatologistToPharmacyPage',
     component: AddDermatologistToPharmacyPage
   },
+  {
+    path: '/work-calendar',
+    name: 'WorkCalendar',
+    component: WorkCalendar
+  }
 ]
 
 const router = new VueRouter({

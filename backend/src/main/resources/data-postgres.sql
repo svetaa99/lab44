@@ -130,3 +130,5 @@ insert into supplier_offers (supplier_id, order_id, price, deadline) values (1, 
 insert into supplier_offers (supplier_id, order_id, price, deadline) values (2, 1, 1000, 1622412000000);
 insert into supplier_offers (supplier_id, order_id, price, deadline) values (3, 1, 1500, 1622584800000);
 
+insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-23', '2021-07-19', 1, 0, 1);
+insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-30', '2021-07-31', 1, 1, 1);

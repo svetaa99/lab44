@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
-import backend.dto.PharmacyDTO;
-import backend.dto.ReservationDTO;
 import backend.enums.Status;
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
@@ -58,7 +56,6 @@ public class DoctorTermsController {
 	@GetMapping("/definedterms/{visitId}")
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
 	public ResponseEntity<String> getDefinedTerms(@PathVariable("visitId") Long visitId){
-		System.out.println("Returning predefined terms for doctor in current session...");
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		Long doctorId = u.getId();

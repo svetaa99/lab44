@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backend.models.DoctorTerms;
-import backend.models.Pharmacy;
-import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.repositories.DoctorTermsRepository;
 import backend.repositories.WorkHoursRepository;
