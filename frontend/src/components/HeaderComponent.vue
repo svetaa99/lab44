@@ -244,6 +244,8 @@
             ">
             <router-link to="/add-dermatologist-to-pharmacy" class="nav-link"
               >Add dermatologist</router-link>
+          </li>
+          
           <!-- Work calendar -->
           <li v-if="userRoles.includes(2) || userRoles.includes(3)"
             :class="
@@ -253,6 +255,18 @@
             ">
             <router-link to="/work-calendar" class="nav-link"
               >Calendar</router-link
+            >
+          </li>
+
+          <!-- Vacation requests page -->
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/vacation-requests'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/vacation-requests" class="nav-link"
+              >Vacation requests</router-link
             >
           </li>
         </ul>

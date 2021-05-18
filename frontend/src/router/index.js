@@ -28,6 +28,7 @@ import DermatologistSearchAndFilterPage from '../views/DermatologistSearchAndFil
 import PharmacistSearchAndFilterPage from '../views/PharmacistSearchAndFilterPage.vue'
 import AddDermatologistToPharmacyPage from '../views/AddDermatologistToPharmacyPage.vue'
 import WorkCalendar from '../views/WorkCalendar.vue'
+import VacationRequestsPage from '../views/VacationRequestsPage.vue'
 
 Vue.use(VueRouter)
 
@@ -171,6 +172,11 @@ const routes = [
     path: '/work-calendar',
     name: 'WorkCalendar',
     component: WorkCalendar
+  },
+  {
+    path: '/vacation-requests',
+    name: 'VacationRequestsPage',
+    component: VacationRequestsPage
   }
 ]
 
