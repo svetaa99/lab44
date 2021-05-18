@@ -8,18 +8,18 @@
     >
       <thead>
         <tr>
-          <th class="th-sm">Dermatologist</th>
+          <th class="th-sm">Pharmacist</th>
           <th class="th-sm">Start</th>
           <th class="th-sm">Finish</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="dt in this.dermatologistAppointments" :key="dt.id">
-          <td>{{ dt.doctor.name }} {{ dt.doctor.surname }}</td>
-          <td>{{ dt.start }}</td>
-          <td>{{ dt.finish }}</td>
+        <tr v-for="ph in this.pharmacistAppointments" :key="ph.id">
+          <td>{{ ph.doctor.name }} {{ ph.doctor.surname }}</td>
+          <td>{{ ph.start }}</td>
+          <td>{{ ph.finish }}</td>
           <td>
-            <button class="btn btn-primary" v-on:click="cancel(dt.id)">
+            <button class="btn btn-primary" v-on:click="cancel(ph.id)">
               Cancel
             </button>
           </td>
@@ -35,7 +35,7 @@ import { config } from "@/config.js";
 const API_URL = config.API_URL;
 export default {
   props: {
-    dermatologistAppointments: Array,
+    pharmacistAppointments: Array,
   },
   methods: {
     cancel(appointmentId) {
@@ -44,8 +44,8 @@ export default {
           `${API_URL}/appointments/cancel-my-reservation/${appointmentId}`
         )
         .then((response) => {
-          this.dermatologistAppointments = response.data;
-          this.$emit("clicked", this.dermatologistAppointments);
+          this.pharmacistAppointments = response.data;
+          this.$emit("clicked", this.pharmacistAppointments);
         });
     },
   },
