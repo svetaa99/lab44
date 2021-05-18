@@ -269,6 +269,18 @@
               >Vacation requests</router-link
             >
           </li>
+
+          <!--Demanded medicines -->
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/demanded-medicines'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/demanded-medicines" class="nav-link"
+              >Demanded medicines</router-link
+            >
+          </li>
         </ul>
       </div>
 

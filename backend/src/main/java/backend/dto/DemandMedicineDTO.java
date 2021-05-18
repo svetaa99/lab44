@@ -1,12 +1,13 @@
 package backend.dto;
 
 import backend.models.DemandMedicine;
+import backend.models.Medicine;
 
 public class DemandMedicineDTO {
 	
 	private Long id;
 	private Long pharmacyId;
-	private Long medicineId;
+	private Medicine medicine;
 	private int quantity;
 	
 	public DemandMedicineDTO() {
@@ -14,21 +15,21 @@ public class DemandMedicineDTO {
 	}
 	
 	public DemandMedicineDTO(DemandMedicine dm) {
-		this(dm.getId(), dm.getPharmacy().getId(), dm.getMedicine().getId(), dm.getQuantity());
+		this(dm.getId(), dm.getPharmacy().getId(), dm.getMedicine(), dm.getQuantity());
 	}
 	
-	public DemandMedicineDTO(Long pharmacyId, Long medicineId, int quantity) {
+	public DemandMedicineDTO(Long pharmacyId, Medicine medicine, int quantity) {
 		super();
 		this.pharmacyId = pharmacyId;
-		this.medicineId = medicineId;
+		this.medicine = medicine;
 		this.quantity = quantity;
 	}
 
-	public DemandMedicineDTO(Long id, Long pharmacyId, Long medicineId, int quantity) {
+	public DemandMedicineDTO(Long id, Long pharmacyId, Medicine medicine, int quantity) {
 		super();
 		this.id = id;
 		this.pharmacyId = pharmacyId;
-		this.medicineId = medicineId;
+		this.medicine = medicine;
 		this.quantity = quantity;
 	}
 
@@ -48,12 +49,12 @@ public class DemandMedicineDTO {
 		this.pharmacyId = pharmacyId;
 	}
 
-	public Long getMedicineId() {
-		return medicineId;
+	public Medicine getMedicine() {
+		return medicine;
 	}
 
-	public void setMedicineId(Long medicineId) {
-		this.medicineId = medicineId;
+	public void setMedicine(Medicine medicine) {
+		this.medicine = medicine;
 	}
 
 	public int getQuantity() {
