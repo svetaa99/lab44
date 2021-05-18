@@ -132,3 +132,7 @@ insert into supplier_offers (supplier_id, order_id, price, deadline) values (3, 
 
 insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-23', '2021-07-19', 1, 0, 1);
 insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-30', '2021-07-31', 1, 1, 1);
+
+insert into demand_medicine (pharmacy_id, medicine_id, quantity) values (1, 1, 10);
+insert into demand_medicine (pharmacy_id, medicine_id, quantity) values (1, 2, 15);
+insert into demand_medicine (pharmacy_id, medicine_id, quantity) values (2, 3, 10);

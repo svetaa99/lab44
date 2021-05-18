@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.dto.MedicineQuantityDTO;
 import backend.dto.OrderDTO;
 import backend.dto.SupplierOfferDTO;
+import backend.models.DemandMedicine;
 import backend.models.LabAdmin;
 import backend.models.Medicine;
 import backend.models.Order;
@@ -26,6 +27,7 @@ import backend.models.OrderMedicines;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.models.SupplierOffer;
+import backend.services.IDemandMedicineService;
 import backend.services.ILabAdminService;
 import backend.services.IMedicineService;
 import backend.services.IOrderMedicinesService;
@@ -59,6 +61,9 @@ public class OrderController {
 	
 	@Autowired
 	private ILabAdminService laService;
+	
+	@Autowired
+	private IDemandMedicineService dmService;
 	
 	@PostMapping(value = "/create-order", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
@@ -197,4 +202,5 @@ public class OrderController {
 		
 		return new ResponseEntity<SupplierOfferDTO>(soDTO, HttpStatus.OK);
 	}
+
 }

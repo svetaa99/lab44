@@ -36,5 +36,10 @@ public class DemandMedicineService implements IDemandMedicineService {
 		dmRepository.delete(obj);
 	}
 
+	@Override
+	public List<DemandMedicine> findAllByPharmacyId(Long pharmacyId) {
+		return dmRepository.findByPharmacyIdEquals(pharmacyId);
+	}
+
 	
 }
