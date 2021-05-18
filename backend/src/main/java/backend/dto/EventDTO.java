@@ -27,7 +27,7 @@ public class EventDTO {
 		this.start = visit.getStart();
 		this.end = visit.getFinish();
 		this.color = "#03C6FC";
-		this.timed = false;
+		this.timed = true;
 	}
 	
 	public EventDTO(Vacation vacation) {
@@ -35,7 +35,7 @@ public class EventDTO {
 		this.start = vacation.getStart().atStartOfDay();
 		this.end = vacation.getFinish().atStartOfDay();
 		this.color = this.name.equals("Vacation") ? "#24FC03" : "#FC5A03"; 
-		this.timed = true;
+		this.timed = false;
 	}
 	
 	public EventDTO(String name, LocalDateTime start, LocalDateTime end, String color, boolean timed) {

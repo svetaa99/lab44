@@ -204,6 +204,7 @@ import axios from "axios";
         .get('http://localhost:8000/events/all')
         .then((response) => {
             this.events = response.data;
+            this.events.forEach(ev => ev.timed = false)
             console.log(this.events);
         })
     },
