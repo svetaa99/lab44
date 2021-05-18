@@ -35,6 +35,7 @@ import com.google.gson.Gson;
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
 import backend.enums.Status;
+import backend.models.Dermatologist;
 import backend.models.Doctor;
 import backend.models.Patient;
 import backend.models.Pharmacist;
@@ -143,7 +144,10 @@ public class VisitController {
 		
 		for (Visit appointment : appointments) {
 			if (appointment.getStatus().equals(Status.RESERVED)) {
-				myAppointments.add(appointment);
+				Doctor d = doctorService.findById(appointment.getDoctorId());
+				if (d instanceof Dermatologist) {
+					myAppointments.add(appointment);
+				}
 			}
 		}
 		
@@ -156,7 +160,85 @@ public class VisitController {
 		return new ResponseEntity<List<VisitDTO>>(visitsDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping("/cancel-my-reservation-to-dermatologists/{id}")
+	@GetMapping("/visits-to-dermatologists")
+	public ResponseEntity<List<VisitDTO>> getMyVisitsToDermatologists() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
+		List<Visit> appointments = visitService.findByPatientIdEquals(u.getId());
+		List<Visit> myAppointments = new ArrayList<Visit>();
+		
+		for (Visit appointment : appointments) {
+			if (appointment.getStatus().equals(Status.FINISHED)) {
+				Doctor d = doctorService.findById(appointment.getDoctorId());
+				if (d instanceof Dermatologist) {
+					myAppointments.add(appointment);
+				}
+			}
+		}
+		
+		List<VisitDTO> visitsDTO = new ArrayList<>();
+		for (Visit visit : myAppointments) {
+			VisitDTO visitDTO = new VisitDTO(visit.getId(), patientService.findById(visit.getPatientId()), doctorService.findById(visit.getDoctorId()), visit.getStart(), visit.getFinish());
+			visitsDTO.add(visitDTO);
+		}
+		
+		return new ResponseEntity<List<VisitDTO>>(visitsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping("/visits-to-pharmacist")
+	public ResponseEntity<List<VisitDTO>> getMyVisitsToPharmacist() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
+		List<Visit> appointments = visitService.findByPatientIdEquals(u.getId());
+		List<Visit> myAppointments = new ArrayList<Visit>();
+		
+		for (Visit appointment : appointments) {
+			if (appointment.getStatus().equals(Status.FINISHED)) {
+				Doctor d = doctorService.findById(appointment.getDoctorId());
+				if (d instanceof Pharmacist) {
+					myAppointments.add(appointment);
+				}
+			}
+		}
+		
+		List<VisitDTO> visitsDTO = new ArrayList<>();
+		for (Visit visit : myAppointments) {
+			VisitDTO visitDTO = new VisitDTO(visit.getId(), patientService.findById(visit.getPatientId()), doctorService.findById(visit.getDoctorId()), visit.getStart(), visit.getFinish());
+			visitsDTO.add(visitDTO);
+		}
+		
+		return new ResponseEntity<List<VisitDTO>>(visitsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping("/to-pharmacist")
+	public ResponseEntity<List<VisitDTO>> getMyAppointmentsToPharmacists() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
+		List<Visit> appointments = visitService.findByPatientIdEquals(u.getId());
+		List<Visit> myAppointments = new ArrayList<Visit>();
+		
+		for (Visit appointment : appointments) {
+			if (appointment.getStatus().equals(Status.RESERVED)) {
+				Doctor d = doctorService.findById(appointment.getDoctorId());
+				if (d instanceof Pharmacist) {
+					myAppointments.add(appointment);
+				}
+			}
+		}
+		
+		List<VisitDTO> visitsDTO = new ArrayList<>();
+		for (Visit visit : myAppointments) {
+			VisitDTO visitDTO = new VisitDTO(visit.getId(), patientService.findById(visit.getPatientId()), doctorService.findById(visit.getDoctorId()), visit.getStart(), visit.getFinish());
+			visitsDTO.add(visitDTO);
+		}
+		
+		return new ResponseEntity<List<VisitDTO>>(visitsDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping("/cancel-my-reservation/{id}")
 	public ResponseEntity<VisitDTO> cancelAppointment(@PathVariable Long id) {
 		Visit visit = visitService.findById(id);
 		

@@ -47,10 +47,29 @@
               <tbody>
                 <tr>
                   <td>
-                    <button class="btn btn-primary">Pharmacy</button>
+                    <button @click="$router.push('my-pharmacist-reservations')" class="btn btn-primary">Pharmacist</button>
                   </td>
                   <td>
                     <button @click="$router.push('my-dermatologist-reservations')" class="btn btn-primary">Dermatologist</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card mt-3">
+            <table class="table">
+              <thead>
+                <th>
+                  Visit history
+                </th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <button @click="$router.push('my-pharmacist-visits')" class="btn btn-primary">To Pharmacist</button>
+                  </td>
+                  <td>
+                    <button @click="$router.push('my-dermatologist-visits')" class="btn btn-primary">To Dermatologist</button>
                   </td>
                 </tr>
               </tbody>

@@ -23,12 +23,15 @@ import AppointmentToDermatologistPage from '../views/AppointmentToDermatologistP
 import ReservedDrugs from '../views/ReservedDrugsPage.vue'
 import DermatologistSchedulingPage from '../views/DermatologistSchedulingPage.vue'
 import DermatologistAppointment from '../views/DermatologistAppointmentPage.vue'
+import PharmacistAppointment from '../views/PharmacistAppointmentsPage.vue'
 import CreatePharmacistPage from '../views/CreatePharmacistPage.vue'
 import DermatologistSearchAndFilterPage from '../views/DermatologistSearchAndFilterPage.vue'
 import PharmacistSearchAndFilterPage from '../views/PharmacistSearchAndFilterPage.vue'
 import AddDermatologistToPharmacyPage from '../views/AddDermatologistToPharmacyPage.vue'
 import WorkCalendar from '../views/WorkCalendar.vue'
 import VacationRequestsPage from '../views/VacationRequestsPage.vue'
+import PharmacistVisitPage from '../views/PharmacistVisitPage.vue'
+import DermatologistVisitPage from '../views/DermatologistVisitPage.vue'
 import DemandedMedicinesPage from '../views/DemandedMedicinesPage.vue'
 
 Vue.use(VueRouter)
@@ -148,6 +151,21 @@ const routes = [
     path: '/my-dermatologist-reservations',
     name: 'DermatologistAppointments',
     component: DermatologistAppointment
+  },
+  {
+    path: '/my-pharmacist-reservations',
+    name: 'PharmacisatAppointments',
+    component: PharmacistAppointment
+  },
+  {
+    path: '/my-pharmacist-visits',
+    name: 'PharmacisatAppointments',
+    component: PharmacistVisitPage
+  },
+  {
+    path: '/my-dermatologist-visits',
+    name: 'DermatologistAppointments',
+    component: DermatologistVisitPage
   },
   {
     path: '/create-pharmacist',
