@@ -170,7 +170,7 @@
 
           <!-- Reserved drugs -->
           <li
-            v-if="userRoles.length !== 0"
+            v-if="userRoles.includes(1)"
             :class="
               $route.path === '/reserved-drugs' ? 'nav-item active' : 'nav-item'
             "

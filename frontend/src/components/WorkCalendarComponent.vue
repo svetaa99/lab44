@@ -39,6 +39,9 @@
           <v-toolbar-title v-if="$refs.calendar">
             {{ $refs.calendar.title }}
           </v-toolbar-title>
+          <v-toolbar-title v-if="!$refs.calendar">
+            {{ noRefTitle }}
+          </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-menu
             bottom
@@ -58,23 +61,26 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="type = 'day'">
+              <v-list-item @click="type = 'day', isYear=false">
                 <v-list-item-title>Day</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'week'">
+              <v-list-item @click="type = 'week', isYear=false">
                 <v-list-item-title>Week</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'month'">
+              <v-list-item @click="type = 'month', isYear=false">
                 <v-list-item-title>Month</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = '4day'">
+              <v-list-item @click="type = '4day', isYear=false">
                 <v-list-item-title>4 days</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="isYear = true">
+                <v-list-item-title>Year</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet height="600" v-if="!isYear">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -137,13 +143,26 @@
           </v-card>
         </v-menu>
       </v-sheet>
+      <v-sheet v-if="isYear">
+        <YearCalendar
+        v-model="year"
+        :activeDates.sync="activeDates"
+        @toggleDate="toggleDate"
+        prefixClass="your_customized_wrapper_class"
+        :activeClass="activeClass"
+      ></YearCalendar>
+      </v-sheet>
     </v-col>
   </v-row>
-    </div>
+  </div>
 </template>
 <script>
 import axios from "axios";
+import YearCalendar from 'vue-material-year-calendar'
   export default {
+    components: {
+      YearCalendar
+    },
     data: () => ({
       focus: '',
       type: 'month',
@@ -159,6 +178,11 @@ import axios from "axios";
       events: [],
       colors: ['blue', 'green', 'orange'],
       names: [],
+      isYear: false,
+      year: 2021,
+      activeDates: [],
+      activeClass: '',
+      noRefTitle: '',
     }),
     mounted () {
       //this.$refs.calendar.checkChange()
@@ -215,6 +239,37 @@ import axios from "axios";
         }
         return false;
       },
+      fillActiveDates(){
+        
+      },
+      toggleDate(dateInfo){
+        this.isYear = false;
+        const param = {date: dateInfo.date};
+        this.year = dateInfo.date.split('-')[0];
+        var monthIndex = dateInfo.date.split('-')[1];
+        this.noRefTitle = this.getMonthName(monthIndex) + " " + this.year;
+        this.viewDay(param);
+      },
+      getMonthName(id){
+        var res = parseInt(id
+                           .replace(/^[0]+/g,""));
+        console.log(res);
+        switch(res){
+          case 1: return "January"
+          case 2: return "February"
+          case 3: return "March"
+          case 4: return "April"
+          case 5: return "May"
+          case 6: return "June"
+          case 7: return "July"
+          case 8: return "August"
+          case 9: return "September"
+          case 10: return "October"
+          case 11: return "November"
+          case 12: return "December"
+          default: return "KURAC"
+        }
+      },
       rnd (a, b) {
         return Math.floor((b - a + 1) * Math.random()) + a
       },
@@ -230,3 +285,17 @@ import axios from "axios";
     },
   }
 </script>
+<style lang="stylus" scoped>
+.your_customized_wrapper_class
+  background-color: #0aa
+  color: white
+  &.red
+    background-color: red
+    color: white
+  &.blue
+    background-color: #0000aa
+    color: white
+  &.your_customized_classname
+    background-color: yellow
+    color: black
+</style>
