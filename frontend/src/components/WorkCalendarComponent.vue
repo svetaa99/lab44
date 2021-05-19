@@ -126,6 +126,13 @@
               >
                 Cancel
               </v-btn>
+              <v-btn v-if="canStartAppointment()"
+                text
+                color="secondary"
+                @click="startAppointment"
+              >
+                Start
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-menu>
@@ -194,6 +201,19 @@ import axios from "axios";
       },
       updateRange() {
 
+      },
+      startAppointment(){
+        window.location.href=`http://localhost:8080/employee-appointments/${this.selectedEvent.id}`
+      },
+      canStartAppointment(){
+        var currTime = new Date().getTime();
+        var startTime = new Date(this.selectedEvent.start).getTime();
+        var finishTime = new Date(this.selectedEvent.end).getTime();
+
+        if(startTime < currTime && currTime < finishTime){
+          return true
+        }
+        return false;
       },
       rnd (a, b) {
         return Math.floor((b - a + 1) * Math.random()) + a

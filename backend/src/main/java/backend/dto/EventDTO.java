@@ -8,6 +8,8 @@ import backend.models.Vacation;
 
 public class EventDTO {
 
+	private Long id;
+	
 	private String name;
 	
 	private LocalDateTime start;
@@ -23,6 +25,7 @@ public class EventDTO {
 	}
 
 	public EventDTO(VisitDTO visit) {
+		this.id = visit.getId();
 		this.name = "Appointment\n" + visit.getpatient().getName() + " " + visit.getpatient().getSurname();
 		this.start = visit.getStart();
 		this.end = visit.getFinish();
@@ -31,6 +34,7 @@ public class EventDTO {
 	}
 	
 	public EventDTO(Vacation vacation) {
+		this.id = -1l;
 		this.name = vacation.getType().equals(VacationType.ABSENCE) ? "Vacation" : "Absence";
 		this.start = vacation.getStart().atStartOfDay();
 		this.end = vacation.getFinish().atStartOfDay();
@@ -84,6 +88,14 @@ public class EventDTO {
 
 	public void setTimed(boolean timed) {
 		this.timed = timed;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override
