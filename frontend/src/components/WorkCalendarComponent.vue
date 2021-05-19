@@ -249,7 +249,7 @@ import YearCalendar from 'vue-material-year-calendar'
             //multiple dates
             //either absence or vacation
             if(event.name.includes("Absence")){
-              var startInterval = new Date(event.end);
+              var startInterval = new Date(event.start);
               for(let i = 0; i < dateSpan; i++){
                 //orange color
                 var tomorrow = new Date(startInterval.getTime() + i * (24 * 60 * 60 * 1000));
@@ -259,12 +259,13 @@ import YearCalendar from 'vue-material-year-calendar'
               }
             }
             else if(event.name.includes("Vacation")){
-              var startInterval = new Date(event.end);
+              var startInterval = new Date(event.start);
               for(let i = 0; i < dateSpan; i++){
                 //green color
                 var tomorrow = new Date(startInterval.getTime() + i * (24 * 60 * 60 * 1000));
                 var formattedDate = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1 < 10 ? '0' + (tomorrow.getMonth() + 1) : tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
                 const param = {date: formattedDate, className: 'green'};
+                console.log(param);
                 this.activeDates.push(param);
             }
           }
