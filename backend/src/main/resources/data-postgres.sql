@@ -131,8 +131,8 @@ insert into supplier_offers (supplier_id, order_id, price, deadline) values (2, 
 insert into supplier_offers (supplier_id, order_id, price, deadline) values (3, 1, 1500, 1622584800000);
 
 insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-23', '2021-07-19', 1, 0, 1);
-insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-30', '2021-07-31', 1, 1, 1);
-
+insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-31', '2021-07-30', 1, 1, 1);
+insert into vacation (finish, start, status, type, doctor_id) values ('2021-12-30', '2021-12-22', 1, 0, 1);
 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 1, '2021-05-19 13:00:00', '2021-05-19 17:00:00', 3, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-19 13:30:00', '2021-05-19 19:00:00', 3, 0);
