@@ -73,7 +73,7 @@
               <v-list-item @click="type = '4day', isYear=false">
                 <v-list-item-title>4 days</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="isYear = true">
+              <v-list-item @click="fillActiveDates()">
                 <v-list-item-title>Year</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -180,8 +180,9 @@ import YearCalendar from 'vue-material-year-calendar'
       names: [],
       isYear: false,
       year: 2021,
-      activeDates: [],
-      activeClass: '',
+      activeDates: [
+        { date: '2021-05-13' }],
+      activeClass: 'blue',
       noRefTitle: '',
     }),
     mounted () {
@@ -240,7 +241,11 @@ import YearCalendar from 'vue-material-year-calendar'
         return false;
       },
       fillActiveDates(){
-        
+        this.events.forEach(event =>{
+          const param = {date: event.start.split('T')[0]};
+          this.activeDates.push(param);
+        })
+        this.isYear = true;
       },
       toggleDate(dateInfo){
         this.isYear = false;
@@ -267,7 +272,7 @@ import YearCalendar from 'vue-material-year-calendar'
           case 10: return "October"
           case 11: return "November"
           case 12: return "December"
-          default: return "KURAC"
+          default: return "January"
         }
       },
       rnd (a, b) {
@@ -285,7 +290,7 @@ import YearCalendar from 'vue-material-year-calendar'
     },
   }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
 .your_customized_wrapper_class
   background-color: #0aa
   color: white
@@ -293,7 +298,7 @@ import YearCalendar from 'vue-material-year-calendar'
     background-color: red
     color: white
   &.blue
-    background-color: #0000aa
+    background-color: #000000
     color: white
   &.your_customized_classname
     background-color: yellow
