@@ -1,29 +1,25 @@
 package backend.dto;
 
-import java.util.List;
-
 import backend.models.Address;
-import backend.models.Pharmacy;
-import backend.models.Medicine;
 
 public class PharmacyDTO {
 	
 	private Long id;
 	private String name;
-	private Long addressId;
+	private Address address;
 	private String description;
 	private double rating;
 	private double pharmacistPrice;
 	
-	public PharmacyDTO(Pharmacy p) {
-		this(p.getId(), p.getName(), p.getAddressId(), p.getDescription(), p.getRating(), p.getpharmacistPrice());
+	public PharmacyDTO() {
+		
 	}
 
-	public PharmacyDTO(Long id, String name, Long addressId, String description, double rating, double pharmacistPrice) {
+	public PharmacyDTO(Long id, String name, Address address, String description, double rating, double pharmacistPrice) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.addressId = addressId;
+		this.address = address;
 		this.description = description;
 		this.rating = rating;
 		this.pharmacistPrice = pharmacistPrice;
@@ -45,12 +41,12 @@ public class PharmacyDTO {
 		this.name = name;
 	}
 
-	public Long getAddressId() {
-		return addressId;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAddressId(Long addressId) {
-		this.addressId = addressId;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public String getDescription() {
@@ -80,7 +76,7 @@ public class PharmacyDTO {
 
 	@Override
 	public String toString() {
-		return "PharmacyDTO [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
+		return "PharmacyDTO [id=" + id + ", name=" + name + ", address=" + address + ", description=" + description
 				+ ", rating=" + rating + ", pharmacistPrice=" + pharmacistPrice + "]";
 	}
 	

@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <h1>{{pharmacy.name}}</h1>
+  <div> 
+    <PharmacyComponent :pharmacy="pharmacy" />
     <MedicinesSearch v-model="searchName" @clicked="onSearchClick"/>
     <MedicinesList :medicines="this.medicines" :extra="extra"/>
+    <hr>
   </div>
 </template>
 
@@ -11,6 +12,7 @@ import axios from 'axios'
 import { config } from '@/config.js'
 import MedicinesList from '@/components/MedicinesList'
 import MedicinesSearch from '@/components/MedicinesSearch'
+import PharmacyComponent from '@/components/PharmacyComponent.vue'
 
 const API_URL = config.API_URL
 
@@ -18,7 +20,8 @@ export default {
   name: 'PharmacyPage',
   components: {
     MedicinesList,
-    MedicinesSearch
+    MedicinesSearch,
+    PharmacyComponent
   },
   data() {
     return {

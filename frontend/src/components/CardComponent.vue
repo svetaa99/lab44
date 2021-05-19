@@ -10,7 +10,7 @@
       <p class="card-text">This is pharmacy.</p>
       <div class="d-flex justify-content-between align-items-center">
         <p class="card-text">
-          {{ pharmacy.addressId }}
+          {{ pharmacy.address.street }} {{ pharmacy.address.number }}, {{ pharmacy.address.city }}
         </p>
         <p class="card-text">Rating: {{ pharmacy.rating }}</p>
       </div>
@@ -35,7 +35,7 @@ export default {
 
 <style>
 .pharmacy-image {
-  height: 300px;
+  height: 270px;
   width: 100%;
   overflow: hidden;
 }

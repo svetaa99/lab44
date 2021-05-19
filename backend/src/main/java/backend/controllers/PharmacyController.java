@@ -1,8 +1,5 @@
 package backend.controllers;
 
-import java.util.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +27,7 @@ import backend.models.Pharmacy;
 import backend.models.PharmacyMedicineAddRemoveObject;
 import backend.models.PharmacyMedicines;
 import backend.models.WorkHours;
+import backend.services.IAddressService;
 import backend.services.IMedicineService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
@@ -50,13 +48,16 @@ public class PharmacyController {
 	private IPharmacyMedicinesService pmService;
 	
 	@Autowired
+	private IAddressService addressService;
+	
+	@Autowired
 	private WorkHoursService whService;
 	
 	private List<PharmacyDTO> createPharmacyDTOList(List<Pharmacy> pharmacies) {
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<PharmacyDTO>();
 		
 		for (Pharmacy pharmacy : pharmacies) {
-			PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy);
+			PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy.getId(), pharmacy.getName(), addressService.findById(pharmacy.getAddressId()), pharmacy.getDescription(), pharmacy.getRating(), pharmacy.getpharmacistPrice());
 			pharmaciesDTO.add(pharmacyDTO);
 		}
 		
@@ -78,7 +79,7 @@ public class PharmacyController {
 			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
 		}
 
-		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy);
+		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy.getId(), pharmacy.getName(), addressService.findById(pharmacy.getAddressId()), pharmacy.getDescription(), pharmacy.getRating(), pharmacy.getpharmacistPrice());
 		
 		return new ResponseEntity<PharmacyDTO>(pharmacyDTO, HttpStatus.OK);
 	}
