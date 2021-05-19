@@ -242,8 +242,37 @@ import YearCalendar from 'vue-material-year-calendar'
       },
       fillActiveDates(){
         this.events.forEach(event =>{
-          const param = {date: event.start.split('T')[0]};
-          this.activeDates.push(param);
+          // span between two dates
+          var dateSpan = (new Date(event.end).getTime() - new Date(event.start).getTime()) / (1000*60*60*24); 
+          if(dateSpan < 0) dateSpan=1;
+          if(dateSpan >= 1){
+            //multiple dates
+            //either absence or vacation
+            if(event.name.includes("Absence")){
+              var startInterval = new Date(event.end);
+              for(let i = 0; i < dateSpan; i++){
+                //orange color
+                var tomorrow = new Date(startInterval.getTime() + i * (24 * 60 * 60 * 1000));
+                var formattedDate = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1 < 10 ? '0' + (tomorrow.getMonth() + 1) : tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
+                const param = {date: formattedDate, className: 'orange'};
+                this.activeDates.push(param);
+              }
+            }
+            else if(event.name.includes("Vacation")){
+              var startInterval = new Date(event.end);
+              for(let i = 0; i < dateSpan; i++){
+                //green color
+                var tomorrow = new Date(startInterval.getTime() + i * (24 * 60 * 60 * 1000));
+                var formattedDate = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1 < 10 ? '0' + (tomorrow.getMonth() + 1) : tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
+                const param = {date: formattedDate, className: 'green'};
+                this.activeDates.push(param);
+            }
+          }
+          }
+          else {
+            const param = {date: event.start.split('T')[0]};
+            this.activeDates.push(param);
+          }
         })
         this.isYear = true;
       },
@@ -294,11 +323,11 @@ import YearCalendar from 'vue-material-year-calendar'
 .your_customized_wrapper_class
   background-color: #0aa
   color: white
-  &.red
-    background-color: red
+  &.orange
+    background-color: #ff7300
     color: white
-  &.blue
-    background-color: #000000
+  &.green
+    background-color: #00cc00
     color: white
   &.your_customized_classname
     background-color: yellow
