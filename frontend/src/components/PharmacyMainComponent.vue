@@ -2,7 +2,7 @@
   <div>
     <!-- Title -->
     <h1 class="mt-4 align-left">{{ pharmacy.name }}</h1>
-    <p class="small align-left">{{ pharmacy.address.street }} {{ pharmacy.address.number }}, {{ pharmacy.address.city }}</p>
+    <!-- <p class="small align-left">{{ pharmacy.address.street }} {{ pharmacy.address.number }}, {{ pharmacy.address.city }}</p> -->
     <hr />
     <p class="align-left">{{ pharmacy.description }}</p>
 

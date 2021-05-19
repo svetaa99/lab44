@@ -210,7 +210,7 @@ public class PharmacyController {
 	@PutMapping(value = "/update-price", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<PharmacyMedicinesDTO> updateMedicinePrice(@RequestBody PharmacyMedicineAddRemoveObject obj) {
-		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
+		PharmacyMedicines oldPM = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
 		double price = obj.getPrice();
 		if (price < 0) {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
@@ -223,9 +223,7 @@ public class PharmacyController {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
-		pm.setPrice(price);
-		pm.setStartDate(startDate);
-		pm.setEndDate(endDate);
+		PharmacyMedicines pm = new PharmacyMedicines(oldPM.getPharmacy(), oldPM.getMedicine(), price, oldPM.getQuantity(), startDate, endDate);
 		pmService.save(pm);
 		
 		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);

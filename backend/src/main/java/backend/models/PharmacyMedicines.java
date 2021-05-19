@@ -39,6 +39,16 @@ public class PharmacyMedicines {
 	public PharmacyMedicines() {
 		
 	}
+	
+	public PharmacyMedicines(Pharmacy pharmacy, Medicine medicine, double price, int quantity, long startDate, long endDate) {
+		super();
+		this.pharmacy = pharmacy;
+		this.medicine = medicine;
+		this.price = price;
+		this.quantity = quantity;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
 
 	public PharmacyMedicines(Long id, Pharmacy pharmacy, Medicine medicine, double price, int quantity, long startDate, long endDate) {
 		super();

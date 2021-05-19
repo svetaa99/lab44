@@ -19,4 +19,12 @@ public interface IPharmacyMedicinesService extends IService<PharmacyMedicines> {
 	List<PharmacyMedicines> findAllByMedicineId(Long medicineId);
 	
 	List<PharmacyMedicines> findAllByMedicineName(String medicineName);
+	
+	List<PharmacyMedicines> findByMedicineIdAndTodaysDate(Long medicineId, long todaysDate);
+	
+	List<PharmacyMedicines> findByPharmacyIdAndTodaysDate(Long pharmacyId, long todaysDate);
+	
+	List<PharmacyMedicines> findByMedicineNameAndTodaysDate(String medicineName, long todaysDate);
+	
+	PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId, long todaysDate);
 }

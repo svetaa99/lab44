@@ -42,6 +42,7 @@ export default {
       .get(`${API_URL}/pharmacy-medicines/get-medicines/${id}`)
       .then(response => {
         const pms = response.data
+        console.log(pms)
         pms.map(pm => {
           this.medicines.push(pm.medicine)
         })

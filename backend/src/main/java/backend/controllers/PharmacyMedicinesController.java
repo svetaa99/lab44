@@ -1,6 +1,7 @@
 package backend.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,8 @@ public class PharmacyMedicinesController {
 	
 	@GetMapping(value = "/get-medicines/{pharmacyId}")
 	public ResponseEntity<List<PharmacyMedicinesDTO>> getPMFromPharmacyId(@PathVariable Long pharmacyId) {
-		List<PharmacyMedicines> pmList = pharmacyMedicineService.findAllByPharmacyId(pharmacyId);
+		System.out.println("DATEEEEEE: " + new Date().getTime());
+		List<PharmacyMedicines> pmList = pharmacyMedicineService.findByPharmacyIdAndTodaysDate(pharmacyId, new Date().getTime());
 		List<PharmacyMedicinesDTO> pmDTOs = new ArrayList<PharmacyMedicinesDTO>();
 		
 		for (PharmacyMedicines pm : pmList) {
@@ -49,7 +51,7 @@ public class PharmacyMedicinesController {
 	
 	@GetMapping(value = "/get-pharmacies/{medicineId}")
 	public ResponseEntity<List<PharmacyMedicinesDTO>> getPMFromMedicineId(@PathVariable Long medicineId) {
-		List<PharmacyMedicines> pmList = pharmacyMedicineService.findAllByMedicineId(medicineId);
+		List<PharmacyMedicines> pmList = pharmacyMedicineService.findByMedicineIdAndTodaysDate(medicineId, new Date().getTime());
 		List<PharmacyMedicinesDTO> pmDTOs = new ArrayList<PharmacyMedicinesDTO>();
 		
 		for (PharmacyMedicines pm : pmList) {
@@ -62,7 +64,7 @@ public class PharmacyMedicinesController {
 	
 	@GetMapping(value = "/get-medicines-by-name/{medicineName}")
 	public ResponseEntity<List<PharmacyMedicinesDTO>> getPMFromMedicineName(@PathVariable("medicineName") String medicineName) {
-		List<PharmacyMedicines> pmList = pharmacyMedicineService.findAllByMedicineName(medicineName);
+		List<PharmacyMedicines> pmList = pharmacyMedicineService.findByMedicineNameAndTodaysDate(medicineName, new Date().getTime());
 		List<PharmacyMedicinesDTO> pmDTOs = new ArrayList<PharmacyMedicinesDTO>();
 		
 		for (PharmacyMedicines pm : pmList) {
@@ -75,7 +77,7 @@ public class PharmacyMedicinesController {
 	
 	@GetMapping(value = "/get-by-ids/{pharmacyId}/{medicineId}")
 	public ResponseEntity<PharmacyMedicinesDTO> getPMByIds(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("medicineId") Long medicineId) {
-		PharmacyMedicines pm = pharmacyMedicineService.findPharmacyMedicinesByIds(pharmacyId, medicineId);
+		PharmacyMedicines pm = pharmacyMedicineService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, new Date().getTime());
 		
 		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);
 	}

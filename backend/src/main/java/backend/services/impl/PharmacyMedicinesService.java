@@ -90,6 +90,27 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	public List<PharmacyMedicines> findAllByMedicineName(String medicineName) {
 		return pharmacyMedicineRepository.findByMedicineNameContainingIgnoreCase(medicineName);
 	}
+
+	@Override
+	public List<PharmacyMedicines> findByMedicineIdAndTodaysDate(Long medicineId, long todaysDate) {
+		return pharmacyMedicineRepository.findByMedicineIdAndTodaysDate(medicineId, todaysDate);
+	}
+
+	@Override
+	public List<PharmacyMedicines> findByPharmacyIdAndTodaysDate(Long pharmacyId, long todaysDate) {
+		return pharmacyMedicineRepository.findByPharmacyIdAndTodaysDate(pharmacyId, todaysDate);
+	}
+
+	@Override
+	public List<PharmacyMedicines> findByMedicineNameAndTodaysDate(String medicineName, long todaysDate) {
+		return pharmacyMedicineRepository.findByMedicineNameAndTodaysDate(medicineName, todaysDate);
+	}
+
+	@Override
+	public PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId,
+			long todaysDate) {
+		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate);
+	}
 	
 
 }
