@@ -7,12 +7,15 @@
     />
     <div class="card-body">
       <h4>{{ pharmacy.name }}</h4>
-      <p class="card-text">This is pharmacy.</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <p class="card-text">
-          {{ pharmacy.address.street }} {{ pharmacy.address.number }}, {{ pharmacy.address.city }}
+      <p class="card-text">{{pharmacy.description}}</p>
+      <div class="d-flex justify-content-between">
+        <p class="card-text small">
+          {{ pharmacy.address.street }} {{ pharmacy.address.number }},
+          {{ pharmacy.address.city }}
         </p>
-        <p class="card-text">Rating: {{ pharmacy.rating }}</p>
+        <p class="card-text small">
+          {{ pharmacy.rating }}
+        </p>
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group">
