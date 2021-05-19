@@ -136,3 +136,10 @@ insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-3
 insert into demand_medicine (pharmacy_id, medicine_id, quantity) values (1, 1, 10);
 insert into demand_medicine (pharmacy_id, medicine_id, quantity) values (1, 2, 15);
 insert into demand_medicine (pharmacy_id, medicine_id, quantity) values (2, 3, 10);
+
+insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-23', '2021-07-19', 1, 0, 1);
+insert into vacation (finish, start, status, type, doctor_id) values ('2021-07-31', '2021-07-30', 1, 1, 1);
+insert into vacation (finish, start, status, type, doctor_id) values ('2021-12-30', '2021-12-22', 1, 0, 1);
+
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 1, '2021-05-19 13:00:00', '2021-05-19 17:00:00', 3, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-19 13:30:00', '2021-05-19 19:00:00', 3, 0);

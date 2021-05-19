@@ -42,25 +42,50 @@ export default {
     methods: {
         sendVacationRequest(){
             var newRequest = { type: this.type, start: this.startDate, finish: this.finishDate }
-            axios
-            .post('http://localhost:8000/vacation/request', newRequest)
-            .then(response => {
-                console.log(response.data);
-                this.savedVac = response.data;
-                if(this.savedVac.status != "ON_HOLD")
+            if(this.startDate < this.finishDate){
+                var today = new Date();
+                var s = new Date(this.startDate);
+                var e = new Date(this.startDate);
+                console.log(today, s, e);
+                if(today > s || today > e){
                     Swal.fire({
-                        title: 'Something went wrong',
-                        text: 'Try again, make sure you dont have pending requests!',
-                        icon: 'error',
-                        confirmButtonText: 'Ok'
+                    title: 'Incorrect values',
+                    text: "Can't have vacation in the past",
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
                     })
-                else
-                    Swal.fire({
-                        title: 'Successfully sent vacation request',
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
+                }
+                else{
+                    axios
+                    .post('http://localhost:8000/vacation/request', newRequest)
+                    .then(response => {
+                        console.log(response.data);
+                        this.savedVac = response.data;
+                        if(this.savedVac.status != "ON_HOLD")
+                            Swal.fire({
+                                title: 'Something went wrong',
+                                text: 'Try again, make sure you dont have pending requests!',
+                                icon: 'error',
+                                confirmButtonText: 'Ok'
+                            })
+                        else
+                            Swal.fire({
+                                title: 'Successfully sent vacation request',
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
+                            })
                     })
-            })
+                }
+            }
+            else{
+                Swal.fire({
+                title: 'Incorrect values',
+                text: 'Finish date is before starting date',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+                })
+                
+            }
         }
     },
     mounted: function() {

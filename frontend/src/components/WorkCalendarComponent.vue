@@ -39,6 +39,9 @@
           <v-toolbar-title v-if="$refs.calendar">
             {{ $refs.calendar.title }}
           </v-toolbar-title>
+          <v-toolbar-title v-if="!$refs.calendar">
+            {{ noRefTitle }}
+          </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-menu
             bottom
@@ -58,23 +61,26 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="type = 'day'">
+              <v-list-item @click="type = 'day', isYear=false">
                 <v-list-item-title>Day</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'week'">
+              <v-list-item @click="type = 'week', isYear=false">
                 <v-list-item-title>Week</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'month'">
+              <v-list-item @click="type = 'month', isYear=false">
                 <v-list-item-title>Month</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = '4day'">
+              <v-list-item @click="type = '4day', isYear=false">
                 <v-list-item-title>4 days</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="fillActiveDates()">
+                <v-list-item-title>Year</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet height="600" v-if="!isYear">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -126,17 +132,37 @@
               >
                 Cancel
               </v-btn>
+              <v-btn v-if="canStartAppointment()"
+                text
+                color="secondary"
+                @click="startAppointment"
+              >
+                Start
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-menu>
       </v-sheet>
+      <v-sheet v-if="isYear">
+        <YearCalendar
+        v-model="year"
+        :activeDates.sync="activeDates"
+        @toggleDate="toggleDate"
+        prefixClass="your_customized_wrapper_class"
+        :activeClass="activeClass"
+      ></YearCalendar>
+      </v-sheet>
     </v-col>
   </v-row>
-    </div>
+  </div>
 </template>
 <script>
 import axios from "axios";
+import YearCalendar from 'vue-material-year-calendar'
   export default {
+    components: {
+      YearCalendar
+    },
     data: () => ({
       focus: '',
       type: 'month',
@@ -152,6 +178,12 @@ import axios from "axios";
       events: [],
       colors: ['blue', 'green', 'orange'],
       names: [],
+      isYear: false,
+      year: 2021,
+      activeDates: [
+        { date: '2021-05-13' }],
+      activeClass: 'blue',
+      noRefTitle: '',
     }),
     mounted () {
       //this.$refs.calendar.checkChange()
@@ -195,6 +227,84 @@ import axios from "axios";
       updateRange() {
 
       },
+      startAppointment(){
+        window.location.href=`http://localhost:8080/employee-appointments/${this.selectedEvent.id}`
+      },
+      canStartAppointment(){
+        var currTime = new Date().getTime();
+        var startTime = new Date(this.selectedEvent.start).getTime();
+        var finishTime = new Date(this.selectedEvent.end).getTime();
+
+        if(startTime < currTime && currTime < finishTime){
+          return true
+        }
+        return false;
+      },
+      fillActiveDates(){
+        this.events.forEach(event =>{
+          // span between two dates
+          var dateSpan = (new Date(event.end).getTime() - new Date(event.start).getTime()) / (1000*60*60*24); 
+          if(dateSpan < 0) dateSpan=1;
+          if(dateSpan >= 1){
+            //multiple dates
+            //either absence or vacation
+            if(event.name.includes("Absence")){
+              var startInterval = new Date(event.start);
+              for(let i = 0; i < dateSpan; i++){
+                //orange color
+                var tomorrow = new Date(startInterval.getTime() + i * (24 * 60 * 60 * 1000));
+                var formattedDate = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1 < 10 ? '0' + (tomorrow.getMonth() + 1) : tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
+                const param = {date: formattedDate, className: 'orange'};
+                this.activeDates.push(param);
+              }
+            }
+            else if(event.name.includes("Vacation")){
+              var startInterval = new Date(event.start);
+              for(let i = 0; i < dateSpan; i++){
+                //green color
+                var tomorrow = new Date(startInterval.getTime() + i * (24 * 60 * 60 * 1000));
+                var formattedDate = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1 < 10 ? '0' + (tomorrow.getMonth() + 1) : tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
+                const param = {date: formattedDate, className: 'green'};
+                console.log(param);
+                this.activeDates.push(param);
+            }
+          }
+          }
+          else {
+            const param = {date: event.start.split('T')[0]};
+            this.activeDates.push(param);
+          }
+        })
+        this.isYear = true;
+      },
+      toggleDate(dateInfo){
+        this.isYear = false;
+        const param = {date: dateInfo.date};
+        this.year = dateInfo.date.split('-')[0];
+        var monthIndex = dateInfo.date.split('-')[1];
+        this.noRefTitle = this.getMonthName(monthIndex) + " " + this.year;
+        this.viewDay(param);
+      },
+      getMonthName(id){
+        var res = parseInt(id
+                           .replace(/^[0]+/g,""));
+        console.log(res);
+        switch(res){
+          case 1: return "January"
+          case 2: return "February"
+          case 3: return "March"
+          case 4: return "April"
+          case 5: return "May"
+          case 6: return "June"
+          case 7: return "July"
+          case 8: return "August"
+          case 9: return "September"
+          case 10: return "October"
+          case 11: return "November"
+          case 12: return "December"
+          default: return "January"
+        }
+      },
       rnd (a, b) {
         return Math.floor((b - a + 1) * Math.random()) + a
       },
@@ -210,3 +320,17 @@ import axios from "axios";
     },
   }
 </script>
+<style lang="stylus">
+.your_customized_wrapper_class
+  background-color: #0aa
+  color: white
+  &.orange
+    background-color: #ff7300
+    color: white
+  &.green
+    background-color: #00cc00
+    color: white
+  &.your_customized_classname
+    background-color: yellow
+    color: black
+</style>
