@@ -14,7 +14,7 @@
       <div class="input-group-append">
         <button
           type="button"
-          class="btn btn-primary input-group-append"
+          class="btn btn-primary input-group-append text-white"
           v-on:click="filterPharmacy()"
         >
           <i class="fas fa-filter">Filter</i>
@@ -58,4 +58,7 @@ export default {
 </script>
 
 <style>
+.text-white {
+  color: white;
+}
 </style>

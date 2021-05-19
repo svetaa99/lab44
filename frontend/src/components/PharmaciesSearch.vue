@@ -9,7 +9,7 @@
         v-model="searchName"
       />
     </div>
-    <button type="button" class="btn btn-primary" v-on:click="searchPharmacy()">
+    <button type="button" class="btn btn-primary text-white" v-on:click="searchPharmacy()">
       <i class="fas fa-search">Search</i>
     </button>
   </div>
@@ -49,4 +49,7 @@ export default {
 </script>
 
 <style>
+.text-white {
+  color: white;
+}
 </style>
