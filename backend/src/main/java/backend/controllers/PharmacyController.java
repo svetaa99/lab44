@@ -34,6 +34,7 @@ import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicineAddRemoveObject;
 import backend.models.PharmacyMedicines;
+import backend.models.ResponseObject;
 import backend.models.WorkHours;
 import backend.services.IAddressService;
 import backend.services.IMedicineService;
@@ -219,18 +220,18 @@ public class PharmacyController {
 	
 	@PutMapping(value = "/update-price", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
-	public ResponseEntity<PharmacyMedicinesDTO> updateMedicinePrice(@RequestBody PharmacyMedicineAddRemoveObject obj) {
+	public ResponseEntity<ResponseObject> updateMedicinePrice(@RequestBody PharmacyMedicineAddRemoveObject obj) {
 		PharmacyMedicines oldPM = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(obj.getPharmacyId(), obj.getMedicineId(), new Date().getTime());
 		double price = obj.getPrice();
 		if (price < 0) {
-			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Invalid price"), HttpStatus.BAD_REQUEST);
 		}
 		
 		long startDate = obj.getStartDate();
 		long endDate = obj.getEndDate();
 		
 		if (startDate > endDate || startDate < 0 || endDate < 0) {
-			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Invalid dates."), HttpStatus.BAD_REQUEST);
 		}
 		
 		if (startDate < oldPM.getEndDate()) {
@@ -238,12 +239,14 @@ public class PharmacyController {
 			ld.plusDays(1);
 			DateTimeFormatter formmat1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			String formatter = formmat1.format(ld);
-			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.CONFLICT);
+			return new ResponseEntity<ResponseObject>(
+					new ResponseObject(400, "Start date of the new price period cannot be before last end date. First available start date: " + formatter), 
+					HttpStatus.CONFLICT);
 		}
 		
 		PharmacyMedicines pm = new PharmacyMedicines(oldPM.getPharmacy(), oldPM.getMedicine(), price, oldPM.getQuantity(), startDate, endDate);
 		pmService.save(pm);
 		
-		return new ResponseEntity<PharmacyMedicinesDTO>(new PharmacyMedicinesDTO(pm), HttpStatus.OK);
+		return new ResponseEntity<ResponseObject>(new ResponseObject(new PharmacyMedicinesDTO(pm), 200, "Ok"), HttpStatus.OK);
 	}
 }
