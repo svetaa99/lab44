@@ -61,9 +61,11 @@ public class EventController {
 		}
 		
 		List<Vacation> allVacations = vacationService.findByDoctorIdAndStatus(doctorId, VacationStatus.APPROVED);
+		
 		for (Vacation vacation : allVacations) {
 			retVal.add(new EventDTO(vacation));
 		}
+		
 		return new ResponseEntity<List<EventDTO>>(retVal, HttpStatus.OK);
 	}
 }

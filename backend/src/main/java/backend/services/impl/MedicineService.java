@@ -27,7 +27,7 @@ public class MedicineService implements IMedicineService{
 
 	@Override
 	public Medicine findById(Long id) {
-		return medicineRepository.findById(id).orElseGet(null);
+		return medicineRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -38,6 +38,15 @@ public class MedicineService implements IMedicineService{
 	@Override
 	public void delete(Medicine obj) {
 		medicineRepository.delete(obj);
+	}
+
+	@Override
+	public List<Medicine> getSubstituteForMedicine(Long id) {
+		System.out.println("dobijen id: " + id);
+		Medicine current = medicineRepository.findById(id).get();
+		List<Medicine> retVal = medicineRepository.findByType(current.getType());
+		retVal.remove(current);
+		return retVal;
 	}
 	
 	

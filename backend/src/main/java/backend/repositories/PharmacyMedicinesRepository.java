@@ -29,4 +29,6 @@ public interface PharmacyMedicinesRepository extends JpaRepository<PharmacyMedic
 	@Query("select pm from PharmacyMedicines pm where pm.pharmacy.id= ?1 and pm.medicine.id = ?2 and ?3 between pm.startDate and pm.endDate")
 	PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId, long todaysDate);
 	
+	@Query("select pm from PharmacyMedicines pm where pm.pharmacy.id = ?1 and pm.quantity > 0")
+	List<PharmacyMedicines> findAvailableByPharmacyId(Long pharmacyId);
 }

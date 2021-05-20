@@ -28,8 +28,6 @@ public class Dermatologist extends Doctor {
 		this.pharmacies = pharmacies;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "Dermatologist [pharmacies=" + pharmacies + ", name=" + name + ", surname=" + surname + ", email="
