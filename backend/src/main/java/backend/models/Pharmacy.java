@@ -14,7 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 public class Pharmacy {
@@ -64,6 +64,15 @@ public class Pharmacy {
 	
 	@OneToMany(mappedBy = "pharmacy")
 	private List<DemandMedicine> demands;
+	
+	@OneToMany(mappedBy = "pharmacy")
+	private List<Promotion> promotions;
+	
+	@Column
+	long startDate;
+	
+	@Column
+	long endDate;
 	
 	public Pharmacy() {
 		
