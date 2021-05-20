@@ -1,7 +1,5 @@
 package backend.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
