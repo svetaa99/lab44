@@ -8,6 +8,7 @@ import backend.models.Promotion;
 
 public class PromotionDTO {
 	
+	private Long id;
 	private Long pharmacyId;
 	private List<Medicine> medicines;
 	private PromotionType type;
@@ -20,9 +21,10 @@ public class PromotionDTO {
 		
 	}
 
-	public PromotionDTO(Long pharmacyId, List<Medicine> medicines, PromotionType type, int discount, String text,
+	public PromotionDTO(Long id, Long pharmacyId, List<Medicine> medicines, PromotionType type, int discount, String text,
 			long startDate, long endDate) {
 		super();
+		this.id = id;
 		this.pharmacyId = pharmacyId;
 		this.medicines = medicines;
 		this.type = type;
@@ -32,6 +34,20 @@ public class PromotionDTO {
 		this.endDate = endDate;
 	}
 	
+	public PromotionDTO(Promotion p) {
+		this(p.getId(), p.getPharmacy().getId(), p.getMedicines(), p.getType(), p.getDiscount(), p.getText(), p.getStartDate(), p.getEndDate());
+	}
+	
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Long getPharmacyId() {
 		return pharmacyId;
 	}
@@ -88,9 +104,7 @@ public class PromotionDTO {
 		this.endDate = endDate;
 	}
 
-	public PromotionDTO(Promotion p) {
-		this(p.getPharmacy().getId(), p.getMedicines(), p.getType(), p.getDiscount(), p.getText(), p.getStartDate(), p.getEndDate());
-	}
+	
 	
 	
 }

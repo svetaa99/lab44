@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -111,6 +112,18 @@ public class PromotionController {
 		
 		PromotionDTO dto = new PromotionDTO(p);
 		return new ResponseEntity<ResponseObject>(new ResponseObject(dto, 200, ""), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/delete-promotion/{promotionId}")
+	public ResponseEntity<ResponseObject> deletePromotion(@PathVariable Long promotionId) {
+		Promotion p = promoService.findById(promotionId);
+		if (p == null) {
+			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Invalid promotion id"), HttpStatus.BAD_REQUEST);
+		}
+		
+		promoService.delete(p);
+		
+		return new ResponseEntity<ResponseObject>(HttpStatus.OK);
 	}
 	
 }

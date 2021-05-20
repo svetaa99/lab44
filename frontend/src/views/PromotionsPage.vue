@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <a class="btn btn-primary" href="/all-promotions">View all promotions</a>
+
+    <hr/>
+
     <h1>Create new promotion</h1>
     <h3>Select available medicines</h3>
     <p>Double click on the row to select</p>
