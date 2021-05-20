@@ -79,6 +79,9 @@ export default {
       axios.get(`${API_URL}/promotions/get-promotion-for-medicine/${this.selectedPM.pharmacy.id}/${this.medicine.id}`)
       .then(response => {
         let promotion = response.data.retObj
+        if (promotion == null) {
+          promotion = {}
+        }
 
         if (promotion.endDate < new Date().getTime()) {
           promotion = {}

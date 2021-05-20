@@ -107,7 +107,7 @@ public class PromotionController {
 	public ResponseEntity<ResponseObject> getPromotionForMedicine(@PathVariable Long pharmacyId, @PathVariable Long medicineId) {
 		Promotion p = promoService.findPromotionForMedicine(pharmacyId, medicineId);
 		if (p == null) {
-			return new ResponseEntity<ResponseObject>(new ResponseObject(404, "No promotion found."), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<ResponseObject>(new ResponseObject(404, "No promotion found."), HttpStatus.OK);
 		}
 		
 		PromotionDTO dto = new PromotionDTO(p);
