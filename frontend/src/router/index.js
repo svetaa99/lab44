@@ -33,6 +33,7 @@ import VacationRequestsPage from '../views/VacationRequestsPage.vue'
 import PharmacistVisitPage from '../views/PharmacistVisitPage.vue'
 import DermatologistVisitPage from '../views/DermatologistVisitPage.vue'
 import DemandedMedicinesPage from '../views/DemandedMedicinesPage.vue'
+import PromotionsPage from '../views/PromotionsPage.vue'
 
 Vue.use(VueRouter)
 
@@ -201,6 +202,11 @@ const routes = [
     path: '/demanded-medicines',
     name: 'DemandedMedicinesPage',
     component: DemandedMedicinesPage
+  },
+  {
+    path: '/promotions',
+    name: 'PromotionsPage',
+    component: PromotionsPage
   }
 ]
 

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.dto.PromotionDTO;
 import backend.enums.PromotionType;
 import backend.models.LabAdmin;
+import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.Promotion;
 import backend.models.ResponseObject;
@@ -85,6 +86,13 @@ public class PromotionController {
 		
 		if (obj.getType() != PromotionType.ACTION && obj.getType() != PromotionType.PROMOTION) {
 			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Invalid promotion type."), HttpStatus.BAD_REQUEST);
+		}
+		
+		for (Medicine m : obj.getMedicines()) {
+			Promotion promo = promoService.findPromotionForMedicine(p.getId(), m.getId());
+			if (promo != null) {
+				return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Medicine is already on sale"), HttpStatus.BAD_REQUEST);
+			}
 		}
 		
 		Promotion promotion = new Promotion(p, obj.getMedicines(), obj.getType(), obj.getDiscount(), obj.getText(), obj.getStartDate(), obj.getEndDate());

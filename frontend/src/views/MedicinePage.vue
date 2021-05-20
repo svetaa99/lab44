@@ -78,13 +78,18 @@ export default {
     reserve() {
       axios.get(`${API_URL}/promotions/get-promotion-for-medicine/${this.selectedPM.pharmacy.id}/${this.medicine.id}`)
       .then(response => {
-        const promotion = response.data.retObj
+        let promotion = response.data.retObj
+
+        if (promotion.endDate < new Date().getTime()) {
+          promotion = {}
+        }
+
         let price = this.selectedPM.price;
 
         if (Object.keys(promotion).length !== 0) {
           price -= price * promotion.discount / 100;
         }
-
+        
         this.reservation.pharmacy = this.selectedPM.pharmacy
         this.reservation.medicine = this.selectedPM.medicine
         this.reservation.totalPrice = price * this.reservation.quantity
