@@ -68,12 +68,6 @@ public class Pharmacy {
 	@OneToMany(mappedBy = "pharmacy")
 	private List<Promotion> promotions;
 	
-	@Column
-	long startDate;
-	
-	@Column
-	long endDate;
-	
 	public Pharmacy() {
 		
 	}

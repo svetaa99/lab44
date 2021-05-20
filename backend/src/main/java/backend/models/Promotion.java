@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import backend.dto.PromotionDTO;
 import backend.enums.PromotionType;
 
 @Entity

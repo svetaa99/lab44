@@ -36,4 +36,9 @@ public class PromotionService implements IPromotionService {
 
 	}
 
+	@Override
+	public List<Promotion> findAllByPharmacyId(Long pharmacyId) {
+		return promoRepository.findByPharmacyIdEquals(pharmacyId);
+	}
+
 }
