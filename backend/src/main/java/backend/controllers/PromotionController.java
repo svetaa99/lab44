@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,6 +92,17 @@ public class PromotionController {
 		PromotionDTO dto = new PromotionDTO(promotion);
 		
 		return new ResponseEntity<ResponseObject>(new ResponseObject(dto, 201, ""), HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/get-promotion-for-medicine/{pharmacyId}/{medicineId}")
+	public ResponseEntity<ResponseObject> getPromotionForMedicine(@PathVariable Long pharmacyId, @PathVariable Long medicineId) {
+		Promotion p = promoService.findPromotionForMedicine(pharmacyId, medicineId);
+		if (p == null) {
+			return new ResponseEntity<ResponseObject>(new ResponseObject(404, "No promotion found."), HttpStatus.NOT_FOUND);
+		}
+		
+		PromotionDTO dto = new PromotionDTO(p);
+		return new ResponseEntity<ResponseObject>(new ResponseObject(dto, 200, ""), HttpStatus.OK);
 	}
 	
 }

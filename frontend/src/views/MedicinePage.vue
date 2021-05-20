@@ -20,6 +20,7 @@
             <option v-for="option in options" :key="option.id" :value="option">{{option.pharmacy.name}}</option>
           </select>
         </div>
+        <p v-if="Object.keys(selectedPM).length !== 0">Cena: {{selectedPM.price}}</p>
         <div class="col-sm">
           <Datepicker placeholder="Datum" v-model="reservation.date"/>
         </div>
@@ -75,24 +76,35 @@ export default {
   },
   methods: {
     reserve() {
-      this.reservation.pharmacy = this.selectedPM.pharmacy
-      this.reservation.medicine = this.selectedPM.medicine
-      this.reservation.totalPrice = this.selectedPM.price * this.reservation.quantity
-      this.reservation.date = this.reservation.date.getTime()
+      axios.get(`${API_URL}/promotions/get-promotion-for-medicine/${this.selectedPM.pharmacy.id}/${this.medicine.id}`)
+      .then(response => {
+        const promotion = response.data.retObj
+        let price = this.selectedPM.price;
 
-      console.log(this.reservation)
-      axios
-        .post(`${API_URL}/reservations/`, this.reservation)
-        .then(response => {
-          if (response.status === 200) {
-            Swal.fire({
-              title: 'Success',
-              text: 'Posted reservation!',
-              icon: 'success',
-            })
-          }
-        })
-    }
+        if (Object.keys(promotion).length !== 0) {
+          price -= price * promotion.discount / 100;
+        }
+
+        this.reservation.pharmacy = this.selectedPM.pharmacy
+        this.reservation.medicine = this.selectedPM.medicine
+        this.reservation.totalPrice = price * this.reservation.quantity
+        this.reservation.date = this.reservation.date.getTime()
+  
+        console.log(this.reservation)
+        axios
+          .post(`${API_URL}/reservations/`, this.reservation)
+          .then(response => {
+            if (response.status === 200) {
+              Swal.fire({
+                title: 'Success',
+                text: 'Posted reservation!',
+                icon: 'success',
+              })
+            }
+          })
+
+      })
+    },
   },
   mounted() {
     const arr = window.location.href.split("/");
