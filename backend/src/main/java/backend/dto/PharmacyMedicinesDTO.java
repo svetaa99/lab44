@@ -1,10 +1,13 @@
 package backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 
 public class PharmacyMedicinesDTO {
+	
 	private Long id;
 	private Pharmacy pharmacy;
 	private Medicine medicine;

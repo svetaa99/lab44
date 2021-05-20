@@ -18,8 +18,7 @@ insert into medicine(name, type, specification) values ('Lek1', 1, 'neeekaaa spe
 insert into medicine(name, type, specification) values ('Lek2', 2, 'sdfsefs');
 insert into medicine(name, type, specification) values ('Lek3', 2, 'uiyuoirtl');
 
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1619820000000, 1621463078691);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 120, 100, 1621463174901, 1624053660000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1619868600000, 1621942200000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 2, 120, 100, 1619820000000, 1622498400000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1619820000000, 1622498400000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1619820000000, 1622498400000);

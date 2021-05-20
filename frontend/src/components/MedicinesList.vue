@@ -55,6 +55,7 @@
 import UpdateMedicinePriceModal from "./UpdateMedicinePriceModal.vue";
 import axios from "axios";
 import { config } from "@/config.js";
+import Swal from 'sweetalert2';
 
 const API_URL = config.API_URL;
 

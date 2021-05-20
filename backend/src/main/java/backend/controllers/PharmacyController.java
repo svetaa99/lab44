@@ -1,8 +1,14 @@
 package backend.controllers;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +25,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
 
 import backend.dto.PharmacyDTO;
 import backend.dto.PharmacyMedicinesDTO;
@@ -37,6 +45,8 @@ import backend.services.impl.WorkHoursService;
 @RequestMapping(value = "pharmacies")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PharmacyController {
+	
+	private static Gson g = new Gson();
 
 	@Autowired
 	private IPharmacyService pharmacyService;
@@ -200,7 +210,7 @@ public class PharmacyController {
 	@PutMapping(value = "/update-quantity", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<PharmacyMedicinesDTO> updateMedicineQuantityInPharmacy(@RequestBody PharmacyMedicineAddRemoveObject obj) {
-		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
+		PharmacyMedicines pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(obj.getPharmacyId(), obj.getMedicineId(), new Date().getTime());
 		pm.setQuantity(obj.getQuantity());
 		
 		pm = pmService.save(pm);
@@ -210,7 +220,7 @@ public class PharmacyController {
 	@PutMapping(value = "/update-price", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<PharmacyMedicinesDTO> updateMedicinePrice(@RequestBody PharmacyMedicineAddRemoveObject obj) {
-		PharmacyMedicines oldPM = pmService.findPharmacyMedicinesByIds(obj.getPharmacyId(), obj.getMedicineId());
+		PharmacyMedicines oldPM = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(obj.getPharmacyId(), obj.getMedicineId(), new Date().getTime());
 		double price = obj.getPrice();
 		if (price < 0) {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
@@ -221,6 +231,14 @@ public class PharmacyController {
 		
 		if (startDate > endDate || startDate < 0 || endDate < 0) {
 			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.BAD_REQUEST);
+		}
+		
+		if (startDate < oldPM.getEndDate()) {
+			LocalDate ld = Instant.ofEpochMilli(endDate).atZone(ZoneId.systemDefault()).toLocalDate();
+			ld.plusDays(1);
+			DateTimeFormatter formmat1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String formatter = formmat1.format(ld);
+			return new ResponseEntity<PharmacyMedicinesDTO>(HttpStatus.CONFLICT);
 		}
 		
 		PharmacyMedicines pm = new PharmacyMedicines(oldPM.getPharmacy(), oldPM.getMedicine(), price, oldPM.getQuantity(), startDate, endDate);

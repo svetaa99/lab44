@@ -120,6 +120,13 @@ export default {
             })
           }
         })
+        .catch(err => {
+            Swal.fire({
+              title: 'Error', 
+              text: `${err.response.data}`,
+              icon: 'error'
+            })
+        })
     },
     handleDeleteClick() {
       Swal.fire({
