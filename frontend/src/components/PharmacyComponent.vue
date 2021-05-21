@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Post Content Column -->
       <div class="col-lg-8">
-        <PharmacyMainComponent :pharmacy="pharmacy" />
+        <PharmacyMainComponent :pharmacy="pharmacy" :admin="admin" />
       </div>
       <div class="col-md-4">
         <div class="card my-4">
@@ -38,10 +38,14 @@
 <script>
 import PharmacyMainComponent from "@/components/PharmacyMainComponent.vue";
 export default {
-  props: ["pharmacy"],
+  props: {
+    pharmacy: Object,
+    admin: Object
+  },
   components: {
     PharmacyMainComponent,
   },
+
 };
 </script>
 

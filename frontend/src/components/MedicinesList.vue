@@ -17,7 +17,6 @@
             <th class="th-sm">Type</th>
             <th class="th-sm">Specification</th>
 
-            <th v-if="extra == ''"></th>
             <th v-if="extra == 'quantity'">Quantity</th>
           </tr>
         </thead>

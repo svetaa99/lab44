@@ -77,6 +77,16 @@ public class DermatologistController {
 		return new ResponseEntity<List<DermatologistDTO>>(createDTOList(derms), HttpStatus.OK);
 	}
 	
+	@GetMapping("/all-from-pharmacy/{pharmacyId}")
+	public ResponseEntity<List<DermatologistDTO>> findAllFromPharmacy(@PathVariable Long pharmacyId) {
+		Pharmacy p = pharmacyService.findById(pharmacyId);
+		List<Dermatologist> dermatologists = dermaService.findAll()
+				.stream().filter(d -> d.getPharmacies().contains(p)).collect(Collectors.toList());
+		List<DermatologistDTO> dDTOs = createDTOList(dermatologists);
+		
+		return new ResponseEntity<List<DermatologistDTO>>(dDTOs, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DermatologistDTO>> searchDermatologists(@RequestBody DermatologistDTO obj) {
 		String name = obj.getName();

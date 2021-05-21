@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="d in doctors" :key="d.id">
+        <tr v-for="d in this.doctors" :key="d.id" @dblclick="handleRowDblClick(d)">
           <td>{{d.name}}</td>
           <td>{{d.surname}}</td>
           <td>{{d.email}}</td>
@@ -96,6 +96,9 @@ export default {
     },
     handleSelectClick(doctor) {
       this.$emit('clicked', doctor);
+    },
+    handleRowDblClick(doctor) {
+      this.$emit('clicked', doctor)
     }
   }
 }

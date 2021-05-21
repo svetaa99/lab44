@@ -66,7 +66,7 @@ public class DoctorTermsController {
 	}
 	
 	@GetMapping("/definedterms-admin/{pharmacyId}/{doctorId}")
-	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")
 	public ResponseEntity<String> getDefinedTermsAdmin(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("doctorId") Long doctorId) {
 		List<DoctorTerms> terms = doctorTermsService.findByDoctorIdEquals(doctorId);
 		List<DoctorTerms> retVal = terms
