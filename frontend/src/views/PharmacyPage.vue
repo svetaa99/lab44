@@ -1,7 +1,7 @@
 <template>
   <div>
     <PharmacyComponent :pharmacy="pharmacy" />
-    <MapComponent v-if="pharmacy.address" :address="pharmacy.address"/>
+    <MapComponent v-if="pharmacy.address" :address="pharmacy.address" :edit="false"/>
     <MedicinesSearch v-model="searchName" @clicked="onSearchClick"/>
     <MedicinesList :medicines="this.medicines" :extra="extra"/>
     <hr>

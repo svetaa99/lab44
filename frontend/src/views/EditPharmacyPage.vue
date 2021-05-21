@@ -3,35 +3,35 @@
     <h1>Edit pharmacy</h1>
     <form>
       <label for="name">Name: </label>
-      <input id="name" type="text" v-model="pharmacy.name">
+      <input id="name" type="text" class="form-control" v-model="pharmacy.name">
 
       <br/>
 
       <label for="desc">Description: </label>
       <br/>
-      <textarea id="desc" v-model="pharmacy.description" placeholder="Descrioption about pharmacy"></textarea>
+      <textarea id="desc" rows="10" v-model="pharmacy.description" class="form-control more-height" placeholder="Descrioption about pharmacy"></textarea>
 
       <br/>
 
       <h3>Address</h3>
-      <MapComponent v-if="pharmacy.address" :address="pharmacy.address" @clicked="updateAddress"/>
+      <MapComponent v-if="pharmacy.address" :address="pharmacy.address" :edit="true" @clicked="updateAddress"/>
       
       <br/>
 
       <label for="street">Street</label>
-      <input type="text" id="street" v-model="pharmacy.address.street">
+      <input type="text" class="form-control" id="street" v-model="pharmacy.address.street">
 
       <label for="city">City</label>
-      <input type="text" id="city" v-model="pharmacy.address.city">
+      <input type="text" class="form-control" id="city" v-model="pharmacy.address.city">
 
       <label for="country">Country</label>
-      <input type="text" id="country" v-model="pharmacy.address.country">
+      <input type="text" class="form-control" id="country" v-model="pharmacy.address.country">
 
       <label for="longitude">Longitude</label>
-      <input type="text" id="longitude" v-model="pharmacy.address.longitude">
+      <input type="text" class="form-control" id="longitude" v-model="pharmacy.address.longitude">
 
       <label for="lat">Latitude</label>
-      <input type="text" id="lat" v-model="pharmacy.address.latitude">
+      <input type="text" class="form-control" id="lat" v-model="pharmacy.address.latitude">
 
       <br/>
       <br/>
@@ -125,5 +125,7 @@ export default {
 </script>
 
 <style>
-
+  .more-height {
+    height: 300px;
+  }
 </style>

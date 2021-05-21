@@ -3,7 +3,7 @@
     <div id="map">
     </div>
     <br/>
-    <button class="btn btn-primary" type="button" v-if="userRoles.includes(4)" @click="handleSaveClick">Save new address</button>
+    <button class="btn btn-primary" type="button" v-if="userRoles.includes(4) && edit" @click="handleSaveClick">Save new address</button>
   </div>
 </template>
 
@@ -18,6 +18,7 @@ export default {
   /* eslint-disable no-unused-vars */ // do not delete these comments!!!
   props: {
     address: Object,
+    edit: Boolean,
   },
   data() {
     return {
@@ -56,7 +57,7 @@ export default {
       longitude: 0,
     }
 
-    if (this.userRoles.includes(4)) {
+    if (this.userRoles.includes(4) && this.edit) {
       var geocodeService = L.esri.Geocoding.geocodeService();
       
       map.on('click', function(e) {
