@@ -2,7 +2,6 @@ package backend.controllers;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -47,8 +46,6 @@ import backend.services.impl.WorkHoursService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PharmacyController {
 	
-	private static Gson g = new Gson();
-
 	@Autowired
 	private IPharmacyService pharmacyService;
 	
@@ -59,16 +56,13 @@ public class PharmacyController {
 	private IPharmacyMedicinesService pmService;
 	
 	@Autowired
-	private IAddressService addressService;
-	
-	@Autowired
 	private WorkHoursService whService;
 	
 	private List<PharmacyDTO> createPharmacyDTOList(List<Pharmacy> pharmacies) {
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<PharmacyDTO>();
 		
 		for (Pharmacy pharmacy : pharmacies) {
-			PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy.getId(), pharmacy.getName(), addressService.findById(pharmacy.getAddressId()), pharmacy.getDescription(), pharmacy.getRating(), pharmacy.getpharmacistPrice());
+			PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy.getId(), pharmacy.getName(), pharmacy.getAddress(), pharmacy.getDescription(), pharmacy.getRating(), pharmacy.getpharmacistPrice());
 			pharmaciesDTO.add(pharmacyDTO);
 		}
 		
@@ -90,7 +84,7 @@ public class PharmacyController {
 			return new ResponseEntity<PharmacyDTO>(HttpStatus.NOT_FOUND);
 		}
 
-		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy.getId(), pharmacy.getName(), addressService.findById(pharmacy.getAddressId()), pharmacy.getDescription(), pharmacy.getRating(), pharmacy.getpharmacistPrice());
+		PharmacyDTO pharmacyDTO = new PharmacyDTO(pharmacy.getId(), pharmacy.getName(), pharmacy.getAddress(), pharmacy.getDescription(), pharmacy.getRating(), pharmacy.getpharmacistPrice());
 		
 		return new ResponseEntity<PharmacyDTO>(pharmacyDTO, HttpStatus.OK);
 	}

@@ -7,7 +7,7 @@
           <div class="card-body">
             <h5 class="card-title">{{p.id}}</h5>
             <p class="card-text">Medicines: {{[p.medicines.map(m => {return m.name})]}}</p>
-            <p class="card-text">Discount: {{p.discount}}</p>
+            <p class="card-text">Discount: {{p.discount}}%</p>
             <p class="card-text">Start date: {{new Date(p.startDate).toDateString()}}</p>
             <p class="card-text">End date: {{new Date(p.endDate).toDateString()}}</p>
             <button class="btn btn-outline-danger" @click="handleDeleteClick(p)">Delete promotion</button>
