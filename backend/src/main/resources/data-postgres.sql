@@ -82,8 +82,8 @@ insert into patients_allergies (patient_id, medicine_id) values (10, 2);
 insert into patients_allergies (patient_id, medicine_id) values (12, 1);
 insert into patients_allergies (patient_id, medicine_id) values (12, 2);
 
-insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price) values (10, 1, 1, 1588456800000, 2, 200);
-insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price) values (10, 2, 3, 1587852000000, 1, 70);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1588456800000, 2, 200, 0);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 2, 3, 1587852000000, 1, 70, 0);
 
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 1, '08:00:00', '21:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (2, 1, '14:00:00', '20:00:00');
@@ -143,3 +143,7 @@ insert into vacation (finish, start, status, type, doctor_id) values ('2021-12-3
 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 1, '2021-05-19 13:00:00', '2021-05-19 17:00:00', 3, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-19 13:30:00', '2021-05-19 19:00:00', 3, 0);
+
+insert into penalty (date, patient_id) values ('2021-05-23', 10);
+insert into penalty (date, patient_id) values ('2021-05-17', 10);
+insert into penalty (date, patient_id) values ('2021-05-10', 11);
