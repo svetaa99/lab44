@@ -36,6 +36,9 @@ public class PharmacyMedicines {
 	@Column
 	long endDate;
 	
+	@Column(columnDefinition = "Int default '0'")
+	int requests;
+	
 	public PharmacyMedicines() {
 		
 	}
@@ -60,7 +63,7 @@ public class PharmacyMedicines {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -117,6 +120,28 @@ public class PharmacyMedicines {
 	public void setEndDate(long endDate) {
 		this.endDate = endDate;
 	}
+
+	public int getRequests() {
+		return requests;
+	}
+
+	public void setRequests(int requests) {
+		this.requests = requests;
+	}
 	
+	public void incRequests() {
+		this.requests++;
+	}
 	
+	public void decRequests() {
+		this.requests--;
+	}
+	
+	public void incQuantity(int by) {
+		this.quantity += by;
+	}
+	
+	public void decQuantity() {
+		this.quantity --;
+	}
 }

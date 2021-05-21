@@ -59,26 +59,37 @@ public class ReportController {
 		List<MedicineReportDTO> medDTO = new ArrayList<MedicineReportDTO>();
 		
 		Visit visitReport = visitService.findById(newReport.getVisitId());
+		Long pharmacyId = visitReport.getPharmacy();
 		
 		for (MedicineDays medDays : newReport.getMedicineDays()) {
 			MedicineReportDTO newMedRepDTO = new MedicineReportDTO(medicineService.findById(medDays.getmedicine()));
 			
-			Long pharmacyId = visitReport.getPharmacy();
-			newMedRepDTO.setAvailable(checkAvailable(pharmacyId, medDays.getmedicine())); //if not send notification to lab admin!
+			newMedRepDTO.setAvailable(checkAvailable(pharmacyId, medDays.getmedicine()));
+			
+			if(!newMedRepDTO.isAvailable()) {
+				//send notification to lab admin
+				System.out.println("DATA: \nPHARMACY: " + pharmacyId + "  MEDICINE: " + newMedRepDTO.getMedicine().getId() + "  DATE: "+ System.currentTimeMillis());
+				PharmacyMedicines newPm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, newMedRepDTO.getMedicine().getId(), System.currentTimeMillis());
+				System.out.println("Current requests: " + newPm.getRequests());
+				newPm.incRequests();
+				System.out.println(newPm.getRequests());
+				pmService.save(newPm);
+			}
 			
 			Long patientId = visitReport.getPatientId();
-			newMedRepDTO.setAllergic(checkAllergic(patientId, medDays.getmedicine())); //if true send ALTERNATIVES? to doctor
+			newMedRepDTO.setAllergic(checkAllergic(patientId, medDays.getmedicine()));
 			
 			medDTO.add(newMedRepDTO);
 		}
 		if(medDTO.stream().filter(m -> m.isAllergic() || !m.isAvailable()).collect(Collectors.toList()).size() > 0) {
-			System.out.println("neuspesno");
+			System.out.println("Failed");
 		}
 		else {
-			System.out.println("uspesno");
+			System.out.println("Success");
 			visitReport.setStatus(Status.FINISHED);
 			visitService.save(visitReport);
 			reportService.save(newReport);
+			updateMedicineQuantity(medDTO, pharmacyId);
 		}
 		return new ResponseEntity<List<MedicineReportDTO>>(medDTO, HttpStatus.OK);
 	}
@@ -91,8 +102,6 @@ public class ReportController {
 		if(pm.getQuantity() <= 0)
 			return false;
 		else {
-			pm.setQuantity(pm.getQuantity() - 1);
-			pmService.save(pm);
 			return true;
 		}
 	}
@@ -103,5 +112,13 @@ public class ReportController {
 				return true;
 		}
 		return false;
+	}
+	public void updateMedicineQuantity(List<MedicineReportDTO> allGood, Long pharmacyId) {
+		PharmacyMedicines pm;
+		for (MedicineReportDTO medRep : allGood) {
+			pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medRep.getMedicine().getId(), System.currentTimeMillis());
+			pm.decQuantity();
+			pmService.save(pm);
+		}
 	}
 }

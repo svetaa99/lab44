@@ -265,7 +265,6 @@ import YearCalendar from 'vue-material-year-calendar'
                 var tomorrow = new Date(startInterval.getTime() + i * (24 * 60 * 60 * 1000));
                 var formattedDate = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1 < 10 ? '0' + (tomorrow.getMonth() + 1) : tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
                 const param = {date: formattedDate, className: 'green'};
-                console.log(param);
                 this.activeDates.push(param);
             }
           }
@@ -288,7 +287,6 @@ import YearCalendar from 'vue-material-year-calendar'
       getMonthName(id){
         var res = parseInt(id
                            .replace(/^[0]+/g,""));
-        console.log(res);
         switch(res){
           case 1: return "January"
           case 2: return "February"
@@ -315,7 +313,6 @@ import YearCalendar from 'vue-material-year-calendar'
         .then((response) => {
             this.events = response.data;
             this.events.forEach(ev => ev.timed = false)
-            console.log(this.events);
         })
     },
   }

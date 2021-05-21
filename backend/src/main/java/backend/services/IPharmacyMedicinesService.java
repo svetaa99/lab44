@@ -29,4 +29,6 @@ public interface IPharmacyMedicinesService extends IService<PharmacyMedicines> {
 	PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId, long todaysDate);
 	
 	List<PharmacyMedicines> findAvailableByPharmacyId(Long pharmacyId);
+	
+	List<PharmacyMedicines> findByMedicineNameAndPharmacyId(String medicineName, Long pharmacyId);
 }

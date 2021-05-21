@@ -59,9 +59,41 @@ public class MedicineController {
 		return new ResponseEntity<List<MedicineDTO>>(medicinesDTO, HttpStatus.OK);
 	}
 	
+	//method is used for visits
+	@GetMapping("/all/{visitId}") 
+	public ResponseEntity<List<MedicineDTO>> getAllMedicinesInPharmacy(@PathVariable Long visitId){
+		Visit v = visitService.findById(visitId);
+		Long pharmacyId = v.getPharmacy();
+		
+		List<PharmacyMedicines> pharmMedicines = pharmMedService.findAllByPharmacyId(pharmacyId);
+		
+		List<Medicine> medicines = new ArrayList<Medicine>();
+		pharmMedicines.forEach(med -> medicines.add(med.getMedicine()));
+		
+		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
+		
+		return new ResponseEntity<List<MedicineDTO>>(medicinesDTO, HttpStatus.OK);
+	}
+	
 	@GetMapping("/search/{name}")
 	public ResponseEntity<List<MedicineDTO>> getAllByName(@PathVariable String name) {
 		List<Medicine> medicines = (List<Medicine>) medicineService.findAllByName(name);
+		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
+		
+		return new ResponseEntity<List<MedicineDTO>>(medicinesDTO, HttpStatus.OK);
+	}
+	
+	//method is used for visits
+	@GetMapping("/search/{name}/{visitId}")
+	public ResponseEntity<List<MedicineDTO>> getAllByNameInPharmacy(@PathVariable String name, @PathVariable Long visitId) {
+		Visit v = visitService.findById(visitId);
+		Long pharmacyId = v.getPharmacy();
+		
+		List<PharmacyMedicines> pharmMedicines = pharmMedService.findByMedicineNameAndPharmacyId(name, pharmacyId);
+		
+		List<Medicine> medicines = new ArrayList<Medicine>();
+		pharmMedicines.forEach(med -> medicines.add(med.getMedicine()));
+		
 		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
 		
 		return new ResponseEntity<List<MedicineDTO>>(medicinesDTO, HttpStatus.OK);
@@ -97,10 +129,7 @@ public class MedicineController {
 				.filter(med -> !allergies.contains(med) && availableMedicine.contains(med))
 				.collect(Collectors.toList());
 		
-		List<MedicineDTO> dtoList = new ArrayList<MedicineDTO>();
-		for (Medicine med : filteredList) {
-			dtoList.add(new MedicineDTO(med));
-		}
+		List<MedicineDTO> dtoList = createMedicineDTOList(filteredList);
 		
 		return new ResponseEntity<List<MedicineDTO>>(dtoList, HttpStatus.OK);
 	}

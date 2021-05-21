@@ -115,6 +115,12 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	public List<PharmacyMedicines> findAvailableByPharmacyId(Long pharmacyId){
 		return pharmacyMedicineRepository.findAvailableByPharmacyId(pharmacyId);
 	}
+
+	@Override
+	public List<PharmacyMedicines> findByMedicineNameAndPharmacyId(String medicineName, Long pharmacyId) {
+		// TODO Auto-generated method stub
+		return pharmacyMedicineRepository.findByMedicineNameAndPharmacyId(medicineName, pharmacyId);
+	}
 	
 
 }

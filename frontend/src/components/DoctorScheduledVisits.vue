@@ -29,6 +29,10 @@
 
 <script>
 import axios from 'axios';
+
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
     name: "DoctorScheduledVisits",
     props: {
@@ -57,9 +61,8 @@ export default {
         }
     },
     mounted: function() {
-        axios.get(`http://localhost:8000/appointments/td`).then((response) => {
+        axios.get(`${API_URL}/appointments/td`).then((response) => {
         this.scheduledVisits = response.data;
-        console.log(JSON.stringify(this.scheduledVisits));
     });
     }
 }

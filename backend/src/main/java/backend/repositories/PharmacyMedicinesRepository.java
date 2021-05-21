@@ -31,4 +31,6 @@ public interface PharmacyMedicinesRepository extends JpaRepository<PharmacyMedic
 	
 	@Query("select pm from PharmacyMedicines pm where pm.pharmacy.id = ?1 and pm.quantity > 0")
 	List<PharmacyMedicines> findAvailableByPharmacyId(Long pharmacyId);
+	
+	List<PharmacyMedicines> findByMedicineNameAndPharmacyId(String medicineName, Long pharmacyId);
 }

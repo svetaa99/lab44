@@ -26,6 +26,9 @@
 import axios from 'axios';
 import Datepicker from "vuejs-datepicker";
 import Swal from 'sweetalert2'
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
     components: {
         Datepicker,
@@ -46,7 +49,6 @@ export default {
                 var today = new Date();
                 var s = new Date(this.startDate);
                 var e = new Date(this.startDate);
-                console.log(today, s, e);
                 if(today > s || today > e){
                     Swal.fire({
                     title: 'Incorrect values',
@@ -57,9 +59,8 @@ export default {
                 }
                 else{
                     axios
-                    .post('http://localhost:8000/vacation/request', newRequest)
+                    .post(`${API_URL}/vacation/request`, newRequest)
                     .then(response => {
-                        console.log(response.data);
                         this.savedVac = response.data;
                         if(this.savedVac.status != "ON_HOLD")
                             Swal.fire({
@@ -90,7 +91,7 @@ export default {
     },
     mounted: function() {
         axios
-        .get('http://localhost:8000/vacation/current')
+        .get(`${API_URL}/vacation/current`)
         .then(response => {
             if(response.data === "YES"){
                 this.requested = true;

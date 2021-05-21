@@ -66,6 +66,9 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
   data: () => {
     return {
@@ -80,14 +83,12 @@ export default {
     login()
     {
       var loginData = {"email": this.email, "password": this.password};
-      console.log(loginData);
       axios
-      .post('http://localhost:8000/users/login-user', loginData)
+      .post(`${API_URL}/users/login-user`, loginData)
       .then(response => {this.jwt = response.data; this.printInfo()});
     },
     printInfo()
     {
-      console.log(this.jwt);
       if(this.jwt.accessToken == ""){
         Swal.fire({
           title: 'Login error',

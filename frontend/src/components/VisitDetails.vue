@@ -55,6 +55,9 @@
 <script>
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
 
     data(){
@@ -72,7 +75,7 @@ export default {
     methods: {
         penaltyForPatient: function(){
             axios
-            .get(`http://localhost:8000/patients/penalty/${this.visitId}`)
+            .get(`${API_URL}/patients/penalty/${this.visitId}`)
             .then(
                 Swal.fire({
                 title: 'User received penalty',
@@ -85,18 +88,16 @@ export default {
         searchForMedicine: function(){
             if (this.searchMedicine == "") {
                 axios
-                .get("http://localhost:8000/medicines/all")
+                .get(`${API_URL}/medicines/all/${this.visitId}`)
                 .then((response) => {
                     this.searchedMedicines = response.data;
-                    console.log(this.searchedMedicines);
                 });
             } 
             else {
                 axios
-                .get(`http://localhost:8000/medicines/search/${this.searchMedicine}`)
+                .get(`${API_URL}/medicines/search/${this.searchMedicine}/${this.visitId}`)
                 .then((response) => {
                     this.searchedMedicines = response.data;
-                    console.log(this.searchedMedicines);
             });
         }
         },
@@ -109,9 +110,8 @@ export default {
             }
             var saveObj = {visitId: this.visitId, medicineDays: medDay, information: this.visitInformation};
             axios
-            .post('http://localhost:8000/reports/save', saveObj)
+            .post(`${API_URL}/reports/save`, saveObj)
             .then((response) => {
-                console.log(response.data);
                 this.medicineDTO = response.data;
                 this.displayInfo();
             });
@@ -191,8 +191,9 @@ export default {
         getSubstituteForMedicine: function(medicineId){
             this.removeById(medicineId);
             axios
-            .get(`http://localhost:8000/medicines/substitute/${medicineId}/${this.visitId}`)
+            .get(`${API_URL}/medicines/substitute/${medicineId}/${this.visitId}`)
             .then(response => {
+                var temp = this.searchedMedicines;
                 this.searchedMedicines = response.data
                 if(this.searchedMedicines.length > 0){
                     Swal.fire({
@@ -211,15 +212,12 @@ export default {
                         timer: 2000,
                         showConfirmButton: true,
                     })
+                    this.searchedMedicines = temp;
                 }
             });
         },
         removeById: function(id){
             var objToRemove = null;
-            console.log("primljen id");
-            console.log(id);
-            console.log("Prepisani");
-            console.log(this.prescribedMedicine);
             this.prescribedMedicine.forEach(med => {
                 if(med.medicine.id == id) {
                     objToRemove = med;
@@ -237,7 +235,6 @@ export default {
                 confirmButtonText: `Show substitute`,
                 })
                 .then((result) => {
-                    console.log("Ne odgovara lek: " + prescribedMedicine.medicine.id);
                     if(result.isConfirmed){
                         this.getSubstituteForMedicine(prescribedMedicine.medicine.id);
                     }

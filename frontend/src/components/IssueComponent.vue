@@ -63,7 +63,7 @@ export default {
         searchReservation: function(){
             axios
             .get(`http://localhost:8000/reservations/${this.reservationId}`)
-            .then((response) => {this.reservation = response.data; console.log(this.reservation)
+            .then((response) => {this.reservation = response.data;
                 if(this.reservation.date !== 0){
                     this.found = true;
                     this.savedReservationId = this.reservationId;

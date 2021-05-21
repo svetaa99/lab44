@@ -74,6 +74,10 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2'
+
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
     name: "DoctorReservation",
     props: {
@@ -152,7 +156,7 @@ export default {
           }
           else{
             axios
-            .post(`http://localhost:8000/doctorterms/createnew/${this.pharmacyId}`, newTerm) //add param
+            .post(`${API_URL}/doctorterms/createnew/${this.pharmacyId}`, newTerm) //add param
             .then(response => {this.handleResponse(response.data)})
           }
        }
@@ -187,7 +191,7 @@ export default {
         else
           var newReservation = {patientId: this.patient.id, doctorId: 1, start: this.formatDateTimeForReq(this.selectedTerm.start), finish: this.formatDateTimeForReq(this.selectedTerm.finish), pharmacy: this.pharmacyId}
         axios
-        .post('http://localhost:8000/appointments/make-appointment', newReservation)
+        .post(`${API_URL}/appointments/make-appointment`, newReservation)
         .then(response => {
         if(response.data === "Patient unavailable"){
           Swal.fire({
@@ -213,22 +217,21 @@ export default {
       })
     },
       searchDateTime: function(){
-        console.log(this.searchDateTimeObject.searchDate + " " + this.searchDateTimeObject.searchTime);
         axios
-        .post('http://localhost:8000/doctorterms/search-date-time', this.searchDateTimeObject)
+        .post(`${API_URL}/doctorterms/search-date-time`, this.searchDateTimeObject)
         .then(response => {this.freeTerms = response.data})
       }
     },
     mounted: async function(){
         axios
-        .get(`http://localhost:8000/appointments/get-user/${this.visitId}`)
-        .then(response => {this.patient = response.data; console.log(this.patient)});
+        .get(`${API_URL}/appointments/get-user/${this.visitId}`)
+        .then(response => {this.patient = response.data;});
         axios
-        .get(`http://localhost:8000/appointments/get-pharmacy/${this.visitId}`)
+        .get(`${API_URL}/appointments/get-pharmacy/${this.visitId}`)
         .then(response => { this.pharmacyId = response.data; })
         const a = await axios
-        .get(`http://localhost:8000/doctorterms/definedterms/${this.visitId}`)
-        .then(response => {this.freeTerms = response.data; console.log(this.freeTerms)});
+        .get(`${API_URL}/doctorterms/definedterms/${this.visitId}`)
+        .then(response => {this.freeTerms = response.data;});
 
         const tokenItem = JSON.parse(localStorage.getItem('jwt'));
         tokenItem.token.roles.map(el => {

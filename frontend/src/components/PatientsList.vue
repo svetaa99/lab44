@@ -69,6 +69,9 @@
 
 <script>
 import axios from "axios";
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
   name: "PatientsList",
   props: {
@@ -105,16 +108,14 @@ export default {
     },
     searchPatients: function () {
       if (this.searchName == "") {
-        axios.get("http://localhost:8000/patients/all").then((response) => {
+        axios.get(`${API_URL}/patients/all`).then((response) => {
           this.patients = response.data;
-          console.log(this.patients);
         });
       } else {
         axios
-          .get(`http://localhost:8000/patients/${this.searchName}`)
+          .get(`${API_URL}/patients/${this.searchName}`)
           .then((response) => {
             this.patients = response.data;
-            console.log(this.patients);
             this.lastSearchRes = this.searchName;
           });
       }
@@ -122,18 +123,16 @@ export default {
     sortPatients: function (param, order) {
       axios
         .get(
-          `http://localhost:8000/patients/${param}/${order}/${this.lastSearchRes}`
+          `${API_URL}/patients/${param}/${order}/${this.lastSearchRes}`
         )
         .then((response) => {
           this.patients = response.data;
-          console.log(response.data);
         });
     },
   },
   mounted: function () {
-    axios.get("http://localhost:8000/patients/all").then((response) => {
+    axios.get(`${API_URL}/patients/all`).then((response) => {
       this.patients = response.data;
-      console.log(this.patients);
     });
   },
 };
