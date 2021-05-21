@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,8 @@ import com.google.gson.Gson;
 
 import backend.dto.PharmacyDTO;
 import backend.dto.PharmacyMedicinesDTO;
+import backend.models.Address;
+import backend.models.LabAdmin;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicineAddRemoveObject;
@@ -36,6 +39,7 @@ import backend.models.PharmacyMedicines;
 import backend.models.ResponseObject;
 import backend.models.WorkHours;
 import backend.services.IAddressService;
+import backend.services.ILabAdminService;
 import backend.services.IMedicineService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
@@ -54,6 +58,12 @@ public class PharmacyController {
 	
 	@Autowired
 	private IPharmacyMedicinesService pmService;
+	
+	@Autowired
+	private ILabAdminService laService;
+	
+	@Autowired
+	private IAddressService addressService;
 	
 	@Autowired
 	private WorkHoursService whService;
@@ -121,6 +131,34 @@ public class PharmacyController {
 		List<PharmacyDTO> pharmaciesDTO = createPharmacyDTOList(pharmacies);
 		
 		return new ResponseEntity<List<PharmacyDTO>>(pharmaciesDTO, HttpStatus.OK);
+	}
+	
+	@PutMapping("/update-pharmacy")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> updatePharmacy(@RequestBody PharmacyDTO obj) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin la = laService.findByEmail(token);
+		Pharmacy p = la.getPharmacy();
+		
+		if (obj.getName().equals("") || obj.getDescription().equals("")) {
+			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Fields cannot be empty"), HttpStatus.BAD_REQUEST);
+		}
+		
+		if (obj.getAddress() == null) {
+			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Address cannot be empty"), HttpStatus.BAD_REQUEST);
+		}
+		
+		p.setName(obj.getName());
+		p.setDescription(obj.getDescription());
+		
+		Address oldAddress = obj.getAddress();
+		Address address = new Address(oldAddress.getStreet(), oldAddress.getNumber(), oldAddress.getCity(), oldAddress.getCountry(),
+				oldAddress.getLongitude(), oldAddress.getLatitude());
+		p.setAddress(address);
+		addressService.save(address);
+		pharmacyService.save(p);
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(p, 200, ""), HttpStatus.OK);
 	}
 	
 	@GetMapping("/freeTerms/{time}")

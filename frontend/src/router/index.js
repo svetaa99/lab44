@@ -35,6 +35,7 @@ import DermatologistVisitPage from '../views/DermatologistVisitPage.vue'
 import DemandedMedicinesPage from '../views/DemandedMedicinesPage.vue'
 import PromotionsPage from '../views/PromotionsPage.vue'
 import AllPromotionsPage from '../views/AllPromotionsPage.vue'
+import EditPharmacyPage from '../views/EditPharmacyPage.vue'
 
 Vue.use(VueRouter)
 
@@ -213,6 +214,11 @@ const routes = [
     path: '/all-promotions',
     name: 'AllPromotionsPage',
     component: AllPromotionsPage
+  },
+  {
+    path: '/edit-pharmacy/:id',
+    name: 'EditPharmacyPage',
+    component: EditPharmacyPage
   }
 ]
 

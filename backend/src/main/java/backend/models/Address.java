@@ -33,6 +33,16 @@ public class Address {
 	public Address() {
 		
 	}
+	
+	public Address(String street, int number, String city, String country, double longitude, double latitude) {
+		super();
+		this.street = street;
+		this.number = number;
+		this.city = city;
+		this.country = country;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
 
 	public Address(Long id, String street, int number, String city, String country, double longitude, double latitude) {
 		super();
