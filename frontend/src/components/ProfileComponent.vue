@@ -29,28 +29,36 @@
             <table class="table">
               <tbody>
                 <tr>
-                  <td>Points</td>
-                  <td>100</td>
+                  <td>Penalty</td>
+                  <td>{{penalty}}</td>
                 </tr>
               </tbody>
             </table>
             <button class="btn btn-outline-primary">Loyality program</button>
           </div>
-          <br>
+          <br />
           <div class="card mt-3">
             <table class="table">
               <thead>
-                <th>
-                  Appointments
-                </th>
+                <th>Appointments</th>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <button @click="$router.push('my-pharmacist-reservations')" class="btn btn-primary">Pharmacist</button>
+                    <button
+                      @click="$router.push('my-pharmacist-reservations')"
+                      class="btn btn-primary"
+                    >
+                      Pharmacist
+                    </button>
                   </td>
                   <td>
-                    <button @click="$router.push('my-dermatologist-reservations')" class="btn btn-primary">Dermatologist</button>
+                    <button
+                      @click="$router.push('my-dermatologist-reservations')"
+                      class="btn btn-primary"
+                    >
+                      Dermatologist
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -59,17 +67,25 @@
           <div class="card mt-3">
             <table class="table">
               <thead>
-                <th>
-                  Visit history
-                </th>
+                <th>Visit history</th>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <button @click="$router.push('my-pharmacist-visits')" class="btn btn-primary">To Pharmacist</button>
+                    <button
+                      @click="$router.push('my-pharmacist-visits')"
+                      class="btn btn-primary"
+                    >
+                      To Pharmacist
+                    </button>
                   </td>
                   <td>
-                    <button @click="$router.push('my-dermatologist-visits')" class="btn btn-primary">To Dermatologist</button>
+                    <button
+                      @click="$router.push('my-dermatologist-visits')"
+                      class="btn btn-primary"
+                    >
+                      To Dermatologist
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -170,12 +186,15 @@ export default {
   data() {
     return {
       user: {},
+      penalty: 0,
     };
   },
   mounted() {
     axios.get(`${API_URL}/users/user`).then((response) => {
       this.user = response.data;
-      console.log(this.user);
+    });
+    axios.get(`${API_URL}/penalty/my`).then((response) => {
+      this.penalty = response.data;
     });
   },
 };

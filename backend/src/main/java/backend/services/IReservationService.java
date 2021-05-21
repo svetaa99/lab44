@@ -8,4 +8,6 @@ public interface IReservationService extends IService<Reservation> {
 
 	List<Reservation> findMy(Long patientId);
 
+	List<Reservation> findReserved();
+
 }

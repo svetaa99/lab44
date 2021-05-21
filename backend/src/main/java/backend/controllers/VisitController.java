@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
+import backend.dto.DermatologistTermDTO;
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
 import backend.enums.Status;
@@ -46,6 +47,7 @@ import backend.models.WorkHours;
 import backend.services.impl.DoctorService;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PatientService;
+import backend.services.impl.PenaltyService;
 import backend.services.impl.ReportService;
 import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
@@ -73,6 +75,9 @@ public class VisitController {
 	@Autowired
 	private DoctorTermsService dtService;
 	
+	@Autowired
+	private PenaltyService penaltyService;
+	
 	private static Gson g = new Gson();
 	
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -80,6 +85,12 @@ public class VisitController {
 	public ResponseEntity<String> makeAppointment(@RequestBody Visit newReservation){
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
+		
+		// Check if has 3 penalties
+		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		
 		Long doctorId = u.getId();
 		
 		newReservation.setDoctorId(doctorId);
