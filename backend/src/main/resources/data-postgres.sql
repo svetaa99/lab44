@@ -4,15 +4,15 @@ insert into patient (id, name, surname, email, password, address, phone_num, poi
 insert into patient (id, name, surname, email, password, address, phone_num, points, category) values (13, 'Veljko', 'Kosanovic', 'cika.ljave@gmail.com', 'ljave123', 2, '061156678', 9, 'SILVER');
 insert into patient (id, name, surname, email, password, address, phone_num, points, category) values (14, 'Pera', 'Peric', 'pera.peric@gmail.com', 'pera123', 4, '022400400', 1, 'BRONZE');
 
-insert into address (street, number, city, country) values ('JNA', 78, 'Ruma', 'Srbija');
-insert into address (street, number, city, country) values ('Glavna', 123, 'Sremska Mitrovica', 'Srbija');
-insert into address (street, number, city, country) values ('Bulevar', 55, 'Beograd', 'Srbija');
-insert into address (street, number, city, country) values ('Nikole tesle', 71, 'Ruma', 'Srbija');
-insert into address (street, number, city, country) values ('Doktorska', 100, 'Beograd', 'Srbija');
+insert into address (street, number, city, country, latitude, longitude) values ('Pinkijeva', 3, 'Ruma', 'Srbija', 45.00332144112418, 19.82307121321917);
+insert into address (street, number, city, country, latitude, longitude) values ('27. Oktobra', 9, 'Ruma', 'Srbija', 45.01032716131725, 19.818894326712318);
+insert into address (street, number, city, country, latitude, longitude) values ('Ustanicka', 67, 'Beograd', 'Srbija', 44.78682348847335, 20.480522684376773);
+insert into address (street, number, city, country, latitude, longitude) values ('Krusevacka', 30, 'Beograd', 'Srbija', 44.78853815332539, 20.48372415369131);
+insert into address (street, number, city, country, latitude, longitude) values ('Cara Dusana', 67, 'Novi Sad', 'Srbija', 45.24124651222663, 19.82543566904801);
 
-insert into pharmacy (name, address, description, rating, pharmacist_price) values ('Apoteka1', 1, 'opis1', 7, 1000);
-insert into pharmacy (name, address, description, rating, pharmacist_price) values ('Apoteka2', 2, 'opis2', 6, 2000);
-insert into pharmacy (name, address, description, rating, pharmacist_price) values ('Apoteka3', 3, 'opis3', 9, 3000);
+insert into pharmacy (name, address_id, description, rating, pharmacist_price) values ('Apoteka1', 1, 'opis1', 7, 1000);
+insert into pharmacy (name, address_id, description, rating, pharmacist_price) values ('Apoteka2', 2, 'opis2', 6, 2000);
+insert into pharmacy (name, address_id, description, rating, pharmacist_price) values ('Apoteka3', 3, 'opis3', 9, 3000);
 
 insert into medicine(name, type, specification) values ('Lek1', 1, 'neeekaaa speeeec');
 insert into medicine(name, type, specification) values ('Lek2', 2, 'sdfsefs');

@@ -58,7 +58,6 @@ export default {
   mounted() {
     axios.get(`${API_URL}/pharmacies/all`).then((response) => {
       this.pharmacies = response.data;
-      console.log(this.pharmacies);
     });
   },
   methods: {

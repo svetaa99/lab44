@@ -33,6 +33,9 @@ import VacationRequestsPage from '../views/VacationRequestsPage.vue'
 import PharmacistVisitPage from '../views/PharmacistVisitPage.vue'
 import DermatologistVisitPage from '../views/DermatologistVisitPage.vue'
 import DemandedMedicinesPage from '../views/DemandedMedicinesPage.vue'
+import PromotionsPage from '../views/PromotionsPage.vue'
+import AllPromotionsPage from '../views/AllPromotionsPage.vue'
+import EditPharmacyPage from '../views/EditPharmacyPage.vue'
 
 Vue.use(VueRouter)
 
@@ -201,6 +204,21 @@ const routes = [
     path: '/demanded-medicines',
     name: 'DemandedMedicinesPage',
     component: DemandedMedicinesPage
+  },
+  {
+    path: '/promotions',
+    name: 'PromotionsPage',
+    component: PromotionsPage
+  },
+  {
+    path: '/all-promotions',
+    name: 'AllPromotionsPage',
+    component: AllPromotionsPage
+  },
+  {
+    path: '/edit-pharmacy/:id',
+    name: 'EditPharmacyPage',
+    component: EditPharmacyPage
   }
 ]
 
