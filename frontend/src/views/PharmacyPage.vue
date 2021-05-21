@@ -1,6 +1,7 @@
 <template>
-  <div> 
+  <div>
     <PharmacyComponent :pharmacy="pharmacy" />
+    <MapComponent v-if="pharmacy.address" :address="pharmacy.address" :edit="false"/>
     <MedicinesSearch v-model="searchName" @clicked="onSearchClick"/>
     <MedicinesList :medicines="this.medicines" :extra="extra"/>
     <hr>
@@ -13,6 +14,7 @@ import { config } from '@/config.js'
 import MedicinesList from '@/components/MedicinesList'
 import MedicinesSearch from '@/components/MedicinesSearch'
 import PharmacyComponent from '@/components/PharmacyComponent.vue'
+import MapComponent from '../components/MapComponent.vue'
 
 const API_URL = config.API_URL
 
@@ -21,7 +23,8 @@ export default {
   components: {
     MedicinesList,
     MedicinesSearch,
-    PharmacyComponent
+    PharmacyComponent,
+    MapComponent,
   },
   data() {
     return {
@@ -36,13 +39,12 @@ export default {
     const id = arr[arr.length - 1];
     axios
       .get(`${API_URL}/pharmacies/${id}`)
-      .then(response => this.pharmacy = response.data)
+      .then(response => {this.pharmacy = response.data;})
 
     axios
       .get(`${API_URL}/pharmacy-medicines/get-medicines/${id}`)
       .then(response => {
         const pms = response.data
-        console.log(pms)
         pms.map(pm => {
           this.medicines.push(pm.medicine)
         })
@@ -63,9 +65,10 @@ export default {
       } 
       else {
         axios
-          .get(`${API_URL}/pharmacy-medicines/get-medicines-by-name/${searchName}`)
+          .get(`${API_URL}/pharmacy-medicines/get-medicines-by-name/${this.pharmacy.id}/${searchName}`)
           .then(response => {
             const pms = response.data
+            console.log(pms)
             this.medicines = []
             pms.map(pm => {
               this.medicines.push(pm.medicine)

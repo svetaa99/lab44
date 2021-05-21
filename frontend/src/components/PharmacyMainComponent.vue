@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Title -->
-    <h1 class="mt-4 align-left">{{ pharmacy.name }}</h1>
+    <h1 class="mt-4 align-left">{{ pharmacy.name }}<a v-if="userRoles.includes(4)" class="btn btn-primary" :href="`/edit-pharmacy/${pharmacy.id}`">Edit pharmacy</a></h1> 
     <!-- <p class="small align-left">{{ pharmacy.address.street }} {{ pharmacy.address.number }}, {{ pharmacy.address.city }}</p> -->
     <hr />
     <p class="align-left">{{ pharmacy.description }}</p>
@@ -18,6 +18,17 @@
 <script>
 export default {
   props: ["pharmacy"],
+  data() {
+    return {
+      userRoles: [],
+    }
+  },
+  mounted() {
+    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+    tokenItem.token.roles.map(el => {
+      this.userRoles.push(el.id);
+    });
+  },
 };
 </script>
 

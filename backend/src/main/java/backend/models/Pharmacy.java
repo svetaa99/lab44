@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,8 +27,8 @@ public class Pharmacy {
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@Column(name = "address", nullable = false)
-	private Long addressId;
+	@OneToOne
+	private Address address;
 	
 	@Column(name = "description", nullable = false)
 	private String description;
@@ -37,10 +38,6 @@ public class Pharmacy {
 	
 	@Column(name = "pharmacist_price", nullable = false)
 	private double pharmacistPrice;
-	
-//	@ManyToMany
-//	@JoinTable(name = "pharmacy_medicines", joinColumns = @JoinColumn(name = "pharmacy_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "medicine_id", referencedColumnName = "id"))
-//	private List<Medicine> medicines = new ArrayList<Medicine>();
 	
 	@OneToMany(mappedBy = "pharmacy")
 	private List<PharmacyMedicines> pharmacyMedicines;
@@ -72,11 +69,11 @@ public class Pharmacy {
 		
 	}
 
-	public Pharmacy(Long id, String name, Long addressId, String description, double rating, double pharmacistPrice) {
+	public Pharmacy(Long id, String name, Address address, String description, double rating, double pharmacistPrice) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.addressId = addressId;
+		this.address = address;
 		this.description = description;
 		this.rating = rating;
 		this.pharmacistPrice = pharmacistPrice;
@@ -98,12 +95,12 @@ public class Pharmacy {
 		this.name = name;
 	}
 
-	public Long getAddressId() {
-		return addressId;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAddressId(Long addressId) {
-		this.addressId = addressId;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public String getDescription() {
@@ -173,7 +170,7 @@ public class Pharmacy {
 
 	@Override
 	public String toString() {
-		return "Pharmacy [id=" + id + ", name=" + name + ", addressId=" + addressId + ", description=" + description
+		return "Pharmacy [id=" + id + ", name=" + name + ", description=" + description
 				+ ", rating=" + rating + ", pharmacistPrice=" + pharmacistPrice + "]";
 	}
 	
