@@ -111,6 +111,10 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 			long todaysDate) {
 		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate);
 	}
+	@Override
+	public List<PharmacyMedicines> findAvailableByPharmacyId(Long pharmacyId){
+		return pharmacyMedicineRepository.findAvailableByPharmacyId(pharmacyId);
+	}
 	
 
 }

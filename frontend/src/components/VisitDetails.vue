@@ -56,6 +56,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 export default {
+
     data(){
         return{
             visitId: this.$route.params.id,
@@ -121,21 +122,11 @@ export default {
                 var oneMedicineDTO = this.medicineDTO[i];
                 if(oneMedicineDTO.allergic){
                     flag = true;
-                    Swal.fire({
-                    title: 'Alergy',
-                    text: 'Patient is allergic to medicine: ' + oneMedicineDTO.medicine.name,
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                    })
+                    this.processAllergic(oneMedicineDTO);
                 }
                 else if (!oneMedicineDTO.available){
                     flag = true;
-                    Swal.fire({
-                    title: 'Unavailable',
-                    text: 'Medicine ' + oneMedicineDTO.medicine.name + 'is not available!',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                    })
+                    this.processUnavailable(oneMedicineDTO);
                 }
             }
             if(!flag){
@@ -145,21 +136,6 @@ export default {
                     icon: 'success',
                     confirmButtonText: 'Ok'
                 })
-            }
-            else{
-                for(var i = 0; i < this.prescribedMedicine.length; i++){
-                    var one = this.prescribedMedicine[i]; // medicine - days
-                    for(var j = 0; j < this.medicineDTO.length; j++){ 
-                        var two = this.medicineDTO[j]; // full medicine info
-                        if(two.allergic || !two.available){
-                            // if(one.medicine.id == two.medicine.id)
-                            // {
-                            //     this.removeMedicine(one.medicine); 
-                            // }
-                        }
-                    }
-                }
-                //alert("Unavailable or allergic medicines removed from list!");
             }
         },
         redirectToReservation: function(){
@@ -199,7 +175,6 @@ export default {
                         this.prescribedMedicine.push({medicine, days});
                     }
                 });
-            
             }
             else{
                 Swal.fire({
@@ -212,6 +187,83 @@ export default {
         removeMedicine: function(medicine){
             const index = this.prescribedMedicine.indexOf(medicine);
             this.prescribedMedicine.splice(index, 1);
+        },
+        getSubstituteForMedicine: function(medicineId){
+            this.removeById(medicineId);
+            axios
+            .get(`http://localhost:8000/medicines/substitute/${medicineId}/${this.visitId}`)
+            .then(response => {
+                this.searchedMedicines = response.data
+                if(this.searchedMedicines.length > 0){
+                    Swal.fire({
+                        title: 'List updated!',
+                        text: 'Medicine removed from prescribed list',
+                        icon: 'success',
+                        timer: 1000,
+                        showConfirmButton: false,
+                    })
+                }
+                else{
+                    Swal.fire({
+                        title: 'No match',
+                        text: 'There is no fitting medicine for patient in this pharmacy!',
+                        icon: 'warning',
+                        timer: 2000,
+                        showConfirmButton: true,
+                    })
+                }
+            });
+        },
+        removeById: function(id){
+            var objToRemove = null;
+            console.log("primljen id");
+            console.log(id);
+            console.log("Prepisani");
+            console.log(this.prescribedMedicine);
+            this.prescribedMedicine.forEach(med => {
+                if(med.medicine.id == id) {
+                    objToRemove = med;
+                }
+            })
+            this.removeMedicine(objToRemove);
+        },
+        processAllergic: function(prescribedMedicine){
+            Swal.fire({
+                title: 'Alergy',
+                text: 'Patient is allergic to medicine: ' + prescribedMedicine.medicine.name,
+                icon: 'error',
+                showDenyButton: true,
+                denyButtonText: `Delete`,
+                confirmButtonText: `Show substitute`,
+                })
+                .then((result) => {
+                    console.log("Ne odgovara lek: " + prescribedMedicine.medicine.id);
+                    if(result.isConfirmed){
+                        this.getSubstituteForMedicine(prescribedMedicine.medicine.id);
+                    }
+                    else if(result.isDenied){
+                        this.removeById(prescribedMedicine.medicine.id);
+                    }
+                })
+        },
+        processUnavailable: function(prescribedMedicine){
+            Swal.fire({
+                title: 'Unavailable',
+                text: 'Medicine ' + prescribedMedicine.medicine.name + ' is not available!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                showDenyButton: true,
+                denyButtonText: `Delete`,
+                confirmButtonText: `Show substitute`,
+                })
+                .then((result) => {
+                    if(result.isConfirmed){
+                        this.getSubstituteForMedicine(prescribedMedicine.medicine.id);
+                    }
+                    else if(result.isDenied){
+                        this.removeById(prescribedMedicine.medicine.id);
+                    }
+                })
         }
     },
     mounted: function(){

@@ -2,6 +2,7 @@ package backend.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.MedicineDTO;
 import backend.models.Medicine;
+import backend.models.Patient;
+import backend.models.PharmacyMedicines;
+import backend.models.Visit;
 import backend.services.IMedicineService;
+import backend.services.IPharmacyMedicinesService;
+import backend.services.impl.PatientService;
+import backend.services.impl.VisitService;
 
 @RestController
 @RequestMapping(value = "medicines")
@@ -23,6 +30,15 @@ public class MedicineController {
 	
 	@Autowired
 	private IMedicineService medicineService;
+	
+	@Autowired
+	private VisitService visitService;
+	
+	@Autowired
+	private PatientService patientService;
+	
+	@Autowired
+	private IPharmacyMedicinesService pharmMedService;
 	
 	private List<MedicineDTO> createMedicineDTOList(List<Medicine> medicines) {
 		List<MedicineDTO> medicinesDTO = new ArrayList<MedicineDTO>();
@@ -61,6 +77,32 @@ public class MedicineController {
 		MedicineDTO medicineDTO = new MedicineDTO(medicine);
 		
 		return new ResponseEntity<MedicineDTO>(medicineDTO, HttpStatus.OK);
+	}
+	@GetMapping("/substitute/{id}/{visitId}")
+	public ResponseEntity<List<MedicineDTO>> getSubstituteForMedicine(@PathVariable Long id, @PathVariable Long visitId){
+		List<Medicine> substituteList = medicineService.getSubstituteForMedicine(id);
+		
+		//filter this list so there is no allergens or unavailable medicine
+		Visit v = visitService.findById(visitId);
+		Patient p = patientService.findById(v.getPatientId());
+		List<Medicine> allergies = p.getAllergies();
+		
+		List<PharmacyMedicines> available = pharmMedService.findAvailableByPharmacyId(v.getPharmacy());
+		List<Medicine> availableMedicine = new ArrayList<Medicine>();
+		available.forEach(m -> availableMedicine.add(m.getMedicine()));
+		
+		List<Medicine> filteredList = 
+				substituteList
+				.stream()
+				.filter(med -> !allergies.contains(med) && availableMedicine.contains(med))
+				.collect(Collectors.toList());
+		
+		List<MedicineDTO> dtoList = new ArrayList<MedicineDTO>();
+		for (Medicine med : filteredList) {
+			dtoList.add(new MedicineDTO(med));
+		}
+		
+		return new ResponseEntity<List<MedicineDTO>>(dtoList, HttpStatus.OK);
 	}
 	
 }
