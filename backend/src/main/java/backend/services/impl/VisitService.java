@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import backend.enums.Status;
 import backend.models.Visit;
 import backend.repositories.VisitRepository;
 import backend.services.IService;
@@ -65,6 +66,14 @@ public class VisitService implements IService<Visit>{
 	public void delete(Visit obj) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public List<Visit> findByDoctorAndPatient(Long doctorId, Long patientId) {
+		return visitRepository.findByPatientIdAndDoctorIdAndStatus(patientId, doctorId, Status.FINISHED);
+	}
+	
+	public List<Visit> findByPatientAndPharmacy(Long patientId, Long pharmacyId) {
+		return visitRepository.findByPatientIdAndPharmacyAndStatus(patientId, pharmacyId, Status.FINISHED);
 	}
 	
 }

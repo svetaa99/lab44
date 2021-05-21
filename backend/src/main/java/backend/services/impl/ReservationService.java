@@ -45,5 +45,15 @@ public class ReservationService implements IReservationService {
 	public List<Reservation> findReserved() {
 		return reservationRepository.findAllByStatus(Status.RESERVED);
 	}
+
+	@Override
+	public List<Reservation> findByPatientAndMedicineReserved(Long patientId, Long medicineId) {
+		return reservationRepository.findAllByPatientIdAndMedicineIdAndStatus(patientId, medicineId, Status.FINISHED);
+	}
+
+	@Override
+	public List<Reservation> findByPatientAndPharmacyReserved(Long pharmacyId, Long patientId) {
+		return reservationRepository.findAllByPatientIdAndPharmacyAndStatus(patientId, pharmacyId, Status.FINISHED);
+	}
 	
 }

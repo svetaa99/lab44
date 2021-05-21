@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
-import backend.dto.DermatologistTermDTO;
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
 import backend.enums.Status;
