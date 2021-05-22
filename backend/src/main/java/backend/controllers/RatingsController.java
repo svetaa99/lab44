@@ -113,10 +113,17 @@ public class RatingsController {
 	public ResponseEntity<Double> getRating(@PathVariable Long objId, @PathVariable int type) {
 		List<Ratings> ratings = ratingService.findByObjIdAndType(objId, type);
 		int count = ratings.size();
+		
+		if (count == 0) {
+			double mark = 0;
+			return new ResponseEntity<Double>(mark, HttpStatus.OK);
+		}
+		
 		int total = 0;
 		for (Ratings rating : ratings) {
 			total += rating.getMark();
 		}
+		
 		double mark = total / count;
 		return new ResponseEntity<Double>(mark, HttpStatus.OK);
 	}
