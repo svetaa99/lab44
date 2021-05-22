@@ -1,5 +1,7 @@
 package backend.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,6 +107,18 @@ public class RatingsController {
 		ratingService.save(rating);
 		
 		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-rating/{objId}/{type}")
+	public ResponseEntity<Double> getRating(@PathVariable Long objId, @PathVariable int type) {
+		List<Ratings> ratings = ratingService.findByObjIdAndType(objId, type);
+		int count = ratings.size();
+		int total = 0;
+		for (Ratings rating : ratings) {
+			total += rating.getMark();
+		}
+		double mark = total / count;
+		return new ResponseEntity<Double>(mark, HttpStatus.OK);
 	}
 	
 }

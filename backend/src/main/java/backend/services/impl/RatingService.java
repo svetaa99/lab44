@@ -50,4 +50,9 @@ public class RatingService implements IRatingService {
 		return ratingRepository.findByTypeEquals(type);
 	}
 
+	@Override
+	public List<Ratings> findByObjIdAndType(Long objId, int type) {
+		return ratingRepository.findByObjIdAndType(objId, type);
+	}
+
 }

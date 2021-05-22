@@ -14,4 +14,6 @@ public interface RatingRepository extends JpaRepository<Ratings, Long> {
 	
 	List<Ratings> findByTypeEquals(int type);
 	
+	List<Ratings> findByObjIdAndType(Long objId, int type);
+	
 }
