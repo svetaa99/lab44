@@ -36,6 +36,7 @@ import DemandedMedicinesPage from '../views/DemandedMedicinesPage.vue'
 import PromotionsPage from '../views/PromotionsPage.vue'
 import AllPromotionsPage from '../views/AllPromotionsPage.vue'
 import EditPharmacyPage from '../views/EditPharmacyPage.vue'
+import ReportsPage from '../views/ReportsPage.vue'
 
 Vue.use(VueRouter)
 
@@ -219,7 +220,12 @@ const routes = [
     path: '/edit-pharmacy/:id',
     name: 'EditPharmacyPage',
     component: EditPharmacyPage
-  }
+  },
+  {
+    path: '/reports',
+    name: 'ReportsPage',
+    component: ReportsPage
+  },
 ]
 
 const router = new VueRouter({

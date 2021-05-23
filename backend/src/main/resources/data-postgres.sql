@@ -151,3 +151,4 @@ insert into penalty (date, patient_id) values ('2021-05-10', 11);
 insert into ratings (mark, obj_id, patient_id, type) values (5, 1, 10, 1);
 insert into ratings (mark, obj_id, patient_id, type) values (5, 1, 11, 1);
 insert into ratings (mark, obj_id, patient_id, type) values (5, 1, 12, 1);
+insert into ratings (mark, obj_id, patient_id, type) values (7, 1, 10, 2);

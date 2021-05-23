@@ -99,9 +99,9 @@ public class RatingsController {
 		
 		Doctor d = doctorService.findById(rating.getObjId());
 		if (d instanceof Dermatologist) {
-			rating.setType(3);
-		} else {
 			rating.setType(2);
+		} else {
+			rating.setType(3);
 		}
 		
 		ratingService.save(rating);

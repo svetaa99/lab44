@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PharmacyComponent v-if="admin && pharmacy" :pharmacy="pharmacy" :admin="admin"/>
+    <PharmacyComponent v-if="pharmacy" :pharmacy="pharmacy" :admin="admin"/>
     <MapComponent v-if="pharmacy" :address="pharmacy.address" :edit="false"/>
     <h3>Medicines</h3>
     <h6>Search medicines</h6>
