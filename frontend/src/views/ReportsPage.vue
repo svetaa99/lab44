@@ -8,14 +8,48 @@
     </div>
 
     <div class="row">
-      <div v-if="showDermatologists" class="col">
+      <div class="col">
         <h3>Dermatologist ratings</h3><br/>
-        <DoctorListComponent v-bind:doctors="dermatologists" :doctorRole="2" :action="'ratings'" />
+        <table width="80%" class="table table-striped table-bordered table-sm">
+          <thead>
+            <tr>
+              <th class="th-sm">Name</th>
+              <th class="th-sm">Surname</th>
+              <th class="th-sm">Email</th>
+              <th class="th-sm">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="d in this.dermatologists" :key="d.id">
+              <td>{{d.name}}</td>
+              <td>{{d.surname}}</td>
+              <td>{{d.email}}</td>
+              <td>{{d.rating}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="col">
         <h3>Pharmacist ratings</h3><br/>
-        <DoctorListComponent :doctors="pharmacists" :doctorRole="3" :action="'ratings'"/>
+        <table width="80%" class="table table-striped table-bordered table-sm">
+          <thead>
+            <tr>
+              <th class="th-sm">Name</th>
+              <th class="th-sm">Surname</th>
+              <th class="th-sm">Email</th>
+              <th class="th-sm">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="d in this.pharmacists" :key="d.id">
+              <td>{{d.name}}</td>
+              <td>{{d.surname}}</td>
+              <td>{{d.email}}</td>
+              <td>{{d.rating}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -40,7 +74,6 @@ export default {
         pharmacy: -1,
       },
       dermatologists: [],
-      showDermatologists: false,
       pharmacists: [],
     }
   },
@@ -57,34 +90,18 @@ export default {
           })
 
         axios
-          .get(`${API_URL}/labadmins/all-pharmacists`)
+          .get(`${API_URL}/ratings/get-pharmacists-rating`)
           .then(response => {
-            this.pharmacists = response.data;
-            this.pharmacists.map(p => {
-              this.getRating(p, 3).then(data => p.rating = data);
-            })
+            this.pharmacists = response.data.retObj;
           })
 
         axios
-          .get(`${API_URL}/labadmins/all-dermatologists`)
+          .get(`${API_URL}/ratings/get-dermatologists-rating`)
           .then(response => {
-            const dermas = response.data
-            dermas.map(d => {
-              this.getRating(d, 2).then(data => d.rating = data);
-            })
-            this.dermatologists = dermas
-            console.log(this.dermatologists)
-            this.showDermatologists = true
+            this.dermatologists = response.data.retObj;
           })
       })
   },
-  methods: {
-    getRating(doctor, role) {
-      return axios
-        .get(`${API_URL}/ratings/get-rating/${doctor.id}/${role}`)
-        .then(response => response.data)
-    }
-  }
 }
 </script>
 

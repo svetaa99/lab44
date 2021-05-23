@@ -11,7 +11,6 @@
           <th v-if="doctorRole == 3">Pharmacy name</th>
           <th v-if="doctorRole == 3">Rating</th>
           <th v-if="doctorRole == 2">Pharmacies</th>
-          <th v-if="doctorRole == 2 && action === 'ratings'">Rating</th>
         </tr>
       </thead>
       <tbody>
@@ -46,7 +45,7 @@
               @click="handleSelectClick(d)">Select</button>
           </td>
 
-          <td v-if="doctorRole === 2 && action == 'ratings'">
+          <td v-if="doctorRole == 2 && action == 'ratings'">
             {{d.rating}}
           </td>
 
@@ -84,7 +83,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.doctors)
     const tokenItem = JSON.parse(localStorage.getItem('jwt'));
     tokenItem.token.roles.map(el => {
       this.userRoles.push(el.id);

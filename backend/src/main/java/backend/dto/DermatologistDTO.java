@@ -15,6 +15,7 @@ public class DermatologistDTO {
 	private List<Pharmacy> pharmacies;
 	private String startTime;
 	private String finishTime;
+	private double rating;
 	
 	public DermatologistDTO() {
 		
@@ -118,6 +119,14 @@ public class DermatologistDTO {
 	public void setFinishTime(String finishTime) {
 		this.finishTime = finishTime;
 	}
-	
 
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+	
+	
 }

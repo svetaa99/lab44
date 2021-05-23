@@ -1,6 +1,8 @@
 package backend.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +14,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import backend.dto.DermatologistDTO;
+import backend.dto.PharmacistDTO;
 import backend.models.Dermatologist;
 import backend.models.Doctor;
+import backend.models.LabAdmin;
+import backend.models.Pharmacist;
+import backend.models.Pharmacy;
 import backend.models.Ratings;
+import backend.models.ResponseObject;
 import backend.models.User;
+import backend.services.IDermatologistService;
+import backend.services.ILabAdminService;
+import backend.services.IPharmacistService;
 import backend.services.impl.DoctorService;
 import backend.services.impl.RatingService;
 import backend.services.impl.ReservationService;
@@ -41,6 +52,15 @@ public class RatingsController {
 	
 	@Autowired
 	private DoctorService doctorService;
+	
+	@Autowired
+	private ILabAdminService laService;
+	
+	@Autowired
+	private IPharmacistService pharmacistService;
+	
+	@Autowired
+	private IDermatologistService dermatologistService;
 	
 	@GetMapping("/rate-pharmacy/{pharmacyId}/{mark}")
 	public ResponseEntity<String> ratePharmacy(@PathVariable Long pharmacyId, @PathVariable int mark) {
@@ -128,4 +148,65 @@ public class RatingsController {
 		return new ResponseEntity<Double>(mark, HttpStatus.OK);
 	}
 	
+	private double calculateRatings(List<Ratings> ratings) {
+		int count = ratings.size();
+		
+		if (count == 0) {
+			double mark = 0;
+			return 0;
+		}
+		
+		int total = 0;
+		for (Ratings rating : ratings) {
+			total += rating.getMark();
+		}
+		
+		double mark = total / count;
+		return mark;
+	}
+
+	@GetMapping("/get-dermatologists-rating")
+	public ResponseEntity<ResponseObject> getDermatologistsRating() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin la = laService.findByEmail(token);
+		Pharmacy p = la.getPharmacy();
+		
+		List<DermatologistDTO> dtos = new ArrayList<DermatologistDTO>();
+		
+		List<Dermatologist> dermatologists = dermatologistService.findAll()
+				.stream().filter(d -> d.getPharmacies().contains(p)).collect(Collectors.toList());
+		for (Dermatologist dermatologist : dermatologists) {
+			double rating = calculateRatings(ratingService.findByObjIdAndType(dermatologist.getId(), 2));
+			DermatologistDTO dto = new DermatologistDTO();
+			dto.setName(dermatologist.getName());
+			dto.setSurname(dermatologist.getSurname());
+			dto.setEmail(dermatologist.getEmail());
+			dto.setRating(rating);
+			dtos.add(dto);
+		}
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(dtos, 200, ""), HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-pharmacists-rating")
+	public ResponseEntity<ResponseObject> getPharmacistsRating() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin la = laService.findByEmail(token);
+		Pharmacy p = la.getPharmacy();
+		
+		List<PharmacistDTO> dtos = new ArrayList<PharmacistDTO>();
+		
+		List<Pharmacist> pList = pharmacistService.findAllByPharmacy(p.getId());
+		for (Pharmacist pharmacist : pList) {
+			double rating = calculateRatings(ratingService.findByObjIdAndType(pharmacist.getId(), 3));
+			PharmacistDTO dto = new PharmacistDTO();
+			dto.setName(pharmacist.getName());
+			dto.setSurname(pharmacist.getSurname());
+			dto.setEmail(pharmacist.getEmail());
+			dto.setRating(rating);
+			dtos.add(dto);
+		}
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(dtos, 200, ""), HttpStatus.OK);
+	}
 }
