@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h3>Monthly visits</h3>
-    <ChartComponent v-if="loaded" :chartdata="monthlyData" :options="options" />
+    <h3>Quarter visits</h3>
+    <ChartComponent v-if="loaded" :chartdata="quarterData" :options="options" />
   </div>
 </template>
 
@@ -17,33 +17,20 @@ export default {
   data() {
     return {
       loaded: false,
-      visits: {
-        1: -1,
-        2: -1,
-        3: -1,
-        4: -1,
-        5: -1,
-        6: -1,
-        7: -1,
-        8: -1,
-        9: -1,
-        10: -1,
-        11: -1,
-        12: -1,
-      },
       visitsArray: [],
-      monthlyData: null,
+      quarterData: null,
       options: null,
     }
   },
   async mounted() {
-    for (let month = 1; month <= 12; month++) {
-      const response = await axios.get(`${API_URL}/appointments/get-monthly-visits/${month}`)
-      this.visitsArray.push(response.data.retObj)
+    const response = await axios.get(`${API_URL}/appointments/get-quarter-visits`)
+    const visitData = response.data.retObj;
+    for (var k in visitData) {
+      this.visitsArray.push(k);
     }
 
-    this.monthlyData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'October', 'November', 'December'],
+    this.quarterData = {
+        labels: ['1st', '2nd', '3rd'],
         datasets: [
           {
             label: 'Visits',
@@ -59,6 +46,7 @@ export default {
     }
 
     this.loaded = true;
+    
   },
 
 }

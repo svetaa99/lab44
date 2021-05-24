@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -337,6 +339,42 @@ public class VisitController {
 		List<Visit> visits = retVisits.stream().filter(v -> v.getStart().getMonthValue() == month && v.getPharmacy() == p.getId()).collect(Collectors.toList());
 		
 		return new ResponseEntity<ResponseObject>(new ResponseObject(visits.size(), 200, ""), HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/get-quarter-visits")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> getQuarterVisits() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin admin = laService.findByEmail(token);
+		Pharmacy p = pharmacyService.findById(admin.getPharmacy().getId());
+		
+		List<Visit> retVisits = visitService.findAll();
+		List<Visit> firstQ = retVisits.stream()
+				.filter(v -> ((v.getStart().getMonthValue() == 1) || (v.getStart().getMonthValue() == 2) ||
+						(v.getStart().getMonthValue() == 3) || (v.getStart().getMonthValue() == 4))
+						&& v.getPharmacy() == p.getId())
+				.collect(Collectors.toList());
+		
+		List<Visit> secondQ = retVisits.stream()
+				.filter(v -> ((v.getStart().getMonthValue() == 5) || (v.getStart().getMonthValue() == 6) ||
+						(v.getStart().getMonthValue() == 7) || (v.getStart().getMonthValue() == 8))
+						&& v.getPharmacy() == p.getId())
+				.collect(Collectors.toList());
+		
+		List<Visit> thirdQ = retVisits.stream()
+				.filter(v -> ((v.getStart().getMonthValue() == 9) || (v.getStart().getMonthValue() == 10) ||
+						(v.getStart().getMonthValue() == 11) || (v.getStart().getMonthValue() == 12))
+						&& v.getPharmacy() == p.getId())
+				.collect(Collectors.toList());
+		
+		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();
+		
+		retMap.put(1, firstQ.size());
+		retMap.put(2, secondQ.size());
+		retMap.put(3, thirdQ.size());
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
 		
 	}
 	
