@@ -20,8 +20,7 @@ public class VisitService implements IService<Visit>{
 
 	@Override
 	public List<Visit> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return visitRepository.findAll();
 	}
 
 	@Override

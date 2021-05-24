@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import backend.models.Doctor;
 import backend.models.Patient;
+import backend.models.Visit;
 
 public class VisitDTO implements Comparable<VisitDTO>{
 
@@ -30,7 +31,6 @@ public class VisitDTO implements Comparable<VisitDTO>{
 		this.start = start;
 		this.finish = finish;
 	}
-
 
 	public Long getId() {
 		return id;

@@ -52,21 +52,24 @@
         </table>
       </div>
     </div>
-
+    
+    <br/>
+    <div>
+      <GraphVisitsComponent />
+    </div>
   </div>
 </template>
 
 <script>
-import DoctorListComponent from '../components/DoctorListComponent.vue';
+
 import axios from "axios";
 import { config } from "@/config.js";
+import GraphVisitsComponent from '../components/GraphVisitsComponent.vue';
 
 const API_URL = config.API_URL;
 
 export default {
-  components: {
-    DoctorListComponent,
-  },
+  components: { GraphVisitsComponent },
   data() {
     return {
       admin: null,
@@ -101,6 +104,7 @@ export default {
             this.dermatologists = response.data.retObj;
           })
       })
+
   },
 }
 </script>

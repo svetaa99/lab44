@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -37,12 +38,17 @@ import backend.dto.VisitDTO;
 import backend.enums.Status;
 import backend.models.Dermatologist;
 import backend.models.Doctor;
+import backend.models.LabAdmin;
 import backend.models.Patient;
 import backend.models.Pharmacist;
+import backend.models.Pharmacy;
 import backend.models.Report;
+import backend.models.ResponseObject;
 import backend.models.User;
 import backend.models.Visit;
 import backend.models.WorkHours;
+import backend.services.ILabAdminService;
+import backend.services.IPharmacyService;
 import backend.services.impl.DoctorService;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PatientService;
@@ -76,6 +82,12 @@ public class VisitController {
 	
 	@Autowired
 	private PenaltyService penaltyService;
+	
+	@Autowired
+	private ILabAdminService laService;
+	
+	@Autowired
+	private IPharmacyService pharmacyService;
 	
 	private static Gson g = new Gson();
 	
@@ -312,6 +324,20 @@ public class VisitController {
 		Visit v = visitService.findById(visitId);
 		Long pharmacyId = v.getPharmacy();
 		return new ResponseEntity<Long>(pharmacyId, HttpStatus.OK);
+	}
+	
+	@GetMapping("/get-monthly-visits/{month}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> getMonthlyVisits(@PathVariable int month) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin admin = laService.findByEmail(token);
+		Pharmacy p = pharmacyService.findById(admin.getPharmacy().getId());
+		
+		List<Visit> retVisits = visitService.findAll();
+		List<Visit> visits = retVisits.stream().filter(v -> v.getStart().getMonthValue() == month && v.getPharmacy() == p.getId()).collect(Collectors.toList());
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(visits.size(), 200, ""), HttpStatus.OK);
+		
 	}
 	
 	private boolean checkTermTaken(Visit newReservation) {
