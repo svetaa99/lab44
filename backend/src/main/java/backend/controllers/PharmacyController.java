@@ -2,13 +2,20 @@ package backend.controllers;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Year;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,12 +37,14 @@ import com.google.gson.Gson;
 
 import backend.dto.PharmacyDTO;
 import backend.dto.PharmacyMedicinesDTO;
+import backend.enums.Status;
 import backend.models.Address;
 import backend.models.LabAdmin;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicineAddRemoveObject;
 import backend.models.PharmacyMedicines;
+import backend.models.Reservation;
 import backend.models.ResponseObject;
 import backend.models.WorkHours;
 import backend.services.IAddressService;
@@ -43,6 +52,7 @@ import backend.services.ILabAdminService;
 import backend.services.IMedicineService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
+import backend.services.IReservationService;
 import backend.services.impl.WorkHoursService;
 
 @RestController
@@ -67,6 +77,9 @@ public class PharmacyController {
 	
 	@Autowired
 	private WorkHoursService whService;
+	
+	@Autowired
+	private IReservationService reservationService;
 	
 	private List<PharmacyDTO> createPharmacyDTOList(List<Pharmacy> pharmacies) {
 		List<PharmacyDTO> pharmaciesDTO = new ArrayList<PharmacyDTO>();
@@ -281,4 +294,36 @@ public class PharmacyController {
 		
 		return new ResponseEntity<ResponseObject>(new ResponseObject(new PharmacyMedicinesDTO(pm), 200, "Ok"), HttpStatus.OK);
 	}
+	
+	@GetMapping("/get-profits/{startDate}/{endDate}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> getPharmacyProfits(@PathVariable long startDate, @PathVariable long endDate) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin admin = laService.findByEmail(token);
+		Pharmacy p = admin.getPharmacy();
+		
+		List<Reservation> retList = reservationService.findByPharmacyAndStatus(p.getId(), Status.FINISHED);
+		Map<Long, Double> retMap = new HashMap<Long, Double>();
+		
+		LocalDateTime startDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDate), ZoneId.systemDefault());
+		LocalDateTime endDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDate), ZoneId.systemDefault());
+		
+		for (int i = startDateTime.getDayOfYear(); i <= endDateTime.getDayOfYear(); i++) {
+			Year y = Year.of(startDateTime.getYear());
+			LocalDate dt = y.atDay(i);
+			double totalProfit = 0;
+			for (int j = 0; j < retList.size(); j++) {
+				LocalDateTime currDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(retList.get(j).getDate()), ZoneId.systemDefault());
+				if (currDateTime.getDayOfYear() == i) {
+					totalProfit += retList.get(j).getTotalPrice();
+				}
+			}
+			retMap.put(dt.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli(), totalProfit);
+		}
+		
+		
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(new TreeMap<Long, Double>(retMap), 200, ""), HttpStatus.OK);
+	}
+	
 }

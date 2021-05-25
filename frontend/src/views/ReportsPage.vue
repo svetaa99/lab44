@@ -62,6 +62,11 @@
       <h3>Medicine consumption</h3>
       <GraphMedicineConsumptionComponent />
     </div>
+    <div class="row">
+      <h3>Pharmacy profits</h3>
+      <GraphPharmacyProfitsComponent />
+    </div>
+    
   </div>
 </template>
 
@@ -71,11 +76,12 @@ import axios from "axios";
 import { config } from "@/config.js";
 import GraphVisitsComponent from '../components/GraphVisitsComponent.vue';
 import GraphMedicineConsumptionComponent from '../components/GraphMedicineConsumptionComponent.vue';
+import GraphPharmacyProfitsComponent from '../components/GraphPharmacyProfitsComponent.vue';
 
 const API_URL = config.API_URL;
 
 export default {
-  components: { GraphVisitsComponent, GraphMedicineConsumptionComponent },
+  components: { GraphVisitsComponent, GraphMedicineConsumptionComponent, GraphPharmacyProfitsComponent },
   data() {
     return {
       admin: null,

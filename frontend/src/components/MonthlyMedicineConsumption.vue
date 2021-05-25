@@ -28,7 +28,7 @@ export default {
     for (const entry of Object.entries(consData)) {
       this.consArray.push(entry[1]);
     }
-    console.log(this.consArray)
+    
     this.monthlyData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
