@@ -76,6 +76,11 @@ insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-29 18:00:00', '2021-05-29 19:00:00', 2, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 5, '2021-05-27 16:00:00', '2021-05-27 17:00:00', 3, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-05-29 18:00:00', '2021-05-29 19:00:00', 3, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2020-05-29 18:00:00', '2020-05-29 19:00:00', 1, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (14, 5, '2020-06-29 18:00:00', '2020-06-29 19:00:00', 1, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2019-05-29 18:00:00', '2019-05-29 19:00:00', 1, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-11-29 18:00:00', '2021-11-29 19:00:00', 1, 0);
+
 
 insert into patients_allergies (patient_id, medicine_id) values (10, 1);
 insert into patients_allergies (patient_id, medicine_id) values (10, 2);

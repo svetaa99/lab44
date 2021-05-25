@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.sun.mail.iap.Response;
 
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
@@ -328,17 +329,23 @@ public class VisitController {
 		return new ResponseEntity<Long>(pharmacyId, HttpStatus.OK);
 	}
 	
-	@GetMapping("/get-monthly-visits/{month}")
+	@GetMapping("/get-monthly-visits")
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
-	public ResponseEntity<ResponseObject> getMonthlyVisits(@PathVariable int month) {
+	public ResponseEntity<ResponseObject> getMonthlyVisits() {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		LabAdmin admin = laService.findByEmail(token);
 		Pharmacy p = pharmacyService.findById(admin.getPharmacy().getId());
 		
 		List<Visit> retVisits = visitService.findAll();
-		List<Visit> visits = retVisits.stream().filter(v -> v.getStart().getMonthValue() == month && v.getPharmacy() == p.getId()).collect(Collectors.toList());
+		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();
+
+		for (int i = 1; i < 13; i++) {
+			int monthNum = i;
+			List<Visit> visits = retVisits.stream().filter(v -> v.getStart().getMonthValue() == monthNum && v.getPharmacy() == p.getId()).collect(Collectors.toList());
+			retMap.put(i, visits.size());
+		}
 		
-		return new ResponseEntity<ResponseObject>(new ResponseObject(visits.size(), 200, ""), HttpStatus.OK);
+		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
 		
 	}
 	
@@ -377,6 +384,26 @@ public class VisitController {
 		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
 		
 	}
+	
+	@GetMapping("/get-year-visits/{yearNum}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> getYearVisits(@PathVariable int yearNum) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin admin = laService.findByEmail(token);
+		Pharmacy p = pharmacyService.findById(admin.getPharmacy().getId());
+		
+		List<Visit> retVisits = visitService.findAll();
+		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();
+		
+		for (int i = 0; i < yearNum; i++) {
+			int selectedYear = LocalDateTime.now().getYear() - i;
+			List<Visit> visits = retVisits.stream().filter(v -> v.getStart().getYear() == selectedYear && v.getPharmacy() == p.getId()).collect(Collectors.toList());
+			retMap.put(selectedYear, visits.size());
+		}
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
+	}
+
 	
 	private boolean checkTermTaken(Visit newReservation) {
 		List<Visit> patientsAppointments = visitService.findByPatientIdEquals(newReservation.getPatientId());

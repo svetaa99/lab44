@@ -54,7 +54,8 @@
     </div>
     
     <br/>
-    <div>
+    <div class="row justify-content-md-center">
+      <h3>Visits</h3>
       <GraphVisitsComponent />
     </div>
   </div>
