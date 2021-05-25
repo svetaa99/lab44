@@ -18,12 +18,11 @@ insert into medicine(name, type, specification) values ('Lek1', 1, 'neeekaaa spe
 insert into medicine(name, type, specification) values ('Lek2', 2, 'sdfsefs');
 insert into medicine(name, type, specification) values ('Lek3', 2, 'uiyuoirtl');
 
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1619868600000, 1621942200000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 2, 120, 100, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 3, 70, 6, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 1, 200, 26, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1609542000000, 1638399600000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1609542000000, 1638399600000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1609542000000, 1638399600000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 3, 70, 6, 1609542000000, 1638399600000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 1, 200, 26, 1609542000000, 1638399600000);
 
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (1, 'Mika', 'Mikic', 'mika22@gmail.com', 'mika123', 5, '011100100');
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (2, 'Djuka', 'Djukic', 'djuka22@gmail.com', 'djuka123', 5, '011101101');
@@ -89,6 +88,9 @@ insert into patients_allergies (patient_id, medicine_id) values (12, 2);
 
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1588456800000, 2, 200, 0);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 2, 3, 1587852000000, 1, 70, 0);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 3, 1621029600000, 10, 70, 2);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (11, 1, 2, 1587852000000, 4, 480, 2);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1626300000000, 18, 70, 2);
 
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 1, '08:00:00', '21:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (2, 1, '14:00:00', '20:00:00');

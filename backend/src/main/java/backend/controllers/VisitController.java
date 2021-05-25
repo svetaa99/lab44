@@ -89,9 +89,6 @@ public class VisitController {
 	@Autowired
 	private ILabAdminService laService;
 	
-	@Autowired
-	private IPharmacyService pharmacyService;
-	
 	private static Gson g = new Gson();
 	
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -334,7 +331,7 @@ public class VisitController {
 	public ResponseEntity<ResponseObject> getMonthlyVisits() {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		LabAdmin admin = laService.findByEmail(token);
-		Pharmacy p = pharmacyService.findById(admin.getPharmacy().getId());
+		Pharmacy p = admin.getPharmacy();
 		
 		List<Visit> retVisits = visitService.findAll();
 		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();
@@ -354,7 +351,7 @@ public class VisitController {
 	public ResponseEntity<ResponseObject> getQuarterVisits() {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		LabAdmin admin = laService.findByEmail(token);
-		Pharmacy p = pharmacyService.findById(admin.getPharmacy().getId());
+		Pharmacy p = admin.getPharmacy();
 		
 		List<Visit> retVisits = visitService.findAll();
 		List<Visit> firstQ = retVisits.stream()
@@ -390,7 +387,7 @@ public class VisitController {
 	public ResponseEntity<ResponseObject> getYearVisits(@PathVariable int yearNum) {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		LabAdmin admin = laService.findByEmail(token);
-		Pharmacy p = pharmacyService.findById(admin.getPharmacy().getId());
+		Pharmacy p = admin.getPharmacy();
 		
 		List<Visit> retVisits = visitService.findAll();
 		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();

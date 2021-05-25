@@ -58,6 +58,10 @@
       <h3>Visits</h3>
       <GraphVisitsComponent />
     </div>
+    <div class="row justify-content-md-center">
+      <h3>Medicine consumption</h3>
+      <GraphMedicineConsumptionComponent />
+    </div>
   </div>
 </template>
 
@@ -66,11 +70,12 @@
 import axios from "axios";
 import { config } from "@/config.js";
 import GraphVisitsComponent from '../components/GraphVisitsComponent.vue';
+import GraphMedicineConsumptionComponent from '../components/GraphMedicineConsumptionComponent.vue';
 
 const API_URL = config.API_URL;
 
 export default {
-  components: { GraphVisitsComponent },
+  components: { GraphVisitsComponent, GraphMedicineConsumptionComponent },
   data() {
     return {
       admin: null,

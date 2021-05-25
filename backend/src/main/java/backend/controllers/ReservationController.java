@@ -131,7 +131,8 @@ public class ReservationController {
 		
 		notifyPatientViaEmail(r);
 		
-		reservationService.delete(r);
+		r.setStatus(Status.FINISHED);
+		reservationService.save(r);
 		
 		return new ResponseEntity<ReservationDTO>(new ReservationDTO(r), HttpStatus.OK);
 	}
