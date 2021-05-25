@@ -64,21 +64,31 @@ public class RatingsController {
 	
 	@GetMapping("/rate-pharmacy/{pharmacyId}/{mark}")
 	public ResponseEntity<String> ratePharmacy(@PathVariable Long pharmacyId, @PathVariable int mark) {
+		
+		System.out.println("USAO");
+		
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
+		int type = 1;
+		if(!ratingService.findByPatientAndObjAndType(u.getId(), pharmacyId, type).isEmpty()) {
+			System.out.println("Vec je ocenio");
+			return new ResponseEntity<String>("You already rated this pharmacy.", HttpStatus.BAD_REQUEST);
+		}
 		
 		if (!reservationService.findByPatientAndPharmacyReserved(pharmacyId, u.getId()).isEmpty() || !visitService.findByPatientAndPharmacy(u.getId(), pharmacyId).isEmpty()) {
 			Ratings rating = new Ratings();
 			rating.setMark(mark);
 			rating.setObjId(pharmacyId);
 			rating.setPatientId(u.getId());
-			rating.setType(1); // 1 for pharmacy
+			rating.setType(type); // 1 for pharmacy
 			
 			ratingService.save(rating);
 			
 			return new ResponseEntity<String>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<String>(HttpStatus.OK);
+			System.out.println("Nije posetio apoteku");
+			String msg = "You need to have finished appointment in this pharmacy or reserved medicine";
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -87,6 +97,10 @@ public class RatingsController {
 	public ResponseEntity<String> rateMedicine(@PathVariable Long medicineId, @PathVariable int mark) {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
+		
+		if(!ratingService.findByPatientAndObjAndType(u.getId(), medicineId, 4).isEmpty()) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 		
 		if (reservationService.findByPatientAndMedicineReserved(u.getId(), medicineId).isEmpty()) {
 			return new ResponseEntity<String>("Nema pravo", HttpStatus.BAD_REQUEST);
@@ -108,6 +122,18 @@ public class RatingsController {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		
+		Doctor doc = doctorService.findById(doctorId);
+		
+		if (doc instanceof Dermatologist) {
+			if(!ratingService.findByPatientAndObjAndType(u.getId(), doctorId, 2).isEmpty()) {
+				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			}
+		} else {
+			if(!ratingService.findByPatientAndObjAndType(u.getId(), doctorId, 3).isEmpty()) {
+				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			}
+		}
+		
 		if (visitService.findByDoctorAndPatient(doctorId, u.getId()).isEmpty()) {
 			return new ResponseEntity<String>("Nema pravo", HttpStatus.BAD_REQUEST);
 		}
@@ -119,9 +145,9 @@ public class RatingsController {
 		
 		Doctor d = doctorService.findById(rating.getObjId());
 		if (d instanceof Dermatologist) {
-			rating.setType(2);
+			rating.setType(2);	// 2 for dermatologist
 		} else {
-			rating.setType(3);
+			rating.setType(3);	// 3 for pharmacist
 		}
 		
 		ratingService.save(rating);

@@ -14,4 +14,6 @@ public interface IRatingService extends IService<Ratings> {
 	
 	List<Ratings> findByObjIdAndType(Long objId, int type);
 	
+	List<Ratings> findByPatientAndObjAndType(Long patientId, Long objId, int type);
+	
 }

@@ -55,4 +55,9 @@ public class RatingService implements IRatingService {
 		return ratingRepository.findByObjIdAndType(objId, type);
 	}
 
+	@Override
+	public List<Ratings> findByPatientAndObjAndType(Long patientId, Long objId, int type) {
+		return ratingRepository.findByPatientIdAndObjIdAndType(patientId, objId, type);
+	}
+
 }

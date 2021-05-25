@@ -16,4 +16,6 @@ public interface RatingRepository extends JpaRepository<Ratings, Long> {
 	
 	List<Ratings> findByObjIdAndType(Long objId, int type);
 	
+	List<Ratings> findByPatientIdAndObjIdAndType(Long patientId, Long objId, int type);
+	
 }
