@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
+import backend.dto.ReservationDTO;
 import backend.enums.Status;
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
@@ -29,6 +30,7 @@ import backend.models.User;
 import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
+import backend.services.impl.PenaltyService;
 import backend.services.impl.PharmacyService;
 import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
@@ -51,6 +53,9 @@ public class DoctorTermsController {
 	@Autowired
 	private VisitService visitService;
 	
+	@Autowired
+	private PenaltyService penaltyService;
+	
 	private static Gson g = new Gson();
 	
 	@GetMapping("/definedterms/{visitId}")
@@ -66,7 +71,7 @@ public class DoctorTermsController {
 	}
 	
 	@GetMapping("/definedterms-admin/{pharmacyId}/{doctorId}")
-	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")
 	public ResponseEntity<String> getDefinedTermsAdmin(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("doctorId") Long doctorId) {
 		List<DoctorTerms> terms = doctorTermsService.findByDoctorIdEquals(doctorId);
 		List<DoctorTerms> retVal = terms
@@ -85,6 +90,11 @@ public class DoctorTermsController {
 		// Get patient from token
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
+		
+		// Check if has 3 penalties
+		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
+			return new ResponseEntity<List<DermatologistTermDTO>>(HttpStatus.BAD_REQUEST);
+		}
 		
 		// Get term from id
 		DoctorTerms doctorTerm = doctorTermsService.findById(termId);

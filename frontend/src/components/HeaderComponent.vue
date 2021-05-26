@@ -245,6 +245,30 @@
               >Demanded medicines</router-link
             >
           </li>
+
+          <!-- Promotions -->
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/promotions'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/promotions" class="nav-link"
+              >Promotions</router-link
+            >
+          </li>
+
+          <!-- Reports -->
+          <li v-if="userRoles.includes(4)"
+            :class="
+              $route.path === '/reports'
+                ? 'nav-item active'
+                : 'nav-item'
+            ">
+            <router-link to="/reports" class="nav-link"
+              >Reports</router-link
+            >
+          </li>
         </ul>
       </div>
 

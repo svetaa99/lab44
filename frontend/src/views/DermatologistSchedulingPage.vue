@@ -74,7 +74,6 @@ export default {
       .get(`${API_URL}/labadmins/all-dermatologists`)
       .then(response => {
         this.dermatologists = response.data;
-        console.log(response.data)
       })
 
     

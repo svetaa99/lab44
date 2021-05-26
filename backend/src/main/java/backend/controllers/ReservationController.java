@@ -1,11 +1,14 @@
 package backend.controllers;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,8 +35,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.ReservationDTO;
+import backend.enums.Status;
 import backend.models.Medicine;
 import backend.models.Patient;
+import backend.models.Penalty;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.models.Reservation;
@@ -42,6 +48,7 @@ import backend.services.IPatientService;
 import backend.services.IPharmacyMedicinesService;
 import backend.services.IPharmacyService;
 import backend.services.IReservationService;
+import backend.services.impl.PenaltyService;
 import backend.services.impl.PharmacistService;
 import backend.services.impl.UserService;
 
@@ -73,6 +80,9 @@ public class ReservationController {
 
 	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private PenaltyService penaltyService;
 
 	
 	private List<ReservationDTO> createReservationDTOList(List<Reservation> reservations) {
@@ -90,6 +100,11 @@ public class ReservationController {
 		List<Reservation> reservations = reservationService.findAll();
 		
 		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
+	}
+	
+	@GetMapping("/count/{patientId}")
+	public long count(@PathVariable Long patientId) {
+		return penaltyService.countPenaltiesByPatientId(patientId);
 	}
 	
 	@GetMapping("/{reservationId}")
@@ -116,7 +131,8 @@ public class ReservationController {
 		
 		notifyPatientViaEmail(r);
 		
-		reservationService.delete(r);
+		r.setStatus(Status.FINISHED);
+		reservationService.save(r);
 		
 		return new ResponseEntity<ReservationDTO>(new ReservationDTO(r), HttpStatus.OK);
 	}
@@ -151,11 +167,34 @@ public class ReservationController {
 		return new ResponseEntity<ReservationDTO>(HttpStatus.OK);
 	}
 	
+	@Scheduled(cron = "0 */15 * * * *")
+	public void givePenalty() {
+		
+		List<Reservation> allReservations = reservationService.findReserved();
+		
+		for (Reservation reservation : allReservations) {
+			LocalDateTime reservationDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(reservation.getDate()), TimeZone.getDefault().toZoneId());
+			if (reservationDate.isBefore(LocalDateTime.now())) {
+				Penalty penalty = new Penalty(reservation.getPatient().getId(), LocalDate.now());
+				penaltyService.save(penalty);
+				
+				reservation.setStatus(Status.CANCELED);
+				reservationService.save(reservation);
+			}
+		}
+	}
+	
 	@PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ReservationDTO> createReservation(@RequestBody Reservation reservation) {
 		Patient patient = reservation.getPatient();
+		
 		if (patientService.findById(patient.getId()).equals(null)) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.NOT_FOUND);
+		}
+		
+		// Check if has 3 penalties
+		if (penaltyService.countPenaltiesByPatientId(patient.getId()) >= 3) {
+			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
 		Pharmacy pharmacy = reservation.getPharmacy();
@@ -182,6 +221,8 @@ public class ReservationController {
 		if (totalPrice < 0) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);	// status code 400
 		}
+		
+		reservation.setStatus(Status.RESERVED);
 		
 		reservation = reservationService.save(reservation);
 		

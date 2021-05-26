@@ -8,7 +8,7 @@
       </div>
     </div>
     <br />
-    <MedicinesList :medicines="this.medicines" :extra="extra"/>
+    <MedicinesList :medicines="this.medicines" :extra="extra" />
   </div>
 </template>
 

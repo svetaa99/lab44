@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import backend.enums.Status;
 import backend.models.Reservation;
 import backend.repositories.ReservationRepository;
 import backend.services.IReservationService;
@@ -38,6 +39,26 @@ public class ReservationService implements IReservationService {
 	@Override
 	public List<Reservation> findMy(Long patientId) {
 		return reservationRepository.findAllByPatientId(patientId);
+	}
+	
+	@Override
+	public List<Reservation> findReserved() {
+		return reservationRepository.findAllByStatus(Status.RESERVED);
+	}
+
+	@Override
+	public List<Reservation> findByPatientAndMedicineReserved(Long patientId, Long medicineId) {
+		return reservationRepository.findAllByPatientIdAndMedicineIdAndStatus(patientId, medicineId, Status.FINISHED);
+	}
+
+	@Override
+	public List<Reservation> findByPatientAndPharmacyReserved(Long pharmacyId, Long patientId) {
+		return reservationRepository.findAllByPatientIdAndPharmacyIdAndStatus(patientId, pharmacyId, Status.FINISHED);
+	}
+
+	@Override
+	public List<Reservation> findByPharmacyAndStatus(Long pharmacyId, Status status) {
+		return reservationRepository.findByPharmacyIdAndStatus(pharmacyId, status);
 	}
 	
 }

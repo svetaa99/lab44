@@ -87,6 +87,14 @@ public class PharmacistController {
 		return new ResponseEntity<List<PharmacistDTO>>(pDTOs, HttpStatus.OK);
 	}
 	
+	@GetMapping("/all-from-pharmacy/{pharmacyId}")
+	public ResponseEntity<List<PharmacistDTO>> getAllFromPharmacy(@PathVariable Long pharmacyId) {
+		List<Pharmacist> pharmacists = pharmacistService.findAllByPharmacy(pharmacyId);
+		List<PharmacistDTO> pDTOs = createPharmacistDTOList(pharmacists);
+		
+		return new ResponseEntity<List<PharmacistDTO>>(pDTOs, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PharmacistDTO>> searchPharmacists(@RequestBody PharmacistDTO obj) {
 		String name = obj.getName();

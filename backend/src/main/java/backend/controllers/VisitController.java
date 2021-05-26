@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -31,21 +34,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.sun.mail.iap.Response;
 
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
 import backend.enums.Status;
 import backend.models.Dermatologist;
 import backend.models.Doctor;
+import backend.models.LabAdmin;
 import backend.models.Patient;
 import backend.models.Pharmacist;
+import backend.models.Pharmacy;
 import backend.models.Report;
+import backend.models.ResponseObject;
 import backend.models.User;
 import backend.models.Visit;
 import backend.models.WorkHours;
+import backend.services.ILabAdminService;
+import backend.services.IPharmacyService;
 import backend.services.impl.DoctorService;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PatientService;
+import backend.services.impl.PenaltyService;
 import backend.services.impl.ReportService;
 import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
@@ -73,6 +83,12 @@ public class VisitController {
 	@Autowired
 	private DoctorTermsService dtService;
 	
+	@Autowired
+	private PenaltyService penaltyService;
+	
+	@Autowired
+	private ILabAdminService laService;
+	
 	private static Gson g = new Gson();
 	
 	@PostMapping(value = "/make-appointment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -80,6 +96,12 @@ public class VisitController {
 	public ResponseEntity<String> makeAppointment(@RequestBody Visit newReservation){
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
+		
+		// Check if has 3 penalties
+		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		
 		Long doctorId = u.getId();
 		
 		newReservation.setDoctorId(doctorId);
@@ -303,6 +325,82 @@ public class VisitController {
 		Long pharmacyId = v.getPharmacy();
 		return new ResponseEntity<Long>(pharmacyId, HttpStatus.OK);
 	}
+	
+	@GetMapping("/get-monthly-visits")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> getMonthlyVisits() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin admin = laService.findByEmail(token);
+		Pharmacy p = admin.getPharmacy();
+		
+		List<Visit> retVisits = visitService.findAll();
+		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();
+
+		for (int i = 1; i < 13; i++) {
+			int monthNum = i;
+			List<Visit> visits = retVisits.stream().filter(v -> v.getStart().getMonthValue() == monthNum && v.getPharmacy() == p.getId()).collect(Collectors.toList());
+			retMap.put(i, visits.size());
+		}
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/get-quarter-visits")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> getQuarterVisits() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin admin = laService.findByEmail(token);
+		Pharmacy p = admin.getPharmacy();
+		
+		List<Visit> retVisits = visitService.findAll();
+		List<Visit> firstQ = retVisits.stream()
+				.filter(v -> ((v.getStart().getMonthValue() == 1) || (v.getStart().getMonthValue() == 2) ||
+						(v.getStart().getMonthValue() == 3) || (v.getStart().getMonthValue() == 4))
+						&& v.getPharmacy() == p.getId())
+				.collect(Collectors.toList());
+		
+		List<Visit> secondQ = retVisits.stream()
+				.filter(v -> ((v.getStart().getMonthValue() == 5) || (v.getStart().getMonthValue() == 6) ||
+						(v.getStart().getMonthValue() == 7) || (v.getStart().getMonthValue() == 8))
+						&& v.getPharmacy() == p.getId())
+				.collect(Collectors.toList());
+		
+		List<Visit> thirdQ = retVisits.stream()
+				.filter(v -> ((v.getStart().getMonthValue() == 9) || (v.getStart().getMonthValue() == 10) ||
+						(v.getStart().getMonthValue() == 11) || (v.getStart().getMonthValue() == 12))
+						&& v.getPharmacy() == p.getId())
+				.collect(Collectors.toList());
+		
+		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();
+		
+		retMap.put(1, firstQ.size());
+		retMap.put(2, secondQ.size());
+		retMap.put(3, thirdQ.size());
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/get-year-visits/{yearNum}")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	public ResponseEntity<ResponseObject> getYearVisits(@PathVariable int yearNum) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		LabAdmin admin = laService.findByEmail(token);
+		Pharmacy p = admin.getPharmacy();
+		
+		List<Visit> retVisits = visitService.findAll();
+		Map<Integer, Integer> retMap = new HashMap<Integer, Integer>();
+		
+		for (int i = 0; i < yearNum; i++) {
+			int selectedYear = LocalDateTime.now().getYear() - i;
+			List<Visit> visits = retVisits.stream().filter(v -> v.getStart().getYear() == selectedYear && v.getPharmacy() == p.getId()).collect(Collectors.toList());
+			retMap.put(selectedYear, visits.size());
+		}
+		
+		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
+	}
+
 	
 	private boolean checkTermTaken(Visit newReservation) {
 		List<Visit> patientsAppointments = visitService.findByPatientIdEquals(newReservation.getPatientId());

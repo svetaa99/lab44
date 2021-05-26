@@ -47,7 +47,7 @@ public class Reservation {
 		
 	}
 
-	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity, double totalPrice) {
+	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity, double totalPrice, Status status) {
 		super();
 		this.id = id;
 		this.patient = patient;
@@ -56,6 +56,7 @@ public class Reservation {
 		this.date = date;
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
+		this.status = status;
 	}
 
 	public Long getId() {
@@ -114,11 +115,19 @@ public class Reservation {
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+	
+	public Status getStatus() {
+		return status;
+	}
+	
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {
 		return "Reservation [patient=" + patient + ", pharmacy=" + pharmacy + ", medicine=" + medicine + ", date="
-				+ date + ", quantity=" + quantity + ", totalPrice=" + totalPrice + "]";
+				+ date + ", quantity=" + quantity + ", totalPrice=" + totalPrice +  ", status=" + status + "]";
 	}
 	
 	

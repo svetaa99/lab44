@@ -38,4 +38,9 @@ public class PenaltyService implements IService<Penalty>{
 	public List<Penalty> findByPatientId(Long id) {
 		return penaltyRepo.findByPatientIdEquals(id);
 	}
+	
+	public long countPenaltiesByPatientId(Long patientId) {
+		return penaltyRepo.countByPatientId(patientId);
+	}
+	
 }
