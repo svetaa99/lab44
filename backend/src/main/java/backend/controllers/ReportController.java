@@ -22,10 +22,13 @@ import backend.models.MedicineReportDTO;
 import backend.models.Patient;
 import backend.models.PharmacyMedicines;
 import backend.models.Report;
+import backend.models.Reservation;
 import backend.models.Visit;
 import backend.services.IMedicineService;
 import backend.services.IPharmacyMedicinesService;
+import backend.services.IReservationService;
 import backend.services.impl.PatientService;
+import backend.services.impl.PharmacyService;
 import backend.services.impl.ReportService;
 import backend.services.impl.VisitService;
 
@@ -49,6 +52,12 @@ public class ReportController {
 	
 	@Autowired
 	private VisitService visitService;
+	
+	@Autowired
+	private PharmacyService pharmacyService;
+	
+	@Autowired
+	private IReservationService reservationService;
 
 	//private static Gson g = new Gson();
 	
@@ -90,11 +99,12 @@ public class ReportController {
 			visitService.save(visitReport);
 			reportService.save(newReport);
 			updateMedicineQuantity(medDTO, pharmacyId);
+			createMedicineReservations(pharmacyId, visitReport.getPatientId(), medDTO);
 		}
 		return new ResponseEntity<List<MedicineReportDTO>>(medDTO, HttpStatus.OK);
 	}
 	public boolean checkAvailable(Long pharmacyId, Long medicineId) {
-		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(pharmacyId, medicineId);
+		PharmacyMedicines pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, System.currentTimeMillis());
 		
 		if(pm == null)
 			return false;
@@ -119,6 +129,20 @@ public class ReportController {
 			pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medRep.getMedicine().getId(), System.currentTimeMillis());
 			pm.decQuantity();
 			pmService.save(pm);
+		}
+	}
+	public void createMedicineReservations(Long pharmId, Long patId, List<MedicineReportDTO> medicines) {
+		Reservation r;
+		for (MedicineReportDTO med : medicines) {
+			r = new Reservation(patientService.findById(patId),
+					pharmacyService.findById(pharmId), 
+					med.getMedicine(),
+					System.currentTimeMillis(),
+					1, 
+					pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmId, med.getMedicine().getId(), System.currentTimeMillis())
+					.getPrice(),
+					Status.FINISHED);
+			reservationService.save(r);
 		}
 	}
 }

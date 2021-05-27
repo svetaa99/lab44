@@ -88,7 +88,7 @@ public class MedicineController {
 		List<PharmacyMedicines> pharmMedicines = pharmMedService.findAllByPharmacyId(pharmacyId);
 		
 		List<Medicine> medicines = new ArrayList<Medicine>();
-		pharmMedicines.forEach(med -> medicines.add(med.getMedicine()));
+		pharmMedicines.forEach(med -> { if(!medicines.contains(med.getMedicine())) medicines.add(med.getMedicine()); });
 		
 		List<MedicineDTO> medicinesDTO = createMedicineDTOList(medicines);
 		

@@ -109,7 +109,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	@Override
 	public PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId,
 			long todaysDate) {
-		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate);
+		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate).get(0);
 	}
 	
 	@Override

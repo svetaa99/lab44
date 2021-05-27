@@ -34,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.sun.mail.iap.Response;
 
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
@@ -51,7 +50,6 @@ import backend.models.User;
 import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.services.ILabAdminService;
-import backend.services.IPharmacyService;
 import backend.services.impl.DoctorService;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PatientService;
