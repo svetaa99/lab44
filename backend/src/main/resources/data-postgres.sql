@@ -117,7 +117,7 @@ insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values 
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (2, 1, '14:00:00', '20:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (3, 2, '10:00:00', '16:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (4, 2, '16:00:00', '22:00:00');
-insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 2, '18:00:00', '20:00:00');
+insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 3, '18:00:00', '20:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (5, 3, '14:00:00', '22:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (6, 1, '13:00:00', '21:00:00');
 

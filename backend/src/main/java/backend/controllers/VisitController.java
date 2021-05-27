@@ -1,6 +1,7 @@
 package backend.controllers;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -456,9 +457,11 @@ public class VisitController {
 			  Doctor doc = doctorService.findById(doctorId);
 			  String DOCTORS_NAME = doc.getName();
 			  
-			  String DATE_TIME = startTime.toString();
+			  String formatterS = "HH:mm dd-MM-yyyy";
+			  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatterS);
+			  String DATE_TIME = formatter.format(startTime);
 			  
-		      msg.setText("Dear " + NAME + ",\nYour doctor " + DOCTORS_NAME + " has appointed new treatment on " + DATE_TIME + ".\nSincerely yours,\nLABONI44.");
+		      msg.setText("Dear " + NAME + ",\nYour doctor " + DOCTORS_NAME + " has appointed new treatment at " + DATE_TIME + ".\nSincerely yours,\nLABONI44.");
 		      msg.setSentDate(new Date());
 		      Transport.send(msg);
 		      System.out.println("Message sent.");
