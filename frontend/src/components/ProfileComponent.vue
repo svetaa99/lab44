@@ -37,7 +37,7 @@
             <button class="btn btn-outline-primary">Loyality program</button>
           </div>
           <br />
-          <div class="card mt-3">
+          <div class="card mt-3" v-if="userRoles.includes(1)">
             <table class="table">
               <thead>
                 <th>Appointments</th>
@@ -64,7 +64,7 @@
               </tbody>
             </table>
           </div>
-          <div class="card mt-3">
+          <div class="card mt-3" v-if="userRoles.includes(1)">
             <table class="table">
               <thead>
                 <th>Visit history</th>
@@ -124,7 +124,7 @@
               </div>
             </div>
           </div>
-          <div class="card mb-3">
+          <div class="card mb-3" v-if="userRoles.includes(1)">
             <div class="card-body">
               <h3>Alergije</h3>
               <br />
@@ -187,14 +187,22 @@ export default {
     return {
       user: {},
       penalty: 0,
+      userRoles: [],
     };
   },
   mounted() {
     axios.get(`${API_URL}/users/user`).then((response) => {
       this.user = response.data;
+      console.log(response.data);
     });
     axios.get(`${API_URL}/penalty/my`).then((response) => {
       this.penalty = response.data;
+    });
+
+    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+
+    tokenItem.token.roles.map(el => {
+      this.userRoles.push(el.id);
     });
   },
 };
