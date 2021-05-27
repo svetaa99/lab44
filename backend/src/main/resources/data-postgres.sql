@@ -48,7 +48,7 @@ insert into pharmacist (id, name, surname, email, password, address, phone_num, 
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (6, 'Djordje', 'Volas', 'djokica@gmail.com', 'djoka123', 5, '011201201', 7, 1);
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (7, 'Stefan', 'Volkovic', 'stefke@gmail.com', 'stefi123', 5, '011202202', 8, 1);
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (8, 'Marko', 'Markovic', 'markelof@gmail.com', 'mare123', 5, '011203203', 9, 2);
-insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (9, 'Sara', 'Neskovic', 'sara@gmail.com', 'sara123', 5, '0112032123', 10, 3);
+insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (9, 'Sara', 'Neskovic', 'sara@gmail.com', 'chang3m3', 5, '0112032123', 10, 3);
 
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,1);
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,2);
@@ -94,6 +94,7 @@ insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (14, 5, '2020-06-29 18:00:00', '2020-06-29 19:00:00', 1, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2019-05-29 18:00:00', '2019-05-29 19:00:00', 1, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-11-29 18:00:00', '2021-11-29 19:00:00', 1, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-26 8:30:00', '2021-05-26 9:30:00', 1, 0);
 
 
 insert into patients_allergies (patient_id, medicine_id) values (10, 1);
@@ -134,6 +135,7 @@ insert into user_role (user_id, role_id) VALUES (5, 3);
 insert into user_role (user_id, role_id) VALUES (6, 3);
 insert into user_role (user_id, role_id) VALUES (7, 3);
 insert into user_role (user_id, role_id) VALUES (8, 3);
+insert into user_role (user_id, role_id) VALUES (9, 3);
 insert into user_role (user_id, role_id) VALUES (10, 1);
 insert into user_role (user_id, role_id) VALUES (11, 1);
 insert into user_role (user_id, role_id) VALUES (12, 1);

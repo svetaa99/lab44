@@ -77,6 +77,7 @@ export default {
       loginObject: null,
       hasLoginError: false,
       jwt: null,
+      userRoles: [],
     };
   },
   methods: {
@@ -107,7 +108,19 @@ export default {
 			  }).then(() => {
           this.saveUserToLocalStorage(this.jwt); //save JWT and EXPIRATION
           this.addAxiosInterceptors(axios);
-          window.location.href="http://localhost:8080/";
+
+          this.jwt.roles.map(el => {
+            this.userRoles.push(el.id);
+          });
+          localStorage.setItem('pw', this.password);
+          if((this.userRoles.includes(2) || this.userRoles.includes(3)) && this.password == "chang3m3"){
+            localStorage.setItem('pw', this.password);
+            window.location.href="http://localhost:8080/profile";
+          }
+          else{
+            localStorage.setItem('pw', '');
+            window.location.href="http://localhost:8080/";
+          }
         })
         
       }

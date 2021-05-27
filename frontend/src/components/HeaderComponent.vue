@@ -293,6 +293,7 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem('jwt');
+      localStorage.removeItem('pw');
       window.location.href = "http://localhost:8080/";
     }  
   },
