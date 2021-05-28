@@ -156,7 +156,7 @@ export default {
           }
           else{
             axios
-            .post(`${API_URL}/doctorterms/createnew/${this.pharmacyId}`, newTerm) //add param
+            .post(`${API_URL}/doctorterms/createnew/${this.visitId}`, newTerm) //add param
             .then(response => {this.handleResponse(response.data)})
           }
        }
@@ -176,9 +176,10 @@ export default {
           icon: 'error',
           confirmButtonText: 'Ok'
         })
-      : respData == "Not in your working hours" ? 
+      : respData.startsWith("Work hours|")  ? 
         Swal.fire({
           title: 'Not in your working hours',
+          text: respData.split("|")[1],
           icon: 'error',
           confirmButtonText: 'Ok'
         }) : this.freeTerms = respData;
