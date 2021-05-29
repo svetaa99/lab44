@@ -35,11 +35,9 @@ const API_URL = config.API_URL;
 
 export default {
     name: "DoctorScheduledVisits",
-    props: {
-        scheduledVisits: Array,
-    },
     data(){
         return {
+            scheduledVisits: []
         };
     },
     methods: {

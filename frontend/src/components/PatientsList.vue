@@ -74,15 +74,13 @@ const API_URL = config.API_URL;
 
 export default {
   name: "PatientsList",
-  props: {
-    patients: Array,
-  },
   data() {
     return {
       searchName: "",
       lastSearchRes: "no-search",
       sortOrder: 0,
       sortColumn: "",
+      patients: [],
     };
   },
   methods: {

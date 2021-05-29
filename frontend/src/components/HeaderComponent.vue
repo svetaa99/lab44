@@ -288,6 +288,7 @@ export default {
   data() {
     return {
       userRoles: [],
+      isLoggedIn: false,
     };
   },
   methods: {
