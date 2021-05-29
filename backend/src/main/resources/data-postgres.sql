@@ -95,6 +95,7 @@ insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2019-05-29 18:00:00', '2019-05-29 19:00:00', 1, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-11-29 18:00:00', '2021-11-29 19:00:00', 1, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-26 8:30:00', '2021-05-26 9:30:00', 1, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-29 2:00:00', '2021-05-29 3:30:00', 1, 0);
 
 
 insert into patients_allergies (patient_id, medicine_id) values (10, 1);
@@ -117,7 +118,7 @@ insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values 
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (2, 1, '14:00:00', '20:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (3, 2, '10:00:00', '16:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (4, 2, '16:00:00', '22:00:00');
-insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 3, '18:00:00', '20:00:00');
+insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 3, '13:00:00', '20:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (5, 3, '14:00:00', '22:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (6, 1, '13:00:00', '21:00:00');
 

@@ -98,7 +98,7 @@ const routes = [
   },
   {
     path: '/employee-appointments/:id',
-    name: 'VisitDetails',
+    name: 'VisitPage',
     component: VisitPage
   },
   {

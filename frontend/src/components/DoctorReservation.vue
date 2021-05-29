@@ -176,7 +176,7 @@ export default {
           icon: 'error',
           confirmButtonText: 'Ok'
         })
-      : respData.startsWith("Work hours|")  ? 
+      : String(respData).startsWith("Work hours|")  ? 
         Swal.fire({
           title: 'Not in your working hours',
           text: respData.split("|")[1],
@@ -207,6 +207,13 @@ export default {
           icon: 'error',
           confirmButtonText: 'Ok'
         });
+        }
+        else if(response.data === "You already have scheduled meeting at that time"){
+          Swal.fire({
+            text: 'You already have scheduled meeting at that time!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          });
         }
         else{
           Swal.fire({

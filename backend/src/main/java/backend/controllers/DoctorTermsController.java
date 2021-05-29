@@ -127,8 +127,7 @@ public class DoctorTermsController {
 	@PostMapping(value = "/createnew/{visitId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')") //DERMATOLOGIST ONLY
 	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm, @PathVariable("visitId") Long visitId){
-		System.out.println("We got : " + newTerm + "\n\n from client...");
-		
+
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		Long doctorId = u.getId();
@@ -138,23 +137,19 @@ public class DoctorTermsController {
 		if(checkIfTakenTerm(newTerm)) {
 			if(checkIfInWorkingHours(newTerm)) {
 				doctorTermsService.save(newTerm);
-				System.out.println("Object saved to db...");
 			}
 			else {
 				List<WorkHours> whs = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, visitService.findById(visitId).getPharmacy());
-				System.out.println("D-ID" + doctorId + "  P-ID" + visitService.findById(visitId).getPharmacy() + "size: " + whs.size());
 				String ret = "Work hours|";
 				for (WorkHours wh : whs) {
 					ret += wh.getStartTime().toString();
 					ret += "-";
 					ret += wh.getFinishTime().toString();
 				}
-				System.out.println(ret);
 				return new ResponseEntity<String>(ret, HttpStatus.OK);
 			}
 		}
 		else {
-			System.out.println("Taken term...");
 			return new ResponseEntity<String>("Taken term", HttpStatus.OK);
 		}
 		List<DoctorTerms> retVal = filterAndSortTerms(doctorTermsService.findByDoctorIdEquals(doctorId), visitId);
@@ -255,7 +250,7 @@ public class DoctorTermsController {
 				return false;
 			else if(startTime.equals(doctorTerms.getStart()) || finishTime.equals(doctorTerms.getFinish()))
 				return false;
-		} 
+		}
 		return true;
 	}
 	private boolean checkIfInWorkingHours(DoctorTerms newTerm) {
