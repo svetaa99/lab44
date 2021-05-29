@@ -103,8 +103,8 @@ export default {
 				title:"Successfully logged in",
 				text:"Welcome!",
 				icon: "success",
-				button: "Ok",
-        time: 1000,
+				confirmButtonText: 'Ok',
+        timer: 1200,
 			  }).then(() => {
           this.saveUserToLocalStorage(this.jwt); //save JWT and EXPIRATION
           this.addAxiosInterceptors(axios);
