@@ -26,14 +26,11 @@ export default {
       axios
       .get(`${API_URL}/appointments/valid-check/${id}`)
       .then(response => {
-          if(!response.data){
+          if(!response.data)
               next('/');
-          }
           else 
             next();
       });
-
-      
     }
 }
 </script>
