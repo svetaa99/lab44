@@ -39,6 +39,7 @@ import backend.enums.Status;
 import backend.models.Medicine;
 import backend.models.Patient;
 import backend.models.Penalty;
+import backend.models.Pharmacist;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
 import backend.models.Reservation;
@@ -112,10 +113,25 @@ public class ReservationController {
 	public ResponseEntity<ReservationDTO> getById(@PathVariable Long reservationId){
 		Reservation r = reservationService.findById(reservationId);
 		
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		Pharmacist p = (Pharmacist) u;
+		
 		ReservationDTO rDTO = new ReservationDTO();
-		if(r == null) {
-			return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
-		}
+		ResponseEntity<ReservationDTO> empty = new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
+		
+		if(r == null) 
+			return empty;
+
+		if(!r.getPharmacy().equals(p.getPharmacy()))
+			return empty;
+		
+		if(r.getDate() < System.currentTimeMillis())
+			return empty;
+		
+		if(r.getStatus() != Status.RESERVED)
+			return empty;
+		
 		rDTO = new ReservationDTO(r);
 		return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
 	}
