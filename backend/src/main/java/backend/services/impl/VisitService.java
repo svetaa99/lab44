@@ -36,8 +36,8 @@ public class VisitService implements IService<Visit>{
 		return visitRepository.findByPatientIdEquals(patientId);
 	}
 	
-	public LocalDateTime lastVisitByPatientIdEquals(Long patientId) {
-		List<Visit> allPatientsVisits = visitRepository.findByPatientIdEquals(patientId);
+	public LocalDateTime lastVisitByPatientIdAndDoctorIdEquals(Long patientId, Long doctorId) {
+		List<Visit> allPatientsVisits = visitRepository.findByPatientIdAndDoctorIdAndStatus(patientId, doctorId, Status.FINISHED);
 
 		if(allPatientsVisits.size() == 0)
 			return null;

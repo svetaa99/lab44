@@ -22,9 +22,11 @@ import com.google.gson.Gson;
 import backend.dto.PatientDTO;
 import backend.models.Patient;
 import backend.models.Penalty;
+import backend.models.User;
 import backend.models.Visit;
 import backend.services.impl.PatientService;
 import backend.services.impl.PenaltyService;
+import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
 import comparators.PatientDTOComparator;
 
@@ -41,6 +43,9 @@ public class PatientController {
 	
 	@Autowired
 	private PenaltyService penaltyService;
+	
+	@Autowired
+	private UserService userService;
 	
 	private static Gson g = new Gson();
 	
@@ -119,17 +124,17 @@ public class PatientController {
 	}
 	
 	public List<PatientDTO> turnPatientsToDTO(List<Patient> patients){
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
 		List<PatientDTO> patientsDTO = new ArrayList<>();
-		//moze se dodati ovde filtriranje samo onih koje je pregledao
-		//  u lastVisitByPatientIdEquals proslediti i doctorId 
-		//	dodati repo metodu findByPatientIdAndDoctorIdEquals
-		//  u else continue;
+		
 		for (Patient p : patients) {
-			LocalDateTime lastVisit = visitService.lastVisitByPatientIdEquals(p.getId());
+			LocalDateTime lastVisit = visitService.lastVisitByPatientIdAndDoctorIdEquals(p.getId(), u.getId());
 			if(lastVisit!=null)
 				patientsDTO.add(new PatientDTO(p, lastVisit.toLocalDate()));
 			else
-				patientsDTO.add(new PatientDTO(p, null));
+				continue;
 		}
 		return patientsDTO;
 	}
