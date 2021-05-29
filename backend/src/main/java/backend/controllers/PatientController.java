@@ -45,8 +45,8 @@ public class PatientController {
 	private static Gson g = new Gson();
 	
 	@GetMapping("/all")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST', 'LAB_ADMIN', 'HEAD_ADMIN')")
 	public ResponseEntity<String> getPatients() {
-		System.out.println("Returning patients...");
 		
 		List<Patient> retVal = patientService.findAll();
 		
@@ -60,14 +60,7 @@ public class PatientController {
 		System.out.println("Returning patients searched by name...");
 		List<Patient> retVal = patientService.findAllByName(name);
 		
-		List<PatientDTO> patientsDTO = new ArrayList<>();
-		for (Patient p : retVal) {
-			LocalDateTime lastVisit = visitService.lastVisitByPatientIdEquals(p.getId());
-			if(lastVisit!=null)
-				patientsDTO.add(new PatientDTO(p, lastVisit.toLocalDate()));
-			else
-				patientsDTO.add(new PatientDTO(p, null));
-		}
+		List<PatientDTO> patientsDTO = turnPatientsToDTO(retVal);
 		
 		return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
 	}
@@ -127,6 +120,10 @@ public class PatientController {
 	
 	public List<PatientDTO> turnPatientsToDTO(List<Patient> patients){
 		List<PatientDTO> patientsDTO = new ArrayList<>();
+		//moze se dodati ovde filtriranje samo onih koje je pregledao
+		//  u lastVisitByPatientIdEquals proslediti i doctorId 
+		//	dodati repo metodu findByPatientIdAndDoctorIdEquals
+		//  u else continue;
 		for (Patient p : patients) {
 			LocalDateTime lastVisit = visitService.lastVisitByPatientIdEquals(p.getId());
 			if(lastVisit!=null)

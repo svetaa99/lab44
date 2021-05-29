@@ -412,7 +412,7 @@ public class VisitController {
 		Visit v = visitService.findById(visitId);
 		
 		ResponseEntity<String> f = new ResponseEntity<String>("false", HttpStatus.OK);
-		System.out.println("POGODJEN");
+		
 		if(v.getDoctorId() != u.getId())
 			return f;
 		if(v.getStart().isAfter(LocalDateTime.now()))
