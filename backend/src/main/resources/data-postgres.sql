@@ -155,6 +155,7 @@ insert into vacation (finish, start, status, type, doctor_id) values ('2021-12-3
 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 1, '2021-05-19 13:00:00', '2021-05-19 17:00:00', 3, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-19 13:30:00', '2021-05-19 19:00:00', 3, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-26 8:30:00', '2021-05-26 10:30:00', 1, 0);
 
 insert into penalty (date, patient_id) values ('2021-05-23', 10);
 insert into penalty (date, patient_id) values ('2021-05-17', 10);
