@@ -288,11 +288,13 @@ export default {
   data() {
     return {
       userRoles: [],
+      isLoggedIn: false,
     };
   },
   methods: {
     logout() {
       localStorage.removeItem('jwt');
+      localStorage.removeItem('pw');
       window.location.href = "http://localhost:8080/";
     }  
   },

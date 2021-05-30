@@ -52,12 +52,4 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 		return workHoursRepository.findByDoctorIdAndPharmacyId(doctorId, pharmacyId);
 	}
 	
-//	public List<DoctorTerms> sortByDermatologistPrice(String type) {
-//		if (type.equals("asc")) {
-//			return doctorTermsRepository.findByOrderByPriceAsc();
-//		} else {
-//			return doctorTermsRepository.findByOrderByPriceDesc();
-//		}
-//	}
-	
 }

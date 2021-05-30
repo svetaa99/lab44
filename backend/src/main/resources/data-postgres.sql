@@ -17,7 +17,22 @@ insert into pharmacy (name, address_id, description, rating, pharmacist_price) v
 insert into medicine(name, type, specification) values ('Lek1', 1, 'neeekaaa speeeec');
 insert into medicine(name, type, specification) values ('Lek2', 2, 'sdfsefs');
 insert into medicine(name, type, specification) values ('Lek3', 2, 'uiyuoirtl');
+insert into medicine(name, type, specification) values ('Lek4', 0, 'antibiotic 4');
+insert into medicine(name, type, specification) values ('Lek5', 0, 'antibiotic 5');
+insert into medicine(name, type, specification) values ('Lek6', 0, 'antibiotic 6');
 
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1619868600000, 1621942200000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 2, 120, 100, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 3, 70, 6, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 1, 200, 26, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 4, 300, 1, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 5, 200, 4, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 6, 150, 30, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 4, 300, 1, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 5, 200, 4, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 6, 150, 30, 1619820000000, 1622498400000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1609542000000, 1638399600000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1609542000000, 1638399600000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1609542000000, 1638399600000);
@@ -33,7 +48,7 @@ insert into pharmacist (id, name, surname, email, password, address, phone_num, 
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (6, 'Djordje', 'Volas', 'djokica@gmail.com', 'djoka123', 5, '011201201', 7, 1);
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (7, 'Stefan', 'Volkovic', 'stefke@gmail.com', 'stefi123', 5, '011202202', 8, 1);
 insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (8, 'Marko', 'Markovic', 'markelof@gmail.com', 'mare123', 5, '011203203', 9, 2);
-insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (9, 'Sara', 'Neskovic', 'sara@gmail.com', 'sara123', 5, '0112032123', 10, 3);
+insert into pharmacist (id, name, surname, email, password, address, phone_num, rating, pharmacy_id) values (9, 'Sara', 'Neskovic', 'sara@gmail.com', 'chang3m3', 5, '0112032123', 10, 3);
 
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,1);
 insert into pharmacy_dermatologists (pharmacy_id, dermatologist_id) values (1,2);
@@ -73,12 +88,14 @@ insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 1, '2021-04-27 16:00:00', '2021-04-27 17:00:00', 1, 2);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 1, '2021-05-27 16:00:00', '2021-05-27 17:00:00', 1, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-29 18:00:00', '2021-05-29 19:00:00', 2, 0);
-insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 5, '2021-05-27 16:00:00', '2021-05-27 17:00:00', 3, 0);
-insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-05-29 18:00:00', '2021-05-29 19:00:00', 3, 0);
-insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2020-05-29 18:00:00', '2020-05-29 19:00:00', 1, 0);
-insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (14, 5, '2020-06-29 18:00:00', '2020-06-29 19:00:00', 1, 0);
-insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2019-05-29 18:00:00', '2019-05-29 19:00:00', 1, 0);
-insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-11-29 18:00:00', '2021-11-29 19:00:00', 1, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 5, '2021-05-27 16:00:00', '2021-05-27 17:00:00', 3, 2);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-05-29 18:00:00', '2021-05-29 19:00:00', 3, 2);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2020-05-29 18:00:00', '2020-05-29 19:00:00', 1, 2);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (14, 5, '2020-06-29 18:00:00', '2020-06-29 19:00:00', 1, 2);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (13, 5, '2019-05-29 18:00:00', '2019-05-29 19:00:00', 1, 2);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 5, '2021-11-29 18:00:00', '2021-11-29 19:00:00', 1, 2);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-26 8:30:00', '2021-05-26 9:30:00', 1, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-29 2:00:00', '2021-05-29 4:30:00', 1, 0);
 
 
 insert into patients_allergies (patient_id, medicine_id) values (10, 1);
@@ -96,12 +113,13 @@ insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, 
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1621893600000, 18, 370, 2);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1622671200000, 18, 400, 2);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1623967200000, 18, 510, 2);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1632000000000, 18, 510, 0);
 
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 1, '08:00:00', '21:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (2, 1, '14:00:00', '20:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (3, 2, '10:00:00', '16:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (4, 2, '16:00:00', '22:00:00');
-insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 2, '18:00:00', '20:00:00');
+insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 3, '13:00:00', '20:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (5, 3, '14:00:00', '22:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (6, 1, '13:00:00', '21:00:00');
 
@@ -119,6 +137,7 @@ insert into user_role (user_id, role_id) VALUES (5, 3);
 insert into user_role (user_id, role_id) VALUES (6, 3);
 insert into user_role (user_id, role_id) VALUES (7, 3);
 insert into user_role (user_id, role_id) VALUES (8, 3);
+insert into user_role (user_id, role_id) VALUES (9, 3);
 insert into user_role (user_id, role_id) VALUES (10, 1);
 insert into user_role (user_id, role_id) VALUES (11, 1);
 insert into user_role (user_id, role_id) VALUES (12, 1);

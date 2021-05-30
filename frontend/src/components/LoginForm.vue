@@ -66,6 +66,9 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
   data: () => {
     return {
@@ -74,20 +77,19 @@ export default {
       loginObject: null,
       hasLoginError: false,
       jwt: null,
+      userRoles: [],
     };
   },
   methods: {
     login()
     {
       var loginData = {"email": this.email, "password": this.password};
-      console.log(loginData);
       axios
-      .post('http://localhost:8000/users/login-user', loginData)
+      .post(`${API_URL}/users/login-user`, loginData)
       .then(response => {this.jwt = response.data; this.printInfo()});
     },
     printInfo()
     {
-      console.log(this.jwt);
       if(this.jwt.accessToken == ""){
         Swal.fire({
           title: 'Login error',
@@ -101,12 +103,24 @@ export default {
 				title:"Successfully logged in",
 				text:"Welcome!",
 				icon: "success",
-				button: "Ok",
-        time: 1000,
+				confirmButtonText: 'Ok',
+        timer: 1200,
 			  }).then(() => {
           this.saveUserToLocalStorage(this.jwt); //save JWT and EXPIRATION
           this.addAxiosInterceptors(axios);
-          window.location.href="http://localhost:8080/";
+
+          this.jwt.roles.map(el => {
+            this.userRoles.push(el.id);
+          });
+          localStorage.setItem('pw', this.password);
+          if((this.userRoles.includes(2) || this.userRoles.includes(3)) && this.password == "chang3m3"){
+            localStorage.setItem('pw', this.password);
+            window.location.href="http://localhost:8080/profile";
+          }
+          else{
+            localStorage.setItem('pw', '');
+            window.location.href="http://localhost:8080/";
+          }
         })
         
       }

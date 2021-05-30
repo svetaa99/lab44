@@ -16,7 +16,7 @@ function getWithExpiry() {
 	if (now.getTime() > item.expiry) {
 		// If the item is expired, delete the item from storage
 		// and return null
-		localStorage.removeItem('jwt')
+		localStorage.removeItem('jwt');
 		return null
 	}
 	return item.token.accessToken

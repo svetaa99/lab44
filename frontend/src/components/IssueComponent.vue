@@ -63,7 +63,8 @@ export default {
         searchReservation: function(){
             axios
             .get(`http://localhost:8000/reservations/${this.reservationId}`)
-            .then((response) => {this.reservation = response.data; console.log(this.reservation)
+            .then((response) => {this.reservation = response.data;
+                console.log(response.data);
                 if(this.reservation.date !== 0){
                     this.found = true;
                     this.savedReservationId = this.reservationId;
@@ -89,6 +90,20 @@ export default {
                 }))
             this.found = false;
         }
+    },
+    beforeRouteEnter (to, from, next) {
+      const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+      var flag = false;
+      if(tokenItem == null)
+        next('/');
+      tokenItem.token.roles.forEach(role => {
+          if(role.id == 3)
+            flag = true;
+      })
+      if(!flag)
+        next('/');
+      else
+        next();
     }
 }
 </script>

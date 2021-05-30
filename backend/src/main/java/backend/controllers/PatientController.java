@@ -22,9 +22,11 @@ import com.google.gson.Gson;
 import backend.dto.PatientDTO;
 import backend.models.Patient;
 import backend.models.Penalty;
+import backend.models.User;
 import backend.models.Visit;
 import backend.services.impl.PatientService;
 import backend.services.impl.PenaltyService;
+import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
 import comparators.PatientDTOComparator;
 
@@ -42,11 +44,14 @@ public class PatientController {
 	@Autowired
 	private PenaltyService penaltyService;
 	
+	@Autowired
+	private UserService userService;
+	
 	private static Gson g = new Gson();
 	
 	@GetMapping("/all")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST', 'LAB_ADMIN', 'HEAD_ADMIN')")
 	public ResponseEntity<String> getPatients() {
-		System.out.println("Returning patients...");
 		
 		List<Patient> retVal = patientService.findAll();
 		
@@ -60,14 +65,7 @@ public class PatientController {
 		System.out.println("Returning patients searched by name...");
 		List<Patient> retVal = patientService.findAllByName(name);
 		
-		List<PatientDTO> patientsDTO = new ArrayList<>();
-		for (Patient p : retVal) {
-			LocalDateTime lastVisit = visitService.lastVisitByPatientIdEquals(p.getId());
-			if(lastVisit!=null)
-				patientsDTO.add(new PatientDTO(p, lastVisit.toLocalDate()));
-			else
-				patientsDTO.add(new PatientDTO(p, null));
-		}
+		List<PatientDTO> patientsDTO = turnPatientsToDTO(retVal);
 		
 		return new ResponseEntity<String>(g.toJson(patientsDTO), HttpStatus.OK);
 	}
@@ -126,13 +124,17 @@ public class PatientController {
 	}
 	
 	public List<PatientDTO> turnPatientsToDTO(List<Patient> patients){
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
 		List<PatientDTO> patientsDTO = new ArrayList<>();
+		
 		for (Patient p : patients) {
-			LocalDateTime lastVisit = visitService.lastVisitByPatientIdEquals(p.getId());
+			LocalDateTime lastVisit = visitService.lastVisitByPatientIdAndDoctorIdEquals(p.getId(), u.getId());
 			if(lastVisit!=null)
 				patientsDTO.add(new PatientDTO(p, lastVisit.toLocalDate()));
 			else
-				patientsDTO.add(new PatientDTO(p, null));
+				continue;
 		}
 		return patientsDTO;
 	}

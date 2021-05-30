@@ -109,7 +109,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	@Override
 	public PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId,
 			long todaysDate) {
-		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate);
+		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate).get(0);
 	}
 	
 	@Override
@@ -123,6 +123,12 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 			long todaysDate) {
 		return pharmacyMedicineRepository.findByPharmacyAndMedicineNameAndTodaysDate(pharmacyId, medicineName, todaysDate);
 
+	}
+
+	@Override
+	public List<PharmacyMedicines> findByMedicineNameAndPharmacyId(String medicineName, Long pharmacyId) {
+		// TODO Auto-generated method stub
+		return pharmacyMedicineRepository.findByMedicineNameAndPharmacyId(medicineName, pharmacyId);
 	}
 	
 

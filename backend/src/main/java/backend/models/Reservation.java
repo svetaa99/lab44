@@ -46,6 +46,18 @@ public class Reservation {
 	public Reservation() {
 		
 	}
+	
+	public Reservation(Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity,
+			double totalPrice, Status status) {
+		super();
+		this.patient = patient;
+		this.pharmacy = pharmacy;
+		this.medicine = medicine;
+		this.date = date;
+		this.quantity = quantity;
+		this.totalPrice = totalPrice;
+		this.status = status;
+	}
 
 	public Reservation(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity, double totalPrice, Status status) {
 		super();

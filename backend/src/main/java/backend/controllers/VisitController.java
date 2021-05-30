@@ -1,6 +1,7 @@
 package backend.controllers;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -34,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.sun.mail.iap.Response;
 
 import backend.dto.PatientDTO;
 import backend.dto.VisitDTO;
@@ -51,7 +51,6 @@ import backend.models.User;
 import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.services.ILabAdminService;
-import backend.services.IPharmacyService;
 import backend.services.impl.DoctorService;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PatientService;
@@ -110,6 +109,9 @@ public class VisitController {
 		if(!checkTermTaken(newReservation))
 			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
 		
+		if(!checkTermDerm(newReservation, doctorId))
+			return new ResponseEntity<String>("You already have scheduled meeting at that time", HttpStatus.OK);
+		
 		if(u instanceof Pharmacist) {
 			if(!checkIfInWorkingHours(newReservation)) {
 				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
@@ -127,7 +129,7 @@ public class VisitController {
 		
 		return new ResponseEntity<String>(g.toJson(newReservation), HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value="/make-appointment-patient", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('PATIENT')")
 	public ResponseEntity<String> makeAppointmentPatient(@RequestBody Visit newReservation){
@@ -400,7 +402,24 @@ public class VisitController {
 		
 		return new ResponseEntity<ResponseObject>(new ResponseObject(retMap, 200, ""), HttpStatus.OK);
 	}
+	
+	@GetMapping("/valid-check/{visitId}")
+	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')")
+	public ResponseEntity<String> checkValidVisitId(@PathVariable Long visitId){
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
+		Visit v = visitService.findById(visitId);
+		
+		ResponseEntity<String> f = new ResponseEntity<String>("false", HttpStatus.OK);
 
+		if(v.getDoctorId() != u.getId())
+			return f;
+		if(v.getStart().isAfter(LocalDateTime.now()) || v.getFinish().isBefore(LocalDateTime.now()))
+			return f;
+		
+		return new ResponseEntity<String>("true", HttpStatus.OK);
+	}
 	
 	private boolean checkTermTaken(Visit newReservation) {
 		List<Visit> patientsAppointments = visitService.findByPatientIdEquals(newReservation.getPatientId());
@@ -418,7 +437,25 @@ public class VisitController {
 			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
 				return false;
 		}
-		//check for doctor as well
+		return true;
+	}
+	
+	private boolean checkTermDerm(Visit newReservation, Long doctorId) {
+		List<Visit> doctorsAppointments = visitService.findByDoctorIdEquals(doctorId);
+		LocalDateTime startTime = newReservation.getStart();
+		LocalDateTime finishTime = newReservation.getFinish();
+		
+		for (Visit visit : doctorsAppointments) {
+			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
+				return false;
+			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
+				return false;
+		}
+		
 		return true;
 	}
 	
@@ -458,9 +495,11 @@ public class VisitController {
 			  Doctor doc = doctorService.findById(doctorId);
 			  String DOCTORS_NAME = doc.getName();
 			  
-			  String DATE_TIME = startTime.toString();
+			  String formatterS = "HH:mm dd-MM-yyyy";
+			  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatterS);
+			  String DATE_TIME = formatter.format(startTime);
 			  
-		      msg.setText("Dear " + NAME + ",\nYour doctor " + DOCTORS_NAME + " has appointed new treatment on " + DATE_TIME + ".\nSincerely yours,\nLABONI44.");
+		      msg.setText("Dear " + NAME + ",\nYour doctor " + DOCTORS_NAME + " has appointed new treatment at " + DATE_TIME + ".\nSincerely yours,\nLABONI44.");
 		      msg.setSentDate(new Date());
 		      Transport.send(msg);
 		      System.out.println("Message sent.");

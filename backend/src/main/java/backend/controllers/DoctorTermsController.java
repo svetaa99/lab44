@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
-import backend.dto.ReservationDTO;
 import backend.enums.Status;
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
@@ -128,8 +127,7 @@ public class DoctorTermsController {
 	@PostMapping(value = "/createnew/{visitId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('DERMATOLOGIST', 'PHARMACIST')") //DERMATOLOGIST ONLY
 	public ResponseEntity<String> saveNewTerm(@RequestBody DoctorTerms newTerm, @PathVariable("visitId") Long visitId){
-		System.out.println("We got : " + newTerm + "\n\n from client...");
-		
+
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		Long doctorId = u.getId();
@@ -139,23 +137,23 @@ public class DoctorTermsController {
 		if(checkIfTakenTerm(newTerm)) {
 			if(checkIfInWorkingHours(newTerm)) {
 				doctorTermsService.save(newTerm);
-				System.out.println("Object saved to db...");
 			}
-			else
-				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
+			else {
+				List<WorkHours> whs = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, visitService.findById(visitId).getPharmacy());
+				String ret = "Work hours|";
+				for (WorkHours wh : whs) {
+					ret += wh.getStartTime().toString();
+					ret += "-";
+					ret += wh.getFinishTime().toString();
+				}
+				return new ResponseEntity<String>(ret, HttpStatus.OK);
+			}
 		}
 		else {
-			System.out.println("Taken term...");
 			return new ResponseEntity<String>("Taken term", HttpStatus.OK);
 		}
-		List<DoctorTerms> retVal = doctorTermsService
-				.findByDoctorIdEquals(doctorId)
-				.stream()
-				.filter(dt -> dt.getStart().isAfter(LocalDateTime.now()))
-				.collect(Collectors.toList());
+		List<DoctorTerms> retVal = filterAndSortTerms(doctorTermsService.findByDoctorIdEquals(doctorId), visitId);
 		
-		DoctorTermsComparator dtc = new DoctorTermsComparator();
-		retVal.sort(dtc);
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}
 	
@@ -228,7 +226,7 @@ public class DoctorTermsController {
 //		return new ResponseEntity<List<DermatologistTermDTO>>(createDermatologistTermDTOList(dt), HttpStatus.OK);
 //	}
 	
-	private List<DermatologistTermDTO> createDermatologistTermDTOList(List<DoctorTerms> dt) {
+	/*private List<DermatologistTermDTO> createDermatologistTermDTOList(List<DoctorTerms> dt) {
 		List<DermatologistTermDTO> dtsDTO = new ArrayList<>();
 		for (DoctorTerms doctorTerm : dt) {
 			User dermatologist = userService.findById(doctorTerm.getDoctorId());
@@ -236,7 +234,7 @@ public class DoctorTermsController {
 			dtsDTO.add(dtDTO);
 		}
 		return dtsDTO;
-	}
+	}*/
 	
 	private boolean checkIfTakenTerm(DoctorTerms newTerm) {
 		List<DoctorTerms> doctorsTakenTerms = doctorTermsService.findByDoctorIdEquals(newTerm.getDoctorId());
@@ -252,7 +250,7 @@ public class DoctorTermsController {
 				return false;
 			else if(startTime.equals(doctorTerms.getStart()) || finishTime.equals(doctorTerms.getFinish()))
 				return false;
-		} 
+		}
 		return true;
 	}
 	private boolean checkIfInWorkingHours(DoctorTerms newTerm) {

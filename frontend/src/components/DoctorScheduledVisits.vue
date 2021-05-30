@@ -29,13 +29,15 @@
 
 <script>
 import axios from 'axios';
+
+import { config } from "@/config.js";
+const API_URL = config.API_URL;
+
 export default {
     name: "DoctorScheduledVisits",
-    props: {
-        scheduledVisits: Array,
-    },
     data(){
         return {
+            scheduledVisits: []
         };
     },
     methods: {
@@ -57,10 +59,23 @@ export default {
         }
     },
     mounted: function() {
-        axios.get(`http://localhost:8000/appointments/td`).then((response) => {
+        axios.get(`${API_URL}/appointments/td`).then((response) => {
         this.scheduledVisits = response.data;
-        console.log(JSON.stringify(this.scheduledVisits));
     });
+    },
+    beforeRouteEnter (to, from, next) {
+      const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+      var flag = false;
+      if(tokenItem == null)
+        next('/');
+      tokenItem.token.roles.forEach(role => {
+          if(role.id == 2 || role.id == 3)
+            flag = true;
+      })
+      if(!flag)
+        next('/');
+      else
+        next();
     }
 }
 </script>

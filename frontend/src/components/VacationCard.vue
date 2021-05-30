@@ -44,7 +44,7 @@ export default {
     },
     declineRequest() {
       Swal.fire({
-        title: 'Why did you declined this request?',
+        title: 'Why did you decline this request?',
         icon: 'question',
         input: 'text',
         showCancelButton: true,
