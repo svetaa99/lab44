@@ -180,8 +180,7 @@ import YearCalendar from 'vue-material-year-calendar'
       names: [],
       isYear: false,
       year: 2021,
-      activeDates: [
-        { date: '2021-05-13' }],
+      activeDates: [],
       activeClass: 'blue',
       noRefTitle: '',
     }),
