@@ -25,7 +25,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 
 	@Override
 	public PharmacyMedicines findById(Long id) {
-		return pharmacyMedicineRepository.findById(id).orElseGet(null);
+		return pharmacyMedicineRepository.findById(id).orElse(null);
 	}
 
 	@Override
