@@ -28,7 +28,6 @@ import backend.models.Role;
 import backend.models.User;
 import backend.models.WorkHours;
 import backend.services.IPharmacistService;
-import backend.services.impl.DoctorTermsService;
 import backend.services.impl.UserService;
 import backend.services.impl.WorkHoursService;
 
@@ -46,9 +45,6 @@ public class PharmacistController {
 	@Autowired
 	private WorkHoursService whService;
 	
-	@Autowired
-	private DoctorTermsService doctorTermsService;
-	
 	private static Gson g = new Gson();
 	
 	private List<PharmacistDTO> createPharmacistDTOList(List<Pharmacist> pharmacists) {
@@ -58,7 +54,7 @@ public class PharmacistController {
 		for (Pharmacist p : pharmacists) {
 			PharmacistDTO pDTO = null;
 			if (p.getPharmacy() != null) {
-				List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getPharmacy().getId());
+				List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getPharmacy().getId());
 				
 				if (whList.size() == 0) {
 					pDTO = new PharmacistDTO(p);
@@ -220,7 +216,7 @@ public class PharmacistController {
 			return new ResponseEntity<String>("Start time must be before finish time.", HttpStatus.BAD_REQUEST);
 		}
 		
-		List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getPharmacy().getId());
+		List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getPharmacy().getId());
 		WorkHours wh = null;
 		
 		if (whList.size() == 0) {

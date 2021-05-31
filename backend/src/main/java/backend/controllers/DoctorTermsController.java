@@ -33,6 +33,7 @@ import backend.services.impl.PenaltyService;
 import backend.services.impl.PharmacyService;
 import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
+import backend.services.impl.WorkHoursService;
 import comparators.DoctorTermsComparator;
 
 @RestController
@@ -54,6 +55,9 @@ public class DoctorTermsController {
 	
 	@Autowired
 	private PenaltyService penaltyService;
+	
+	@Autowired
+	private WorkHoursService whService;
 	
 	private static Gson g = new Gson();
 	
@@ -139,7 +143,7 @@ public class DoctorTermsController {
 				doctorTermsService.save(newTerm);
 			}
 			else {
-				List<WorkHours> whs = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, visitService.findById(visitId).getPharmacy());
+				List<WorkHours> whs = whService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, visitService.findById(visitId).getPharmacy());
 				String ret = "Work hours|";
 				for (WorkHours wh : whs) {
 					ret += wh.getStartTime().toString();
@@ -254,7 +258,7 @@ public class DoctorTermsController {
 		return true;
 	}
 	private boolean checkIfInWorkingHours(DoctorTerms newTerm) {
-		for (WorkHours wh : doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacyId())) {
+		for (WorkHours wh : whService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacyId())) {
 			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))
 				return true;
 		}

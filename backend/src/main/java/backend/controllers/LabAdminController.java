@@ -2,7 +2,6 @@ package backend.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ import backend.services.IDermatologistService;
 import backend.services.ILabAdminService;
 import backend.services.IPharmacistService;
 import backend.services.IPharmacyService;
-import backend.services.impl.DoctorTermsService;
 import backend.services.impl.WorkHoursService;
 
 @RestController
@@ -39,7 +37,7 @@ import backend.services.impl.WorkHoursService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LabAdminController {
 
-	private static Gson g = new Gson();
+	//private static Gson g = new Gson();
 
 	@Autowired
 	private ILabAdminService laService;
@@ -54,9 +52,6 @@ public class LabAdminController {
 	private IPharmacyService pharmacyService;
 	
 	@Autowired
-	private DoctorTermsService doctorTermsService;
-	
-	@Autowired
 	private WorkHoursService whService;
 	
 	private List<PharmacistDTO> createPharmacistDTOList(List<Pharmacist> pharmacists) {
@@ -66,7 +61,7 @@ public class LabAdminController {
 		for (Pharmacist p : pharmacists) {
 			PharmacistDTO pDTO = null;
 			if (p.getPharmacy() != null) {
-				List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getPharmacy().getId());
+				List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getPharmacy().getId());
 				
 				if (whList.size() == 0) {
 					pDTO = new PharmacistDTO(p);
@@ -94,7 +89,7 @@ public class LabAdminController {
 		List<DermatologistDTO> dDTOs = new ArrayList<DermatologistDTO>();
 		
 		for (Dermatologist dermatologist : derms) {
-			List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getId());
+			List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(p.getId(), p.getId());
 			WorkHours wh = whList.get(0);
 			DermatologistDTO dDTO = new DermatologistDTO(dermatologist);
 			dDTO.setStartTime(wh.getStartTime().toString());
@@ -186,7 +181,7 @@ public class LabAdminController {
 		dermatologistService.save(d);
 		pharmacyService.save(p);
 		
-		List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getId());
+		List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getId());
 		WorkHours wh = whList.get(0);
 		
 		whService.delete(wh);

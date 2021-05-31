@@ -23,18 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistDTO;
-import backend.dto.DermatologistFilterObject;
-import backend.dto.FilterObject;
 import backend.dto.WorkHoursDTO;
 import backend.models.Dermatologist;
 import backend.models.LabAdmin;
-import backend.models.Pharmacist;
 import backend.models.Pharmacy;
 import backend.models.WorkHours;
 import backend.services.IDermatologistService;
 import backend.services.ILabAdminService;
 import backend.services.IPharmacyService;
-import backend.services.impl.DoctorTermsService;
 import backend.services.impl.WorkHoursService;
 
 @RestController
@@ -53,9 +49,6 @@ public class DermatologistController {
 	
 	@Autowired
 	private WorkHoursService whService;
-	
-	@Autowired
-	private DoctorTermsService doctorTermsService;
 	
 	private static Gson g = new Gson();
 	
@@ -170,7 +163,7 @@ public class DermatologistController {
 			return new ResponseEntity<String>("Start time must be before finish time.", HttpStatus.BAD_REQUEST);
 		}
 		
-		List<WorkHours> whList = doctorTermsService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getId());
+		List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getId());
 		WorkHours wh = null;
 		
 		if (whList.size() == 0) {

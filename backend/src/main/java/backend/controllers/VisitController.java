@@ -52,12 +52,12 @@ import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.services.ILabAdminService;
 import backend.services.impl.DoctorService;
-import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PatientService;
 import backend.services.impl.PenaltyService;
 import backend.services.impl.ReportService;
 import backend.services.impl.UserService;
 import backend.services.impl.VisitService;
+import backend.services.impl.WorkHoursService;
 
 @RestController
 @RequestMapping(value = "appointments")
@@ -80,13 +80,13 @@ public class VisitController {
 	private DoctorService doctorService;
 	
 	@Autowired
-	private DoctorTermsService dtService;
-	
-	@Autowired
 	private PenaltyService penaltyService;
 	
 	@Autowired
 	private ILabAdminService laService;
+	
+	@Autowired
+	private WorkHoursService whService;
 	
 	private static Gson g = new Gson();
 	
@@ -509,7 +509,7 @@ public class VisitController {
 	}
 	
 	private boolean checkIfInWorkingHours(Visit newTerm) {
-		for (WorkHours wh : dtService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacy())) {
+		for (WorkHours wh : whService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacy())) {
 			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))
 				return true;
 		}			

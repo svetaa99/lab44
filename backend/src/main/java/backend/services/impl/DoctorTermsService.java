@@ -1,6 +1,8 @@
 package backend.services.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,6 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 
 	@Autowired
 	private DoctorTermsRepository doctorTermsRepository;
-	
-	@Autowired
-	private WorkHoursRepository workHoursRepository;
 
 	@Override
 	public List<DoctorTerms> findAll() {
@@ -45,11 +44,7 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 	}
 	
 	public List<DoctorTerms> findAllFutureTerms(){
-		return doctorTermsRepository.findAll();
-	}
-	
-	public List<WorkHours> findWorkingHoursForDoctorByIdAndPharmacyId(Long doctorId, Long pharmacyId){
-		return workHoursRepository.findByDoctorIdAndPharmacyId(doctorId, pharmacyId);
+		return doctorTermsRepository.findAll().stream().filter(dt -> dt.getStart().isAfter(LocalDateTime.now())).collect(Collectors.toList());
 	}
 	
 }
