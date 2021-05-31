@@ -35,6 +35,20 @@ public class PharmacyMedicinesController {
 		return pharmacyMedicineService.findAllPharmaciesWithMedicine(medicineId);
 	}
 	
+	@GetMapping("/all")
+	public ResponseEntity<List<PharmacyMedicinesDTO>> getAll() {
+		List<PharmacyMedicines> pmList = pharmacyMedicineService.findAll();
+		List<PharmacyMedicinesDTO> pmDTOs = new ArrayList<PharmacyMedicinesDTO>();
+		
+		for (PharmacyMedicines pm : pmList) {
+			PharmacyMedicinesDTO pmDTO = new PharmacyMedicinesDTO(pm);
+			pmDTOs.add(pmDTO);
+		}
+		
+		return new ResponseEntity<List<PharmacyMedicinesDTO>>(pmDTOs, HttpStatus.OK);
+	
+	}
+	
 	@GetMapping(value = "/get-medicines/{pharmacyId}")
 	public ResponseEntity<List<PharmacyMedicinesDTO>> getPMFromPharmacyId(@PathVariable Long pharmacyId) {
 		List<PharmacyMedicines> pmList = pharmacyMedicineService.findByPharmacyIdAndTodaysDate(pharmacyId, new Date().getTime());

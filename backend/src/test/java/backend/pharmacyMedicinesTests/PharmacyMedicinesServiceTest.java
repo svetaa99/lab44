@@ -1,4 +1,4 @@
-package backend;
+package backend.pharmacyMedicinesTests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,11 +40,6 @@ public class PharmacyMedicinesServiceTest {
 	private PharmacyMedicines createNewPMObject() {
 		return new PharmacyMedicines(1l, new Pharmacy(1l, "Nova apoteka", new Address(3l, "JNA", 78, "Ruma", "Srbija", 41.03, 42.04), "Desc", 7.3, 100), 
 				new Medicine(3l, "testmed", MedicineTypes.ANESTHETIC, "speeec"), 100, 7, 6l, 7l);
-	}
-	
-	private PharmacyMedicines createSecondPMObject() {
-		return new PharmacyMedicines(2l, new Pharmacy(2l, "Druga apoteka", new Address(4l, "Glavna", 123, "Sremska Mitrovica", "Srbija", 42.03, 43.04), "Descriptionn", 5.8, 200), 
-				new Medicine(4l, "secondsdfds", MedicineTypes.ANESTHETIC, "fdsfdsdsfs"), 200, 5, 8l, 9l);
 	}
 	
 	@Test
