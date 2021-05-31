@@ -23,7 +23,7 @@ insert into medicine(name, type, specification) values ('Lek6', 0, 'antibiotic 6
 
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1619868600000, 1621942200000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 2, 120, 100, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1619820000000, 1622498400000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1619820000000, 1630447200000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1619820000000, 1622498400000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 3, 70, 6, 1619820000000, 1622498400000);
 insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 1, 200, 26, 1619820000000, 1622498400000);
@@ -169,6 +169,7 @@ insert into vacation (finish, start, status, type, doctor_id) values ('2021-12-3
 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (11, 1, '2021-05-19 13:00:00', '2021-05-19 17:00:00', 3, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-19 13:30:00', '2021-05-19 19:00:00', 3, 0);
+insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-26 8:30:00', '2021-05-26 10:30:00', 1, 0);
 
 insert into penalty (date, patient_id) values ('2021-05-23', 10);
 insert into penalty (date, patient_id) values ('2021-05-17', 10);
