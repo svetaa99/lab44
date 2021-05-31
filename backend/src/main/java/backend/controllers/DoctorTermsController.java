@@ -74,8 +74,8 @@ public class DoctorTermsController {
 	}
 	
 	@GetMapping("/definedterms-admin/{pharmacyId}/{doctorId}")
-	@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")
-	public ResponseEntity<String> getDefinedTermsAdmin(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("doctorId") Long doctorId) {
+	//@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")
+	public ResponseEntity<List<DoctorTerms>> getDefinedTermsAdmin(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("doctorId") Long doctorId) {
 		List<DoctorTerms> terms = doctorTermsService.findByDoctorIdEquals(doctorId);
 		List<DoctorTerms> retVal = terms
 				.stream()
@@ -85,7 +85,7 @@ public class DoctorTermsController {
 				)
 				.collect(Collectors.toList());
 		
-		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
+		return new ResponseEntity<List<DoctorTerms>>(retVal, HttpStatus.OK);
 	}
 			
 	@GetMapping("/reserve-dermatologist/{termId}")
@@ -162,7 +162,7 @@ public class DoctorTermsController {
 	}
 	
 	@PostMapping(value = "/createnew-admin", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	//@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<String> saveNewTermAdmin(@RequestBody DoctorTerms newTerm) {
 		if(checkIfTakenTerm(newTerm)) {
 			if(checkIfInWorkingHours(newTerm)) {
@@ -198,16 +198,11 @@ public class DoctorTermsController {
 		
 		List<DoctorTerms> retVal = doctorTermsService.findByDoctorIdEquals(doctorId);
 		
-		System.out.println("Termina ukupno: " + retVal.size());
-		System.out.println("Datum dobijen = " + newDateTime.getSearchDate());
-		
 		if(newDateTime.getSearchDate() != null)
 			retVal = retVal.stream().filter(t -> t.getStart().toLocalDate().equals(newDateTime.getSearchDate())).collect(Collectors.toList());
 		
 		if(newDateTime.getSearchTime() != null)
 			retVal = retVal.stream().filter(t -> t.getStart().getHour() == (newDateTime.getSearchTime().getHour())).collect(Collectors.toList());
-		
-		System.out.println("Pretragom nadjeno: " + retVal.size());
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}

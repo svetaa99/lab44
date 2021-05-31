@@ -36,16 +36,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws ServletException, IOException {
         // Get authorization header and validate
-    	System.out.println("ZAHTEEEV: "  + request.toString() + "\n" + request.getHeaderNames().toString());
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (header == null) { //|| !header.startsWith("Bearer ")
-        	System.out.println("HEADER JE NULL!");
             chain.doFilter(request, response);
             return;
         }
-        System.out.println("HEADER: " + header);
-        
         // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
         if (!jwtTokenUtil.validate(token)) {
@@ -56,8 +52,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String tokenStr = jwtTokenUtil.getToken(request);
         UserDetails userDetails = userRepo
             .findUserByEmail(jwtTokenUtil.getUsernameFromToken(tokenStr));
-        System.out.println("Kojeg korisnika nadje: " + userDetails.getUsername());
-
+        
         UsernamePasswordAuthenticationToken
             authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null,
@@ -65,15 +60,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     List.of() : userDetails.getAuthorities()
             );
         
-        System.out.println("ROLE KORISNIKA : " + userDetails.getAuthorities());
-        
         authentication.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("\n\nAUTENTIFIKOVAN? : " + SecurityContextHolder.getContext().getAuthentication().isAuthenticated() + "\n\nKOOO: " +  SecurityContextHolder.getContext().getAuthentication().getName() + "\n" +
-        		SecurityContextHolder.getContext().getAuthentication().toString());
+        
         chain.doFilter(request, response);
     }
 

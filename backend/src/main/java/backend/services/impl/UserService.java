@@ -1,7 +1,6 @@
 package backend.services.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,6 @@ public class UserService implements IService<User>{
 	
 	@Override
 	public List<User> findAll() {
-//		List<User> allUsers = new ArrayList<User>();
-//		allUsers.addAll(patientRepo.findAll());
-//		allUsers.addAll(doctorRepo.findAll());
-		for (User u : userService.findAll()) {
-			System.out.println(u);
-		}
 		return userService.findAll();
 	}
 	
