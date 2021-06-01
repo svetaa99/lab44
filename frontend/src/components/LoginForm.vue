@@ -63,8 +63,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import axios from "axios";
+import Swal from "sweetalert2";
 
 import { config } from "@/config.js";
 const API_URL = config.API_URL;
@@ -81,63 +81,63 @@ export default {
     };
   },
   methods: {
-    login()
-    {
-      var loginData = {"email": this.email, "password": this.password};
-      axios
-      .post(`${API_URL}/users/login-user`, loginData)
-      .then(response => {this.jwt = response.data; this.printInfo()});
-    },
-    printInfo()
-    {
-      if(this.jwt.accessToken == ""){
-        Swal.fire({
-          title: 'Login error',
-          text: 'Bad credentials!',
-          icon: 'error',
-          confirmButtonText: 'Ok'
+    login() {
+      var loginData = { email: this.email, password: this.password };
+      axios.post(`${API_URL}/users/login-user`, loginData).then((response) => {
+        this.jwt = response.data;
+        this.printInfo();
       });
-      }
-      else{
+    },
+    printInfo() {
+      if (this.jwt.accessToken == "") {
         Swal.fire({
-				title:"Successfully logged in",
-				text:"Welcome!",
-				icon: "success",
-				confirmButtonText: 'Ok',
-        timer: 1200,
-			  }).then(() => {
+          title: "Login error",
+          text: "Bad credentials!",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        Swal.fire({
+          title: "Successfully logged in",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(() => {
           this.saveUserToLocalStorage(this.jwt); //save JWT and EXPIRATION
           this.addAxiosInterceptors(axios);
 
-          this.jwt.roles.map(el => {
+          this.jwt.roles.map((el) => {
             this.userRoles.push(el.id);
           });
-          localStorage.setItem('pw', this.password);
-          if((this.userRoles.includes(2) || this.userRoles.includes(3)) && this.password == "chang3m3"){
-            localStorage.setItem('pw', this.password);
-            window.location.href="http://localhost:8080/profile";
+          localStorage.setItem("pw", this.password);
+          if (
+            (this.userRoles.includes(2) || this.userRoles.includes(3)) &&
+            this.password == "chang3m3"
+          ) {
+            localStorage.setItem("pw", this.password);
+            window.location.href = "http://localhost:8080/profile";
+          } else {
+            localStorage.setItem("pw", "");
+            window.location.href = "http://localhost:8080/";
           }
-          else{
-            localStorage.setItem('pw', '');
-            window.location.href="http://localhost:8080/";
-          }
-        })
-        
+        });
       }
     },
     saveUserToLocalStorage(jwt) {
       const jwtExp = {
         token: jwt,
-        expiry: new Date().getTime() + jwt.expiresIn
-      }
-      localStorage.setItem('jwt', JSON.stringify(jwtExp));
+        expiry: new Date().getTime() + jwt.expiresIn,
+      };
+      localStorage.setItem("jwt", JSON.stringify(jwtExp));
     },
     addAxiosInterceptors(axios) {
-        axios.interceptors.request.use(request => {
-        request.headers['Authorization'] = 'Bearer ' + JSON.parse(localStorage.getItem('jwt')).accessToken;
+      axios.interceptors.request.use((request) => {
+        request.headers["Authorization"] =
+          "Bearer " + JSON.parse(localStorage.getItem("jwt")).accessToken;
         return request;
       });
-    }
+    },
   },
 };
 </script>

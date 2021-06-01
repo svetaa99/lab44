@@ -65,8 +65,6 @@ public class RatingsController {
 	@GetMapping("/rate-pharmacy/{pharmacyId}/{mark}")
 	public ResponseEntity<String> ratePharmacy(@PathVariable Long pharmacyId, @PathVariable int mark) {
 		
-		System.out.println("USAO");
-		
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		int type = 1;
@@ -86,7 +84,6 @@ public class RatingsController {
 			
 			return new ResponseEntity<String>(HttpStatus.OK);
 		} else {
-			System.out.println("Nije posetio apoteku");
 			String msg = "You need to have finished appointment in this pharmacy or reserved medicine";
 			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
@@ -158,6 +155,11 @@ public class RatingsController {
 	@GetMapping("/get-rating/{objId}/{type}")
 	public ResponseEntity<Double> getRating(@PathVariable Long objId, @PathVariable int type) {
 		List<Ratings> ratings = ratingService.findByObjIdAndType(objId, type);
+		
+		if (ratings.size() == 0) {
+			return new ResponseEntity<Double>(HttpStatus.BAD_REQUEST);
+		}
+		
 		int count = ratings.size();
 		
 		if (count == 0) {

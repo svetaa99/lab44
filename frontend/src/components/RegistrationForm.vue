@@ -73,21 +73,6 @@
               Please insert a valid phone number.
             </div>
           </div>
-          <div class="col-6">
-            <label for="firstName" class="form-label">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder=""
-              value=""
-              v-model="user.password"
-              required
-            />
-            <div v-if="submitted && !passwordValid" class="text-danger">
-              Please insert a valid password.
-            </div>
-          </div>
 
           <!-- <div class="col-6">
             <label for="lastName" class="form-label">Confirm password</label>
