@@ -158,8 +158,9 @@ export default {
   },
   methods: {
     reserve() {
+      console.log(this.selectedPM.value)
       if (
-        this.selectedPM.value == null ||
+        Object.keys(this.selectedPM).length === 0 ||
         this.reservation.pharmacy == "" ||
         this.reservation.date == "" ||
         this.reservation.quantity == ""
@@ -219,7 +220,7 @@ export default {
         .then((response) => {
           console.log(response.data);
         })
-        .catch((error) => {
+        .catch(() => {
           console.log(this.message);
           Swal.fire({
             title: "Rate error",

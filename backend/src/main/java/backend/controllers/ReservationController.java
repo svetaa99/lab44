@@ -242,7 +242,7 @@ public class ReservationController {
 		
 		reservation = reservationService.save(reservation);
 		
-		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(pharmacy.getId(), medicine.getId());
+		PharmacyMedicines pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacy.getId(), medicine.getId(), new Date().getTime());
 		int oldQuantity = pm.getQuantity();
 		if (oldQuantity < quantity) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);

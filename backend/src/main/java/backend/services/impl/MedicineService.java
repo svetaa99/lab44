@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import backend.models.Medicine;
 import backend.repositories.MedicineRepository;
@@ -30,6 +31,7 @@ public class MedicineService implements IMedicineService{
 		return medicineRepository.findById(id).orElse(null);
 	}
 
+	@Transactional
 	@Override
 	public Medicine save(Medicine obj) {
 		return medicineRepository.save(obj);

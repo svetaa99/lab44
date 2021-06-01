@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import backend.models.DoctorTerms;
 import backend.repositories.DoctorTermsRepository;
@@ -31,6 +32,7 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 		return doctorTermsRepository.findByDoctorIdEquals(id);
 	}
 
+	@Transactional
 	@Override
 	public DoctorTerms save(DoctorTerms obj) {
 		return doctorTermsRepository.save(obj);

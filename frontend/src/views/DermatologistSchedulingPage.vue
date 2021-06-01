@@ -16,9 +16,9 @@
                     </thead>
                     <tbody>
                         <tr v-for="term in freeTerms" :key="term.id">
-                          <td>{{formatDate(term.start)}}</td>
-                          <td>{{formatTime(term.start)}}</td>
-                          <td>{{formatTime(term.finish)}}</td>
+                          <td>{{formatDate(term.start.date)}}</td>
+                          <td>{{formatTime(term.start.time)}}</td>
+                          <td>{{formatTime(term.finish.time)}}</td>
                         </tr>
                     </tbody>
                     </table>
@@ -84,18 +84,48 @@ export default {
       axios
         .get(`http://localhost:8000/doctorterms/definedterms-admin/${this.admin.pharmacy.id}/${this.selectedDermatologist.id}`)
         .then(response => {
+          console.log("Defined terms\n")
+          console.log(response.data)
           this.freeTerms = response.data
         })
     },
-    formatDate: function(dateInStr){
-      console.log(dateInStr);
-      var dateTokens = dateInStr.split("T")[0].split("-");
-      return dateTokens[2] + "-" + dateTokens[1] + "-" + dateTokens[0]
-    },
-    formatTime: function(timeInStr){
-      var timeTokens = timeInStr.split("T")[1].split(":");
-      return timeTokens[0] + ":" + timeTokens[1]
-    },
+    formatDate: function(dateInJson){
+        return "" + dateInJson.day.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + "." + dateInJson.month.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + "." + dateInJson.year + "." 
+      },
+      formatTime: function(timeInJson){
+        return "" + timeInJson.hour.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + ":" + timeInJson.minute.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          })
+      },
+      formatDateTimeForReq: function(dateTimeJson){
+        return "" + dateTimeJson.date.year + "-" 
+        + dateTimeJson.date.month.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + "-" 
+        + dateTimeJson.date.day.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + "T" 
+        + dateTimeJson.time.hour.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          }) + ":" 
+        + dateTimeJson.time.minute.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          })
+      },
     saveNewTerm: function(){
       if (Object.keys(this.selectedDermatologist).length === 0) {
         Swal.fire({
@@ -155,6 +185,8 @@ export default {
           confirmButtonText: 'Ok'
         }).then(result => {
           if (result.isConfirmed) {
+            console.log("After add term: \n");
+            console.log(respData)
             this.freeTerms = respData;
           }
         })

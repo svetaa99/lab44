@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import backend.models.Order;
 import backend.repositories.OrderRepository;
@@ -25,6 +26,7 @@ public class OrderService implements IOrderService {
 		return orderRepository.findById(id).orElseGet(null);
 	}
 
+	@Transactional
 	@Override
 	public Order save(Order obj) {
 		orderRepository.save(obj);

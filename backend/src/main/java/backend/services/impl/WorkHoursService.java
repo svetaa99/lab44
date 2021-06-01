@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import backend.models.WorkHours;
 import backend.repositories.WorkHoursRepository;
@@ -35,6 +36,7 @@ public class WorkHoursService implements IService<WorkHours> {
 		return workHoursRepository.findById(id).orElse(null);
 	}
 
+	@Transactional
 	@Override
 	public WorkHours save(WorkHours obj) {
 		return workHoursRepository.save(obj);

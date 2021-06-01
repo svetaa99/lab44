@@ -2,7 +2,10 @@ package backend.repositories;
 
 import java.util.List;
 
+import javax.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 import backend.models.PharmacyMedicines;
@@ -29,8 +32,9 @@ public interface PharmacyMedicinesRepository extends JpaRepository<PharmacyMedic
 	@Query("select pm from PharmacyMedicines pm where pm.pharmacy.id = ?1 and pm.medicine.name = ?2 and ?3 between pm.startDate and pm.endDate")
 	List<PharmacyMedicines> findByPharmacyAndMedicineNameAndTodaysDate(Long pharmacyId, String medicineName, long todaysDate);
 	
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("select pm from PharmacyMedicines pm where pm.pharmacy.id= ?1 and pm.medicine.id = ?2 and ?3 between pm.startDate and pm.endDate")
-	List<PharmacyMedicines> findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId, long todaysDate);
+	PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId, long todaysDate);
 	
 	@Query("select pm from PharmacyMedicines pm where pm.pharmacy.id = ?1 and pm.quantity > 0")
 	List<PharmacyMedicines> findAvailableByPharmacyId(Long pharmacyId);

@@ -200,13 +200,13 @@
               Doctors
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <router-link v-if="userRoles.includes(4)" to="/create-pharmacist" class="dropdown-item">Create pharmacist</router-link>
+              <router-link to="/pharmacist-search-and-filter" class="dropdown-item">Pharmacists view</router-link>
 
-              <router-link v-if="userRoles.includes(4)" to="/add-dermatologist-to-pharmacy" class="dropdown-item">Add dermatologist</router-link>
+              <router-link v-if="userRoles.includes(4)" to="/create-pharmacist" class="dropdown-item">Create pharmacist</router-link>
 
               <router-link to="/dermatologist-search-and-filter" class="dropdown-item">Dermatologists view</router-link>
 
-              <router-link to="/pharmacist-search-and-filter" class="dropdown-item">Pharmacists view</router-link>
+              <router-link v-if="userRoles.includes(4)" to="/add-dermatologist-to-pharmacy" class="dropdown-item">Add dermatologist</router-link>
             </div>
           </li>
 

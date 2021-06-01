@@ -21,23 +21,12 @@ insert into medicine(name, type, specification) values ('Lek4', 0, 'antibiotic 4
 insert into medicine(name, type, specification) values ('Lek5', 0, 'antibiotic 5');
 insert into medicine(name, type, specification) values ('Lek6', 0, 'antibiotic 6');
 
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1619868600000, 1621942200000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 2, 120, 100, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1619820000000, 1630447200000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 3, 70, 6, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 1, 200, 26, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 4, 300, 1, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 5, 200, 4, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 6, 150, 30, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 4, 300, 1, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 5, 200, 4, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 6, 150, 30, 1619820000000, 1622498400000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1609542000000, 1638399600000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1609542000000, 1638399600000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1609542000000, 1638399600000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 3, 70, 6, 1609542000000, 1638399600000);
-insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 1, 200, 26, 1609542000000, 1638399600000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 1, 100, 100, 1621893600000, 1640386800000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 2, 120, 100, 1621893600000, 1640386800000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (1, 3, 90, 100, 1621893600000, 1640386800000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (2, 3, 70, 10, 1621893600000, 1640386800000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 3, 70, 6, 1621893600000, 1640386800000);
+insert into pharmacy_medicines (pharmacy_id, medicine_id, price, quantity, start_date, end_date) values (3, 1, 200, 26, 1621893600000, 1640386800000);
 
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (1, 'Mika', 'Mikic', 'mika22@gmail.com', 'mika123', 5, '011100100');
 insert into dermatologist (id, name, surname, email, password, address, phone_num) values (2, 'Djuka', 'Djukic', 'djuka22@gmail.com', 'djuka123', 5, '011101101');

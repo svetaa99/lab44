@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import backend.models.Medicine;
 import backend.models.Pharmacy;
@@ -28,6 +30,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 		return pharmacyMedicineRepository.findById(id).orElse(null);
 	}
 
+	@Transactional
 	@Override
 	public PharmacyMedicines save(PharmacyMedicines obj) {
 		return pharmacyMedicineRepository.save(obj);
@@ -106,10 +109,11 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 		return pharmacyMedicineRepository.findByMedicineNameAndTodaysDate(medicineName, todaysDate);
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Override
 	public PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId,
 			long todaysDate) {
-		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate).get(0);
+		return pharmacyMedicineRepository.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, medicineId, todaysDate);
 	}
 	
 	@Override

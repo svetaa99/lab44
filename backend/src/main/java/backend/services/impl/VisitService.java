@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import backend.enums.Status;
 import backend.models.Visit;
@@ -13,6 +14,7 @@ import backend.repositories.VisitRepository;
 import backend.services.IService;
 
 @Service
+@Transactional(readOnly = true)
 public class VisitService implements IService<Visit>{
 
 	@Autowired
@@ -56,6 +58,7 @@ public class VisitService implements IService<Visit>{
 		return allDoctorVisits.stream().filter(v -> v.getFinish().isAfter(LocalDateTime.now())).collect(Collectors.toList());
 	}
 	
+	@Transactional(readOnly = false)
 	@Override
 	public Visit save(Visit obj) {
 		return visitRepository.save(obj);
