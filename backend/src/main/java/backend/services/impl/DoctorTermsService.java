@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import backend.models.DoctorTerms;
-import backend.models.WorkHours;
 import backend.repositories.DoctorTermsRepository;
-import backend.repositories.WorkHoursRepository;
 import backend.services.IService;
 
 @Service
@@ -26,7 +24,7 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 
 	@Override
 	public DoctorTerms findById(Long id) {
-		return doctorTermsRepository.findById(id).orElseGet(null);
+		return doctorTermsRepository.findById(id).orElse(null);
 	}
 	
 	public List<DoctorTerms> findByDoctorIdEquals(Long id){

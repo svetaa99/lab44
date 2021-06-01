@@ -16,9 +16,9 @@
                     </thead>
                     <tbody>
                         <tr v-for="term in freeTerms" :key="term.id">
-                          <td>{{formatDate(term.start.date)}}</td>
-                          <td>{{formatTime(term.start.time)}}</td>
-                          <td>{{formatTime(term.finish.time)}}</td>
+                          <td>{{formatDate(term.start)}}</td>
+                          <td>{{formatTime(term.start)}}</td>
+                          <td>{{formatTime(term.finish)}}</td>
                         </tr>
                     </tbody>
                     </table>
@@ -87,23 +87,14 @@ export default {
           this.freeTerms = response.data
         })
     },
-    formatDate: function(dateInJson){
-        return "" + dateInJson.day.toLocaleString('en-US', {
-            minimumIntegerDigits: 2,
-            useGrouping: false
-          }) + "." + dateInJson.month.toLocaleString('en-US', {
-            minimumIntegerDigits: 2,
-            useGrouping: false
-          }) + "." + dateInJson.year + "." 
+    formatDate: function(dateInStr){
+      console.log(dateInStr);
+      var dateTokens = dateInStr.split("T")[0].split("-");
+      return dateTokens[2] + "-" + dateTokens[1] + "-" + dateTokens[0]
     },
-    formatTime: function(timeInJson){
-      return "" + timeInJson.hour.toLocaleString('en-US', {
-          minimumIntegerDigits: 2,
-          useGrouping: false
-        }) + ":" + timeInJson.minute.toLocaleString('en-US', {
-          minimumIntegerDigits: 2,
-          useGrouping: false
-        })
+    formatTime: function(timeInStr){
+      var timeTokens = timeInStr.split("T")[1].split(":");
+      return timeTokens[0] + ":" + timeTokens[1]
     },
     saveNewTerm: function(){
       if (Object.keys(this.selectedDermatologist).length === 0) {

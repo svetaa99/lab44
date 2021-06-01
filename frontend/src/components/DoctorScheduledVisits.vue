@@ -61,6 +61,7 @@ export default {
     mounted: function() {
         axios.get(`${API_URL}/appointments/td`).then((response) => {
         this.scheduledVisits = response.data;
+        console.log(this.scheduledVisits);
     });
     },
     beforeRouteEnter (to, from, next) {
