@@ -4,6 +4,9 @@
       <br /><br />
 
       <edit-profile-modal-component :user="user"></edit-profile-modal-component>
+      <change-password-modal-component
+        :user="user"
+      ></change-password-modal-component>
 
       <div class="row gutters-sm">
         <div class="col-md-4 mb-3">
@@ -15,11 +18,19 @@
                   <p class="text-secondary mb-1"></p>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-primary mr-4"
                     data-toggle="modal"
                     data-target="#editProfileModal"
                   >
                     Edit
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-toggle="modal"
+                    data-target="#changePasswordModal"
+                  >
+                    Change password
                   </button>
                 </div>
               </div>
@@ -30,7 +41,7 @@
               <tbody>
                 <tr>
                   <td>Penalty</td>
-                  <td>{{penalty}}</td>
+                  <td>{{ penalty }}</td>
                 </tr>
               </tbody>
             </table>
@@ -129,13 +140,22 @@
               <h3>Alergije</h3>
               <br />
               <div class="input-group mb-3">
-                <input
+                <!-- string value -->
+                <model-select
+                  :options="options"
+                  v-model="item2"
+                  placeholder="Select medicine"
+                  class="form-control"
+                  style="width: 90%;"
+                >
+                </model-select>
+                <!-- <input
                   type="text"
                   class="form-control"
                   placeholder="New alergy"
                   aria-label="New alergy"
                   aria-describedby="basic-addon2"
-                />
+                /> -->
                 <div class="input-group-append">
                   <button class="btn btn-outline-primary" type="button">
                     Add
@@ -145,19 +165,19 @@
               <table class="table table-sm">
                 <tbody>
                   <tr>
-                    <td>Alergija 1</td>
+                    <td>Lek1</td>
                     <td>
                       <button class="btn btn-outline-danger">Delete</button>
                     </td>
                   </tr>
                   <tr>
-                    <td>Alergija 2</td>
+                    <td>Lek2</td>
                     <td>
                       <button class="btn btn-outline-danger">Delete</button>
                     </td>
                   </tr>
                   <tr>
-                    <td>Alergija 3</td>
+                    <td>Lek3</td>
                     <td>
                       <button class="btn btn-outline-danger">Delete</button>
                     </td>
@@ -176,18 +196,24 @@
 import axios from "axios";
 import { config } from "@/config.js";
 import ProfileEditModalComponent from "../components/ProfileEditModalComponent.vue";
+import ChangePasswordModalComponent from "../components/ChangePasswordModalComponent.vue";
+import { ModelSelect } from "vue-search-select";
 
 const API_URL = config.API_URL;
 
 export default {
   components: {
     "edit-profile-modal-component": ProfileEditModalComponent,
+    "change-password-modal-component": ChangePasswordModalComponent,
+    "model-select": ModelSelect,
   },
   data() {
     return {
       user: {},
       penalty: 0,
       userRoles: [],
+      options: [],
+      item2: ''
     };
   },
   mounted() {
@@ -198,13 +224,22 @@ export default {
     axios.get(`${API_URL}/penalty/my`).then((response) => {
       this.penalty = response.data;
     });
+    axios.get(`${API_URL}/medicines/all`).then((response) => {
+      this.options = response.data;
+      console.log(this.options);
+    });
 
-    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+    const tokenItem = JSON.parse(localStorage.getItem("jwt"));
 
-    tokenItem.token.roles.map(el => {
+    tokenItem.token.roles.map((el) => {
       this.userRoles.push(el.id);
     });
   },
+  methods: {
+    reset2 () {
+        this.item2 = ''
+      },
+  }
 };
 </script>
 

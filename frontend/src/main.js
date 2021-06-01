@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import vuetify from '@/plugins/vuetify'
+import 'vue-search-select/dist/VueSearchSelect.css'
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
