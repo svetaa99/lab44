@@ -7,7 +7,6 @@
       </div>
       <div class="col-md-4">
         <div class="card my-4">
-          <h6 class="small">Pharmacy rating: {{this.rating}}</h6>
           <h5 class="card-header">Rate this pharmacy</h5>
           <div class="card-body">
             <div class="input-group">

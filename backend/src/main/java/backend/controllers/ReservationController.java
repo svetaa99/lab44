@@ -168,7 +168,7 @@ public class ReservationController {
 	}
 	
 	@GetMapping("cancel-reservation/{id}")
-	public ResponseEntity<ReservationDTO> cancelReservation(@PathVariable Long id) {
+	public ResponseEntity<List<ReservationDTO>> cancelReservation(@PathVariable Long id) {
 		Reservation res = reservationService.findById(id);
 		
 		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(res.getPharmacy().getId(), res.getMedicine().getId());
@@ -180,7 +180,11 @@ public class ReservationController {
 		
 		reservationService.delete(res);
 		
-		return new ResponseEntity<ReservationDTO>(HttpStatus.OK);
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = us.findUserByEmail(token);
+		List<Reservation> reservations = reservationService.findMy(u.getId());
+		
+		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
 	}
 	
 	@Scheduled(cron = "0 */15 * * * *")
