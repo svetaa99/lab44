@@ -219,8 +219,9 @@ public class PharmacistController {
 		List<WorkHours> allDoctorsWH = whService.findAllWorkHoursForDoctor(doctorId);
 		
 		for (WorkHours workHours : allDoctorsWH) {
-			if (workHours.getStartTime().isBefore(startTime) && startTime.isBefore(workHours.getFinishTime())) {
-				return new ResponseEntity<String>("Doctor works in different pharmacy at this time", HttpStatus.BAD_REQUEST);
+			if ((workHours.getStartTime().isBefore(startTime) && startTime.isBefore(workHours.getFinishTime())) || 
+					(workHours.getStartTime().isBefore(finishTime) && finishTime.isBefore(workHours.getFinishTime()))) {
+				return new ResponseEntity<String>("Doctor works in another pharmacy at this time", HttpStatus.BAD_REQUEST);
 			}
 		}
 		

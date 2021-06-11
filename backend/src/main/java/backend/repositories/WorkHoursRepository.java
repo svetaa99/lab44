@@ -10,5 +10,5 @@ public interface WorkHoursRepository extends JpaRepository<WorkHours, Long>{
 
 	List<WorkHours> findByDoctorIdAndPharmacyId(Long doctorId, Long pharmacyId);
 
-
+	List<WorkHours> findByDoctorIdEquals(Long doctorId);
 }
