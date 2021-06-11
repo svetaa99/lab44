@@ -88,7 +88,7 @@ public class DermatologistController {
 		List<Dermatologist> derms = dermaService.findAllByNameOrSurname(name, surname);
 		
 		if (name.equals("") && surname.equals("")) {
-			return new ResponseEntity<List<DermatologistDTO>>(createDTOList(dermaService.findAll()), HttpStatus.OK);
+			return new ResponseEntity<List<DermatologistDTO>>(new ArrayList<DermatologistDTO>(), HttpStatus.OK);
 		}
 		
 		return new ResponseEntity<List<DermatologistDTO>>(createDTOList(derms), HttpStatus.OK);
@@ -161,6 +161,14 @@ public class DermatologistController {
 		
 		if (startTime.isAfter(finishTime)) {
 			return new ResponseEntity<String>("Start time must be before finish time.", HttpStatus.BAD_REQUEST);
+		}
+		
+		List<WorkHours> allDoctorsWH = whService.findAllWorkHoursForDoctor(doctorId);
+		
+		for (WorkHours workHours : allDoctorsWH) {
+			if (workHours.getStartTime().isBefore(startTime) && startTime.isBefore(workHours.getFinishTime())) {
+				return new ResponseEntity<String>("Doctor works in different pharmacy at this time", HttpStatus.BAD_REQUEST);
+			}
 		}
 		
 		List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getId());

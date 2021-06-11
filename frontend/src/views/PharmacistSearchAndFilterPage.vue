@@ -2,6 +2,11 @@
   <div class="container">
     <DoctorSearchComponent :doctorRole="3" @clicked="handleSearchClick" />
     <DoctorFilterComponent :doctorRole="3" @clicked="handleFilterClick" />
+    <div class="row justify-content-md-center">
+      <div class="col align-self-center">
+        <button type="button" class="btn btn-primary" @click="handleResetClick">Reset data</button>
+      </div>
+    </div><br/>
     <DoctorListComponent :doctorRole="3" :doctors="pharmacists" :action="'update'" />
   </div>
 </template>
@@ -12,6 +17,7 @@ import DoctorFilterComponent from '@/components/DoctorFilterComponent.vue'
 import DoctorListComponent from '../components/DoctorListComponent.vue';
 import axios from 'axios'
 import { config } from "@/config.js";
+import Swal from 'sweetalert2';
 
 const API_URL = config.API_URL;
 
@@ -52,7 +58,14 @@ export default {
       axios
         .post(`${API_URL}/pharmacist/search`, search)
         .then(response => {
-          this.pharmacists = response.data
+          if (Object.keys(response.data).length === 0) {
+            Swal.fire({
+              text: 'No results from the search',
+              icon: 'info'
+            })
+          } else {
+            this.pharmacists = response.data
+          }
         })
     },
     handleFilterClick(filter) {
@@ -63,6 +76,21 @@ export default {
         .then(response => {
           this.pharmacists = response.data
         })
+    },
+    handleResetClick() {
+      if (this.userRoles.includes(4)) {
+        axios
+          .get(`${API_URL}/labadmins/all-pharmacists`)
+          .then(response => {
+            this.pharmacists = response.data;
+          })
+      } else {
+        axios
+          .get(`${API_URL}/pharmacist/all`)
+          .then(response => {
+            this.pharmacists = response.data;
+          })
+      }
     }
   }
 }
