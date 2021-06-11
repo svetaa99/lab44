@@ -22,6 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -64,6 +65,7 @@ public class DoctorTermsControllerTest {
 	}
 	
 	@Test
+	@Transactional
 	@Rollback(true)
 	public void testGoodCreateForAdmin() throws Exception {
 		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-06-05T18:00:00\", \"finish\": \"2021-06-05T19:00:00\" } ";
@@ -75,7 +77,6 @@ public class DoctorTermsControllerTest {
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testTakenCreateForAdmin() throws Exception {
 		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-06-05T18:00:00\", \"finish\": \"2021-06-05T19:00:00\" } ";
 		MvcResult res = mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk()).andReturn();
@@ -83,7 +84,6 @@ public class DoctorTermsControllerTest {
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testBadWHCreateForAdmin() throws Exception {
 		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-06-05T01:00:00\", \"finish\": \"2021-06-05T02:00:00\" } ";
 		MvcResult res = mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk()).andReturn();
