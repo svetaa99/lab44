@@ -73,6 +73,13 @@ export default {
               icon:'success'
             })
           })
+          .catch(err => {
+            Swal.fire({
+              title: 'Error',
+              text: `${err.response.data.message}`,
+              icon: 'error'
+            })
+          })
       } else if (this.doctorRole === 2) {
         axios
           .put(`${API_URL}/dermatologists/update-work-hours/${this.doctor.id}`, putObject)
@@ -84,6 +91,13 @@ export default {
               title: 'Success',
               text: 'Successfully updated work time of the doctor.',
               icon:'success'
+            })
+          })
+          .catch(err => {
+            Swal.fire({
+              title: 'Error',
+              text: `${err.response.data}`,
+              icon: 'error'
             })
           })
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ReservedDrugsComponent v-bind:reservedDrugs="this.reservedDrugs" />
+    <ReservedDrugsComponent v-bind:reservedDrugs="this.reservedDrugs" @clicked="handleCancelClick"/>
   </div>
 </template>
 
@@ -25,6 +25,15 @@ export default {
       this.reservedDrugs = response.data;
     });
   },
+  methods: {
+    handleCancelClick(reservationId) {
+      axios
+        .get(`${API_URL}/reservations/cancel-reservation/${reservationId}`)
+        .then((response) => {
+          this.reservedDrugs = response.data;
+        });
+    }
+  }
 };
 </script>
 

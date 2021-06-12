@@ -259,14 +259,35 @@ public class VisitController {
 	}
 	
 	@GetMapping("/cancel-my-reservation/{id}")
-	public ResponseEntity<VisitDTO> cancelAppointment(@PathVariable Long id) {
+	public ResponseEntity<List<VisitDTO>> cancelAppointment(@PathVariable Long id) {
 		Visit visit = visitService.findById(id);
 		
 		visit.setStatus(Status.CANCELED);
 		
 		visitService.save(visit);
 		
-		return new ResponseEntity<VisitDTO>(HttpStatus.OK);
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userService.findUserByEmail(token);
+		
+		List<Visit> appointments = visitService.findByPatientIdEquals(u.getId());
+		List<Visit> myAppointments = new ArrayList<Visit>();
+		
+		for (Visit appointment : appointments) {
+			if (appointment.getStatus().equals(Status.RESERVED)) {
+				Doctor d = doctorService.findById(appointment.getDoctorId());
+				if (d instanceof Dermatologist) {
+					myAppointments.add(appointment);
+				}
+			}
+		}
+		
+		List<VisitDTO> visitsDTO = new ArrayList<>();
+		for (Visit visit1 : myAppointments) {
+			VisitDTO visitDTO = new VisitDTO(visit1.getId(), patientService.findById(visit1.getPatientId()), doctorService.findById(visit1.getDoctorId()), visit1.getStart(), visit1.getFinish());
+			visitsDTO.add(visitDTO);
+		}
+		
+		return new ResponseEntity<List<VisitDTO>>(visitsDTO, HttpStatus.OK);
 	}
 
 	@GetMapping("/doctor/{doctorId}")

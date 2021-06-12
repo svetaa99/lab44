@@ -46,14 +46,14 @@ public class PharmacyMedicinesControllerTest {
 	public void testGetAll() throws Exception {
 				
 		mockMvc.perform(get(URL_PREFIX + "/all")).andExpect(status().isOk())
-		.andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(17)))
+		.andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(6)))
 		.andExpect(jsonPath("$.[*].id").value(hasItem(1)))
 		.andExpect(jsonPath("$.[*].pharmacy.id").value(hasItem(1)))
 		.andExpect(jsonPath("$.[*].medicine.id").value(hasItem(1)))
 		.andExpect(jsonPath("$.[*].price").value(hasItem(100.0)))
 		.andExpect(jsonPath("$.[*].quantity").value(hasItem(100)))
-		.andExpect(jsonPath("$.[*].startDate").value(hasItem(1619868600000l)))
-		.andExpect(jsonPath("$.[*].endDate").value(hasItem(1621942200000l)));
+		.andExpect(jsonPath("$.[*].startDate").value(hasItem(1621893600000l)))
+		.andExpect(jsonPath("$.[*].endDate").value(hasItem(1640386800000l)));
 		
 	}
 	

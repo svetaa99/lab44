@@ -51,4 +51,8 @@ public class WorkHoursService implements IService<WorkHours> {
 	public List<WorkHours> findWorkingHoursForDoctorByIdAndPharmacyId(Long doctorId, Long pharmacyId){
 		return workHoursRepository.findByDoctorIdAndPharmacyId(doctorId, pharmacyId);
 	}
+	
+	public List<WorkHours> findAllWorkHoursForDoctor(Long doctorId) {
+		return workHoursRepository.findByDoctorIdEquals(doctorId);
+	}
 }

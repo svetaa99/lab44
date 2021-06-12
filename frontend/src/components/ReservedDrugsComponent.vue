@@ -45,12 +45,7 @@ export default {
   },
   methods: {
     cancel(reservationId) {
-      axios
-        .get(`${API_URL}/reservations/cancel-reservation/${reservationId}`)
-        .then((response) => {
-          this.reservedDrugs = response.data;
-          this.$emit("clicked", this.reservedDrugs);
-        });
+      this.$emit("clicked", reservationId);
     },
   },
 };

@@ -102,6 +102,7 @@ insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, 
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1622671200000, 18, 400, 2);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1623967200000, 18, 510, 2);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1632000000000, 18, 510, 0);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 3, 1, 1622725200000, 4, 510, 0);
 
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (1, 1, '08:00:00', '21:00:00');
 insert into work_hours (doctor_id, pharmacy_id, start_time, finish_time) values (2, 1, '14:00:00', '20:00:00');

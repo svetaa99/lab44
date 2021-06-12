@@ -39,14 +39,7 @@ export default {
   },
   methods: {
     cancel(appointmentId) {
-      axios
-        .get(
-          `${API_URL}/appointments/cancel-my-reservation/${appointmentId}`
-        )
-        .then((response) => {
-          this.dermatologistAppointments = response.data;
-          this.$emit("clicked", this.dermatologistAppointments);
-        });
+      this.$emit("clicked", appointmentId);
     },
   },
 };

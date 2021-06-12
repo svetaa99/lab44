@@ -2,6 +2,7 @@
   <div>
     <DermatologistAppointmentsList
       v-bind:dermatologistAppointments="this.dermatologistAppointments"
+      @clicked="update"
     />
   </div>
 </template>
@@ -26,6 +27,15 @@ export default {
     axios.get(`${API_URL}/appointments/to-dermatologists`).then((response) => {
       this.dermatologistAppointments = response.data;
     });
+  },
+  methods: {
+    update(appointmentId) {
+      axios
+        .get(`${API_URL}/appointments/cancel-my-reservation/${appointmentId}`)
+        .then((response) => {
+          this.dermatologistAppointments = response.data;
+        });
+    },
   },
 };
 </script>

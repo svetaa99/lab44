@@ -7,6 +7,7 @@ import backend.models.Reservation;
 
 public class ReservationDTO {
 	
+	private Long id;
 	private Patient patient;
 	private Pharmacy pharmacy;
 	private Medicine medicine;
@@ -19,8 +20,9 @@ public class ReservationDTO {
 	}
 	
 	
-	public ReservationDTO(Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity, double totalPrice) {
+	public ReservationDTO(Long id, Patient patient, Pharmacy pharmacy, Medicine medicine, long date, int quantity, double totalPrice) {
 		super();
+		this.id = id;
 		this.patient = patient;
 		this.pharmacy = pharmacy;
 		this.medicine = medicine;
@@ -31,7 +33,15 @@ public class ReservationDTO {
 
 
 	public ReservationDTO(Reservation r) {
-		this(r.getPatient(), r.getPharmacy(), r.getMedicine(), r.getDate(), r.getQuantity(), r.getTotalPrice());
+		this(r.getId(), r.getPatient(), r.getPharmacy(), r.getMedicine(), r.getDate(), r.getQuantity(), r.getTotalPrice());
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 
