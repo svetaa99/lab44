@@ -169,16 +169,8 @@ public class ReservationController {
 	
 	@GetMapping("cancel-reservation/{id}")
 	public ResponseEntity<List<ReservationDTO>> cancelReservation(@PathVariable Long id) {
-		Reservation res = reservationService.findById(id);
-		
-		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(res.getPharmacy().getId(), res.getMedicine().getId());
-		int oldQuantity = pm.getQuantity();
-		
-		int newQuantity = oldQuantity + res.getQuantity();
-		pm.setQuantity(newQuantity);
-		pmService.save(pm);
-		
-		reservationService.delete(res);
+
+		reservationService.cancelReservationPatient(id);
 		
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = us.findUserByEmail(token);

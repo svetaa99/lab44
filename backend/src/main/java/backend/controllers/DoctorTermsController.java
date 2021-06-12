@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
-import backend.enums.Status;
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
 import backend.models.User;
-import backend.models.Visit;
 import backend.models.WorkHours;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PenaltyService;
@@ -99,21 +97,8 @@ public class DoctorTermsController {
 			return new ResponseEntity<List<DermatologistTermDTO>>(HttpStatus.BAD_REQUEST);
 		}
 		
+		doctorTermsService.makeReservation(termId, u.getId()); // Transactional method
 		// Get term from id
-		DoctorTerms doctorTerm = doctorTermsService.findById(termId);
-		
-		// Make appointment
-		Visit newVisit = new Visit();
-		newVisit.setPatientId(u.getId());
-		newVisit.setDoctorId(doctorTerm.getDoctorId());
-		newVisit.setStart(doctorTerm.getStart());
-		newVisit.setFinish(doctorTerm.getFinish());
-		newVisit.setPharmacy(doctorTerm.getPharmacyId());
-		newVisit.setStatus(Status.RESERVED);
-		
-		visitService.save(newVisit);
-		
-		doctorTermsService.delete(doctorTerm);
 		
 		List<DoctorTerms> appointments = doctorTermsService.findAllFutureTerms();
 		List<DermatologistTermDTO> dtsDTO = new ArrayList<>();

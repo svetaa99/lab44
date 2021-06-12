@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import backend.enums.Status;
+import backend.models.PharmacyMedicines;
 import backend.models.Reservation;
 import backend.repositories.ReservationRepository;
+import backend.services.IPharmacyMedicinesService;
 import backend.services.IReservationService;
 
 @Service
@@ -17,6 +19,9 @@ public class ReservationService implements IReservationService {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
+	
+	@Autowired
+	private IPharmacyMedicinesService pmService;
 	
 	@Override
 	public List<Reservation> findAll() {
@@ -62,6 +67,21 @@ public class ReservationService implements IReservationService {
 	@Override
 	public List<Reservation> findByPharmacyAndStatus(Long pharmacyId, Status status) {
 		return reservationRepository.findByPharmacyIdAndStatus(pharmacyId, status);
+	}
+	
+	@Transactional
+	public Reservation cancelReservationPatient(Long id) {
+		Reservation res = findById(id);
+		
+		PharmacyMedicines pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(res.getPharmacy().getId(), res.getMedicine().getId(), System.currentTimeMillis());
+		int oldQuantity = pm.getQuantity();
+		
+		int newQuantity = oldQuantity + res.getQuantity();
+		pm.setQuantity(newQuantity);
+		pmService.save(pm);
+		
+		delete(res);
+		return res;
 	}
 	
 }
