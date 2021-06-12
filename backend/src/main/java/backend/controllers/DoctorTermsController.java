@@ -203,6 +203,12 @@ public class DoctorTermsController {
 		
 		if(newDateTime.getSearchTime() != null)
 			retVal = retVal.stream().filter(t -> t.getStart().getHour() == (newDateTime.getSearchTime().getHour())).collect(Collectors.toList());
+		retVal = 
+				retVal
+				.stream()
+				.filter(t->t.getPharmacyId() == visitService.findById(newDateTime.getVisit()).getPharmacy()
+						&& t.getStart().isAfter(LocalDateTime.now()))
+				.collect(Collectors.toList());
 		
 		return new ResponseEntity<String>(g.toJson(retVal), HttpStatus.OK);
 	}

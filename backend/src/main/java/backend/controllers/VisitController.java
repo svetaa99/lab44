@@ -96,30 +96,22 @@ public class VisitController {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		
-		// Check if has 3 penalties
-		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
-		
 		Long doctorId = u.getId();
 		
 		newReservation.setDoctorId(doctorId);
 		newReservation.setStatus(Status.RESERVED);
 		
-		if(!checkTermTaken(newReservation))
-			return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
-		
-		if(!checkTermDerm(newReservation, doctorId))
-			return new ResponseEntity<String>("You already have scheduled meeting at that time", HttpStatus.OK);
-		
-		if(u instanceof Pharmacist) {
+		if(visitService.save(newReservation) == null) {		//Transactional method
+			if(!checkTermTaken(newReservation))
+				return new ResponseEntity<String>("Patient unavailable", HttpStatus.OK);
+			
+			if(!checkTermDerm(newReservation, newReservation.getDoctorId()))
+				return new ResponseEntity<String>("You already have scheduled meeting at that time", HttpStatus.OK);
+			
 			if(!checkIfInWorkingHours(newReservation)) {
 				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
 			}
 		}
-		
-		visitService.save(newReservation);
-		
 		Patient p = patientService.findById(newReservation.getPatientId());
 		String patientsEmail = p.getEmail();
 		
@@ -137,6 +129,11 @@ public class VisitController {
 		User u = userService.findUserByEmail(token);
 		Long patientId = u.getId();
 		
+		// Check if has 3 penalties
+		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		
 		newReservation.setPatientId(patientId);
 		newReservation.setFinish(newReservation.getStart().plusHours(1));
 		newReservation.setStatus(Status.RESERVED);
@@ -151,7 +148,6 @@ public class VisitController {
 	public ResponseEntity<String> saveAppointment(@RequestBody Report newReport){
 		Visit v = visitService.findById(newReport.getVisitId());
 		v.setStatus(Status.FINISHED);
-		System.out.println("Int: " + Status.FINISHED);
 		visitService.save(v);
 		
 		reportService.save(newReport);
@@ -421,43 +417,7 @@ public class VisitController {
 		return new ResponseEntity<String>("true", HttpStatus.OK);
 	}
 	
-	private boolean checkTermTaken(Visit newReservation) {
-		List<Visit> patientsAppointments = visitService.findByPatientIdEquals(newReservation.getPatientId());
-		
-		LocalDateTime startTime = newReservation.getStart();
-		LocalDateTime finishTime = newReservation.getFinish();
-
-		for (Visit visit : patientsAppointments) {
-			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
-				return false;
-			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
-				return false;
-			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
-				return false;
-			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
-				return false;
-		}
-		return true;
-	}
 	
-	private boolean checkTermDerm(Visit newReservation, Long doctorId) {
-		List<Visit> doctorsAppointments = visitService.findByDoctorIdEquals(doctorId);
-		LocalDateTime startTime = newReservation.getStart();
-		LocalDateTime finishTime = newReservation.getFinish();
-		
-		for (Visit visit : doctorsAppointments) {
-			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
-				return false;
-			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
-				return false;
-			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
-				return false;
-			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
-				return false;
-		}
-		
-		return true;
-	}
 	
 	public void notifyPatientViaEmail(String patientsEmail, Long doctorId, LocalDateTime startTime, String patientsName) {
 		final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
@@ -507,7 +467,43 @@ public class VisitController {
 		    	e.printStackTrace();
 		    }
 	}
+	private boolean checkTermTaken(Visit newReservation) {
+		List<Visit> patientsAppointments = visitService.findByPatientIdEquals(newReservation.getPatientId());
+		
+		LocalDateTime startTime = newReservation.getStart();
+		LocalDateTime finishTime = newReservation.getFinish();
+
+		for (Visit visit : patientsAppointments) {
+			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
+				return false;
+			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
+				return false;
+		}
+		return true;
+	}
 	
+	private boolean checkTermDerm(Visit newReservation, Long doctorId) {
+		List<Visit> doctorsAppointments = visitService.findByDoctorIdEquals(doctorId);
+		LocalDateTime startTime = newReservation.getStart();
+		LocalDateTime finishTime = newReservation.getFinish();
+		
+		for (Visit visit : doctorsAppointments) {
+			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
+				return false;
+			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
+				return false;
+		}
+		
+		return true;
+	}
 	private boolean checkIfInWorkingHours(Visit newTerm) {
 		for (WorkHours wh : whService.findWorkingHoursForDoctorByIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacy())) {
 			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))

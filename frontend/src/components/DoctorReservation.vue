@@ -95,6 +95,7 @@ export default {
             newFinishTime: '',
             selectedTerm: null,
             searchDateTimeObject : {
+              visit: this.$route.params.id,
               searchDate: '',
               searchTime: '',
             }
@@ -170,6 +171,7 @@ export default {
        }
       },
       handleResponse: function(respData){
+        console.log(respData);
         respData == "Taken term" ? 
         Swal.fire({
           title: 'Taken term',

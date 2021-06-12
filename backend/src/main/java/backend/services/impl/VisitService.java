@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import backend.enums.Status;
 import backend.models.Visit;
+import backend.models.WorkHours;
 import backend.repositories.VisitRepository;
+import backend.repositories.WorkHoursRepository;
 import backend.services.IService;
 
 @Service
@@ -19,7 +21,10 @@ public class VisitService implements IService<Visit>{
 
 	@Autowired
 	private VisitRepository visitRepository;
-
+	
+	@Autowired 
+	private WorkHoursRepository whRepository;
+	
 	@Override
 	public List<Visit> findAll() {
 		return visitRepository.findAll();
@@ -61,6 +66,15 @@ public class VisitService implements IService<Visit>{
 	@Transactional(readOnly = false)
 	@Override
 	public Visit save(Visit obj) {
+		if(!checkTermTaken(obj))
+			return null;
+		
+		if(!checkTermDerm(obj, obj.getDoctorId()))
+			return null;
+		
+		if(!checkIfInWorkingHours(obj)) {
+			return null;
+		}
 		return visitRepository.save(obj);
 	}
 
@@ -76,6 +90,51 @@ public class VisitService implements IService<Visit>{
 	
 	public List<Visit> findByPatientAndPharmacy(Long patientId, Long pharmacyId) {
 		return visitRepository.findByPatientIdAndPharmacyAndStatus(patientId, pharmacyId, Status.FINISHED);
+	}
+	
+	private boolean checkTermTaken(Visit newReservation) {
+		List<Visit> patientsAppointments = findByPatientIdEquals(newReservation.getPatientId());
+		
+		LocalDateTime startTime = newReservation.getStart();
+		LocalDateTime finishTime = newReservation.getFinish();
+
+		for (Visit visit : patientsAppointments) {
+			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
+				return false;
+			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
+				return false;
+		}
+		return true;
+	}
+	
+	private boolean checkTermDerm(Visit newReservation, Long doctorId) {
+		List<Visit> doctorsAppointments = findByDoctorIdEquals(doctorId);
+		LocalDateTime startTime = newReservation.getStart();
+		LocalDateTime finishTime = newReservation.getFinish();
+		
+		for (Visit visit : doctorsAppointments) {
+			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(finishTime.isAfter(visit.getStart()) && finishTime.isBefore(visit.getFinish())) 
+				return false;
+			else if(startTime.isBefore(visit.getStart()) && finishTime.isAfter(visit.getFinish()))
+				return false;
+			else if(startTime.equals(visit.getStart()) || finishTime.equals(visit.getFinish()))
+				return false;
+		}
+		
+		return true;
+	}
+	private boolean checkIfInWorkingHours(Visit newTerm) {
+		for (WorkHours wh : whRepository.findByDoctorIdAndPharmacyId(newTerm.getDoctorId(), newTerm.getPharmacy())) {
+			if(newTerm.getStart().toLocalTime().isAfter(wh.getStartTime()) && newTerm.getFinish().toLocalTime().isBefore(wh.getFinishTime()))
+				return true;
+		}			
+		return false;
 	}
 	
 }

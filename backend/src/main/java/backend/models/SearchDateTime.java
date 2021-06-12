@@ -5,6 +5,8 @@ import java.time.LocalTime;
 
 public class SearchDateTime {
 
+	private Long visit;
+	
 	private LocalDate searchDate;
 	
 	private LocalTime searchTime;
@@ -23,6 +25,14 @@ public class SearchDateTime {
 
 	public void setSearchTime(LocalTime searchTime) {
 		this.searchTime = searchTime;
+	}
+
+	public Long getVisit() {
+		return visit;
+	}
+
+	public void setVisitId(Long visit) {
+		this.visit = visit;
 	}
 	
 	
