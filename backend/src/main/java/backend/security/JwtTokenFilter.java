@@ -2,6 +2,7 @@ package backend.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -58,7 +59,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null,
                 userDetails == null ?
-                    new ArrayList<GrantedAuthority>() : userDetails.getAuthorities()
+                    List.of() : userDetails.getAuthorities()
             );
         
         authentication.setDetails(
