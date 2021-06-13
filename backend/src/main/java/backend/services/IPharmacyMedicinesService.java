@@ -4,8 +4,10 @@ import java.util.List;
 
 import backend.models.Medicine;
 import backend.models.Pharmacy;
+import backend.models.PharmacyMedicineAddRemoveObject;
 import backend.models.PharmacyMedicines;
 import backend.models.Reservation;
+import backend.models.ResponseObject;
 
 public interface IPharmacyMedicinesService extends IService<PharmacyMedicines> {
 	
@@ -38,4 +40,6 @@ public interface IPharmacyMedicinesService extends IService<PharmacyMedicines> {
 	PharmacyMedicines updateAfterReservation(Reservation reservation, int quantity);
 	
 	PharmacyMedicines updateAfterReservationCancel(Reservation reservation);
+	
+	ResponseObject updateMedicinePrice(PharmacyMedicineAddRemoveObject obj);
 }
