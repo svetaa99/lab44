@@ -81,7 +81,7 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 				return "ok";
 			}
 			else
-				return "Not in your working hours";
+				return "Not in doctors working hours";
 		}
 		else {
 			return "Taken term";
