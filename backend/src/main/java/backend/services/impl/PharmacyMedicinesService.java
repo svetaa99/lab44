@@ -1,6 +1,7 @@
 package backend.services.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
+import backend.models.Reservation;
 import backend.repositories.PharmacyMedicinesRepository;
 import backend.services.IPharmacyMedicinesService;
 
@@ -109,7 +111,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 		return pharmacyMedicineRepository.findByMedicineNameAndTodaysDate(medicineName, todaysDate);
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional
 	@Override
 	public PharmacyMedicines findByPharmacyIdAndMedicineIdAndTodaysDate(Long pharmacyId, Long medicineId,
 			long todaysDate) {
@@ -133,6 +135,39 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	public List<PharmacyMedicines> findByMedicineNameAndPharmacyId(String medicineName, Long pharmacyId) {
 		// TODO Auto-generated method stub
 		return pharmacyMedicineRepository.findByMedicineNameAndPharmacyId(medicineName, pharmacyId);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Override
+	public PharmacyMedicines updateAfterReservation(Reservation reservation, int quantity) {
+		PharmacyMedicines pm = findByPharmacyIdAndMedicineIdAndTodaysDate(reservation.getPharmacy().getId(), reservation.getMedicine().getId(), new Date().getTime());
+		int oldQuantity = pm.getQuantity();
+		if (oldQuantity < quantity) {
+			return null;
+		}
+		
+		int newQuantity = oldQuantity - quantity;
+		
+		pm.setQuantity(newQuantity);
+		pm = save(pm);
+		
+		return pm;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Override
+	public PharmacyMedicines updateAfterReservationCancel(Reservation reservation) {
+		PharmacyMedicines pm = findPharmacyMedicinesByIds(reservation.getPharmacy().getId(), reservation.getMedicine().getId());
+		if (pm == null) {
+			return null;
+		}
+		
+		int oldQuantity = pm.getQuantity();
+		
+		int newQuantity = oldQuantity + reservation.getQuantity();
+		pm.setQuantity(newQuantity);
+		pm = save(pm);
+		return pm;
 	}
 	
 

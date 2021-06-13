@@ -171,12 +171,10 @@ public class ReservationController {
 	public ResponseEntity<List<ReservationDTO>> cancelReservation(@PathVariable Long id) {
 		Reservation res = reservationService.findById(id);
 		
-		PharmacyMedicines pm = pmService.findPharmacyMedicinesByIds(res.getPharmacy().getId(), res.getMedicine().getId());
-		int oldQuantity = pm.getQuantity();
-		
-		int newQuantity = oldQuantity + res.getQuantity();
-		pm.setQuantity(newQuantity);
-		pmService.save(pm);
+		PharmacyMedicines pm = pmService.updateAfterReservationCancel(res);
+		if (pm == null) {
+			return new ResponseEntity<List<ReservationDTO>>(HttpStatus.BAD_REQUEST);
+		}
 		
 		reservationService.delete(res);
 		
@@ -246,15 +244,10 @@ public class ReservationController {
 		
 		reservation = reservationService.save(reservation);
 		
-		PharmacyMedicines pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacy.getId(), medicine.getId(), new Date().getTime());
-		int oldQuantity = pm.getQuantity();
-		if (oldQuantity < quantity) {
+		PharmacyMedicines pm = pmService.updateAfterReservation(reservation, quantity);
+		if (pm == null) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);
 		}
-		
-		int newQuantity = oldQuantity - quantity;
-		pm.setQuantity(newQuantity);
-		pmService.save(pm);
 		
 		ReservationDTO rDTO = new ReservationDTO(reservation);
 		return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);

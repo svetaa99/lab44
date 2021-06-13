@@ -5,6 +5,7 @@ import java.util.List;
 import backend.models.Medicine;
 import backend.models.Pharmacy;
 import backend.models.PharmacyMedicines;
+import backend.models.Reservation;
 
 public interface IPharmacyMedicinesService extends IService<PharmacyMedicines> {
 	
@@ -33,4 +34,8 @@ public interface IPharmacyMedicinesService extends IService<PharmacyMedicines> {
 	List<PharmacyMedicines> findAvailableByPharmacyId(Long pharmacyId);
 	
 	List<PharmacyMedicines> findByMedicineNameAndPharmacyId(String medicineName, Long pharmacyId);
+	
+	PharmacyMedicines updateAfterReservation(Reservation reservation, int quantity);
+	
+	PharmacyMedicines updateAfterReservationCancel(Reservation reservation);
 }
