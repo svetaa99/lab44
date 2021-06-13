@@ -49,10 +49,10 @@ insert into lab_admin (id, name, surname, email, password, address, phone_num, p
 insert into lab_admin (id, name, surname, email, password, address, phone_num, pharmacy_id) values (17, 'Paun', 'Paunovic', 'paun@gmail.com', 'paun123', 3, '022213213', 3);
 insert into lab_admin (id, name, surname, email, password, address, phone_num, pharmacy_id) values (18, 'Zeljko', 'Zeljkovic', 'zelje@gmail.com', 'zelje123', 2, '022213213', 1);
 
-insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-06-05 15:50:00', '2021-06-05 17:00:00');
-insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-06-06 18:00:00', '2021-06-06 18:30:00');
-insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (2, 1, '2021-06-15 16:00:00', '2021-06-05 17:00:00');
-insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 2, '2021-06-05 15:00:00', '2021-06-05 15:30:00');
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-06-25 15:50:00', '2021-06-05 17:00:00');
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 1, '2021-06-26 18:00:00', '2021-06-06 18:30:00');
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (2, 1, '2021-06-19 16:00:00', '2021-06-05 17:00:00');
+insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 2, '2021-06-21 15:00:00', '2021-06-05 15:30:00');
 insert into doctor_terms (doctor_id, pharmacy_id, start, finish) values (1, 2, '2021-06-28 15:00:00', '2021-06-28 16:00:00');
 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-04-20 16:00:00', '2021-04-20 16:30:00', 1, 2); 
