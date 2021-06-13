@@ -84,6 +84,23 @@ public class VisitService implements IService<Visit>{
 		
 	}
 	
+	public Visit makePharmacistAppointmentPatient(Visit newReservation, Long patientId) {
+		newReservation.setPatientId(patientId);
+		newReservation.setFinish(newReservation.getStart().plusHours(1));
+		
+		if(!checkTermTaken(newReservation))
+			return null;
+		if(checkTermDerm(newReservation, newReservation.getDoctorId()))
+			return null;
+		if(checkIfInWorkingHours(newReservation))
+			return null;
+		
+		newReservation.setStatus(Status.RESERVED);
+	
+		save(newReservation);
+		return newReservation;
+	}
+	
 	public List<Visit> findByDoctorAndPatient(Long doctorId, Long patientId) {
 		return visitRepository.findByPatientIdAndDoctorIdAndStatus(patientId, doctorId, Status.FINISHED);
 	}
@@ -97,7 +114,7 @@ public class VisitService implements IService<Visit>{
 		
 		LocalDateTime startTime = newReservation.getStart();
 		LocalDateTime finishTime = newReservation.getFinish();
-
+		
 		for (Visit visit : patientsAppointments) {
 			if(startTime.isAfter(visit.getStart()) && startTime.isBefore(visit.getFinish())) 
 				return false;

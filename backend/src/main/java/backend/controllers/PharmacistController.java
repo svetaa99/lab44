@@ -174,7 +174,7 @@ public class PharmacistController {
 		p.setName(obj.getName());
 		p.setSurname(obj.getSurname());
 		p.setEmail(obj.getEmail());
-		p.setPassword("changem3");   // generic password that the pharmacist will change when first loggs in
+		p.setPassword("chang3m3");   // generic password that the pharmacist will change when first loggs in
 		p.setAddress(obj.getAddress());
 		p.setPhoneNum(obj.getPhoneNum());
 		p.setPharmacy(obj.getPharmacy());

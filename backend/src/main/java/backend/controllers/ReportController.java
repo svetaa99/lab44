@@ -77,11 +77,8 @@ public class ReportController {
 			
 			if(!newMedRepDTO.isAvailable()) {
 				//send notification to lab admin
-				System.out.println("DATA: \nPHARMACY: " + pharmacyId + "  MEDICINE: " + newMedRepDTO.getMedicine().getId() + "  DATE: "+ System.currentTimeMillis());
 				PharmacyMedicines newPm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacyId, newMedRepDTO.getMedicine().getId(), System.currentTimeMillis());
-				System.out.println("Current requests: " + newPm.getRequests());
 				newPm.incRequests();
-				System.out.println(newPm.getRequests());
 				pmService.save(newPm);
 			}
 			

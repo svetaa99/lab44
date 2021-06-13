@@ -133,12 +133,9 @@ public class VisitController {
 		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
+		if(visitService.makePharmacistAppointmentPatient(newReservation, patientId) == null)//transactional method
+			return new ResponseEntity<String>("FAIL", HttpStatus.OK);//obradi na frontu!
 		
-		newReservation.setPatientId(patientId);
-		newReservation.setFinish(newReservation.getStart().plusHours(1));
-		newReservation.setStatus(Status.RESERVED);
-		
-		visitService.save(newReservation);
 		System.out.println(newReservation);
 		return new ResponseEntity<String>("OK", HttpStatus.OK);
 	}

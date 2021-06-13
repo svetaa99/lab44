@@ -35,12 +35,4 @@ public class ReportService implements IService<Report>{
 		reportRepository.delete(obj);
 	}
 	
-//	public List<Report> getAllReportsForPatientById(Long id){
-//		return reportRepository.findByPatientIdEquals(id);
-//		
-//	}
-//	public List<Report> getAllReportsForDoctorById(Long id){
-//		return reportRepository.findByDoctorIdEquals(id);
-//	}
-
 }

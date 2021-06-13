@@ -169,14 +169,7 @@ public class ReservationController {
 	
 	@GetMapping("cancel-reservation/{id}")
 	public ResponseEntity<List<ReservationDTO>> cancelReservation(@PathVariable Long id) {
-		Reservation res = reservationService.findById(id);
-		
-		PharmacyMedicines pm = pmService.updateAfterReservationCancel(res);
-		if (pm == null) {
-			return new ResponseEntity<List<ReservationDTO>>(HttpStatus.BAD_REQUEST);
-		}
-		
-		reservationService.delete(res);
+		reservationService.cancelReservationPatient(id);
 		
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = us.findUserByEmail(token);
