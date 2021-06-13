@@ -154,7 +154,7 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 		return pm;
 	}
 	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional
 	@Override
 	public PharmacyMedicines updateAfterReservationCancel(Reservation reservation) {
 		PharmacyMedicines pm = findPharmacyMedicinesByIds(reservation.getPharmacy().getId(), reservation.getMedicine().getId());
