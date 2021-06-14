@@ -74,6 +74,7 @@ public class DoctorTermsService implements IService<DoctorTerms>{
 		return doctorTermsRepository.findAll().stream().filter(dt -> dt.getStart().isAfter(LocalDateTime.now())).collect(Collectors.toList());
 	}
 	
+	@Transactional
 	public String createNewTerm(DoctorTerms newTerm) {
 		if(checkIfTakenTerm(newTerm)) {
 			if(checkIfInWorkingHours(newTerm)) {

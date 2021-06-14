@@ -70,6 +70,21 @@ public class ReservationService implements IReservationService {
 	}
 	
 	@Transactional
+	@Override
+	public Reservation createReservation(Reservation reservation) {
+		reservation.setStatus(Status.RESERVED);
+		reservation = save(reservation);
+		
+		PharmacyMedicines pm = pmService.updateAfterReservation(reservation, reservation.getQuantity());
+		if (pm == null) {
+			return null;
+		}
+		
+		return reservation;
+	}
+	
+	@Transactional
+	@Override
 	public Reservation cancelReservationPatient(Long id) {
 		Reservation res = findById(id);
 		

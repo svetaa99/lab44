@@ -148,7 +148,8 @@ public class PharmacyMedicinesService implements IPharmacyMedicinesService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Override
 	public PharmacyMedicines updateAfterReservation(Reservation reservation, int quantity) {
-		PharmacyMedicines pm = findByPharmacyIdAndMedicineIdAndTodaysDate(reservation.getPharmacy().getId(), reservation.getMedicine().getId(), new Date().getTime());
+		PharmacyMedicines pm = findByPharmacyIdAndMedicineIdAndTodaysDate(reservation.getPharmacy().getId(), 
+				reservation.getMedicine().getId(), new Date().getTime());
 		int oldQuantity = pm.getQuantity();
 		if (oldQuantity < quantity) {
 			return null;

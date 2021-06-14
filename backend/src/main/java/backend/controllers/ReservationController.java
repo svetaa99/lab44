@@ -74,9 +74,6 @@ public class ReservationController {
 	private UserService userService;
 	
 	@Autowired
-	private IPharmacyMedicinesService pmService;
-	
-	@Autowired
 	private PharmacistService pharmacistService;
 
 	@Autowired
@@ -233,12 +230,8 @@ public class ReservationController {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);	// status code 400
 		}
 		
-		reservation.setStatus(Status.RESERVED);
-		
-		reservation = reservationService.save(reservation);
-		
-		PharmacyMedicines pm = pmService.updateAfterReservation(reservation, quantity);
-		if (pm == null) {
+		reservation = reservationService.createReservation(reservation);
+		if (reservation == null) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
