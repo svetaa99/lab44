@@ -70,6 +70,6 @@
     "not dead"
   ],
   "engines": {
-    "node": "12",
+    "node": "12"
   }
 }

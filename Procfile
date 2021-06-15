@@ -1,1 +1,0 @@
-front: cd frontend && npm start
