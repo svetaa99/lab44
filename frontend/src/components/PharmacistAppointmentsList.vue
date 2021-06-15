@@ -16,8 +16,8 @@
       <tbody>
         <tr v-for="ph in this.pharmacistAppointments" :key="ph.id">
           <td>{{ ph.doctor.name }} {{ ph.doctor.surname }}</td>
-          <td>{{ ph.start }}</td>
-          <td>{{ ph.finish }}</td>
+          <td>{{ ph.start | date }}</td>
+          <td>{{ ph.finish | date }}</td>
           <td>
             <button class="btn btn-primary" v-on:click="cancel(ph.id)">
               Cancel
@@ -46,6 +46,18 @@ export default {
         .then((response) => {
           this.pharmacistAppointments = response.data;
           this.$emit("clicked", this.pharmacistAppointments);
+          Swal.fire({
+            title: "Appointment canceled successfully.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        }).catch((error) => {
+          Swal.fire({
+            title: "Error",
+            text: "You can't cancel appointment 24 hours before choosen date.",
+            icon: "error",
+          });
         });
     },
   },

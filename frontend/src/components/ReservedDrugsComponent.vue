@@ -14,6 +14,7 @@
           <th class="th-sm">Pharmacy</th>
           <th class="th-sm">Quantity</th>
           <th class="th-sm">Price</th>
+          <th class="th-sm">Date</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,7 @@
           <td>{{ rd.pharmacy.name }}</td>
           <td>{{ rd.quantity }}</td>
           <td>{{ rd.totalPrice }}</td>
+          <td>{{ rd.date | date }}</td>
           <td>
             <button class="btn btn-primary" v-on:click="cancel(rd.id)">
               Cancel

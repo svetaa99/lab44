@@ -81,6 +81,10 @@ export default {
                 title: 'User received penalty',
                 icon: 'error',
                 confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href=`http://localhost:8080/`;
+                }
             })
             )
             
