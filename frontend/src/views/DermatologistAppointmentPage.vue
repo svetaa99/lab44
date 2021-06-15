@@ -34,6 +34,18 @@ export default {
         .get(`${API_URL}/appointments/cancel-my-reservation/${appointmentId}`)
         .then((response) => {
           this.dermatologistAppointments = response.data;
+          Swal.fire({
+            title: "Appointment canceled successfully.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }).catch((error) => {
+          Swal.fire({
+            title: "Error",
+            text: "You can't cancel appointment 24 hours before choosen date.",
+            icon: "error",
+          });
         });
     },
   },

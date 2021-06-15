@@ -1,9 +1,21 @@
 package backend.controllers;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +34,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.DermatologistTermDTO;
+import backend.models.Doctor;
 import backend.models.DoctorTerms;
 import backend.models.SearchDateTime;
 import backend.models.User;
 import backend.models.WorkHours;
+import backend.services.impl.DoctorService;
 import backend.services.impl.DoctorTermsService;
 import backend.services.impl.PenaltyService;
 import backend.services.impl.PharmacyService;
@@ -57,6 +71,9 @@ public class DoctorTermsController {
 	@Autowired
 	private WorkHoursService whService;
 	
+	@Autowired
+	private DoctorService doctorService;
+	
 	private static Gson g = new Gson();
 	
 	@GetMapping("/definedterms/{visitId}")
@@ -72,7 +89,7 @@ public class DoctorTermsController {
 	}
 	
 	@GetMapping("/definedterms-admin/{pharmacyId}/{doctorId}")
-	//@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")
+	@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")
 	public ResponseEntity<String> getDefinedTermsAdmin(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("doctorId") Long doctorId) {
 		List<DoctorTerms> terms = doctorTermsService.findByDoctorIdEquals(doctorId);
 		List<DoctorTerms> retVal = terms
@@ -96,7 +113,7 @@ public class DoctorTermsController {
 		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
 			return new ResponseEntity<List<DermatologistTermDTO>>(HttpStatus.BAD_REQUEST);
 		}
-		
+		DoctorTerms selected = doctorTermsService.findById(termId);
 		doctorTermsService.makeReservation(termId, u.getId()); // Transactional method
 		// Get term from id
 		
@@ -108,7 +125,7 @@ public class DoctorTermsController {
 			dtsDTO.add(dtDTO);
 		}
 		
-		// TODO: Notify via email
+		notifyPatientViaEmail(u.getEmail(), selected.getDoctorId(), selected.getStart(), u.getName());
 		
 		return new ResponseEntity<List<DermatologistTermDTO>>(dtsDTO, HttpStatus.OK);
 	}
@@ -147,19 +164,11 @@ public class DoctorTermsController {
 	}
 	
 	@PostMapping(value = "/createnew-admin", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<String> saveNewTermAdmin(@RequestBody DoctorTerms newTerm) {
-		if(checkIfTakenTerm(newTerm)) {
-			if(checkIfInWorkingHours(newTerm)) {
-				doctorTermsService.save(newTerm);
-				System.out.println("Object saved to db...");
-			}
-			else
-				return new ResponseEntity<String>("Not in your working hours", HttpStatus.OK);
-		}
-		else {
-			System.out.println("Taken term...");
-			return new ResponseEntity<String>("Taken term", HttpStatus.OK);
+		String retString = doctorTermsService.createNewTerm(newTerm);
+		if (!retString.equals("ok")) {
+			return new ResponseEntity<String>(retString, HttpStatus.OK);
 		}
 		
 		List<DoctorTerms> retVal = doctorTermsService
@@ -200,6 +209,7 @@ public class DoctorTermsController {
 	
 	@GetMapping("/dermatologist-all")
 	public ResponseEntity<List<DermatologistTermDTO>> getDermatologistFreeTerms() {
+		
 		List<DoctorTerms> appointments = doctorTermsService.findAllFutureTerms();
 		List<DermatologistTermDTO> dtsDTO = new ArrayList<>();
 		for (DoctorTerms doctorTerm : appointments) {
@@ -262,5 +272,53 @@ public class DoctorTermsController {
 		.collect(Collectors.toList());
 		retVal.sort(dtc);
 		return retVal;
+	}
+	public void notifyPatientViaEmail(String patientsEmail, Long doctorId, LocalDateTime startTime, String patientsName) {
+		final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+		 // Get a Properties object
+		    Properties props = System.getProperties();
+		    props.setProperty("mail.smtp.host", "smtp.gmail.com");
+		    props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+		    props.setProperty("mail.smtp.socketFactory.fallback", "false");
+		    props.setProperty("mail.smtp.port", "465");
+		    props.setProperty("mail.smtp.socketFactory.port", "465");
+		    props.put("mail.smtp.auth", "true");
+		    props.put("mail.debug", "true");
+		    props.put("mail.store.protocol", "pop3");
+		    props.put("mail.transport.protocol", "smtp");
+		    final String username = "labonibato44@gmail.com";//
+		    final String password = "filipsvetauki1";
+		    try{
+		      Session session = Session.getDefaultInstance(props, 
+		                          new Authenticator(){
+		                             protected PasswordAuthentication getPasswordAuthentication() {
+		                                return new PasswordAuthentication(username, password);
+		                             }});
+
+		   // -- Create a new message --
+		      Message msg = new MimeMessage(session);
+
+		   // -- Set the FROM and TO fields --
+		      msg.setFrom(new InternetAddress("labonibato44@gmail.com"));
+		      msg.setRecipients(Message.RecipientType.TO, 
+		                        InternetAddress.parse(patientsEmail, false));
+		      msg.setSubject("Doctors appointment");
+		      
+			  String NAME = patientsName;
+			  
+			  Doctor doc = doctorService.findById(doctorId);
+			  String DOCTORS_NAME = doc.getName();
+			  
+			  String formatterS = "HH:mm dd-MM-yyyy";
+			  DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatterS);
+			  String DATE_TIME = formatter.format(startTime);
+			  
+		      msg.setText("Dear " + NAME + ",\nYou appointed new treatment with doctor " + DOCTORS_NAME + " at " + DATE_TIME + ".\nSincerely yours,\nLABONI44.");
+		      msg.setSentDate(new Date());
+		      Transport.send(msg);
+		      System.out.println("Message sent.");
+		    }catch (MessagingException e){ 
+		    	e.printStackTrace();
+		    }
 	}
 }

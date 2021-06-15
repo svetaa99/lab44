@@ -8,8 +8,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import vuetify from '@/plugins/vuetify'
 import 'vue-search-select/dist/VueSearchSelect.css'
+import DateFilter from './filters/date'
 
 Vue.config.productionTip = false
+Vue.filter('date', DateFilter ) // register filter globally
 Vue.use(BootstrapVue)
 
 new Vue({

@@ -263,33 +263,16 @@ public class PharmacyController {
 	@PutMapping(value = "/update-price", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
 	public ResponseEntity<ResponseObject> updateMedicinePrice(@RequestBody PharmacyMedicineAddRemoveObject obj) {
-		PharmacyMedicines oldPM = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(obj.getPharmacyId(), obj.getMedicineId(), new Date().getTime());
-		double price = obj.getPrice();
-		if (price < 0) {
-			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Invalid price"), HttpStatus.BAD_REQUEST);
+		ResponseObject response = pmService.updateMedicinePrice(obj);
+		HttpStatus status = null;
+		if (response.getStatus() == 200) {
+			response.setRetObj(new PharmacyMedicinesDTO((PharmacyMedicines)response.getRetObj()));
+			status = HttpStatus.OK;
+		} else {
+			status = HttpStatus.BAD_REQUEST;
 		}
 		
-		long startDate = obj.getStartDate();
-		long endDate = obj.getEndDate();
-		
-		if (startDate > endDate || startDate < 0 || endDate < 0) {
-			return new ResponseEntity<ResponseObject>(new ResponseObject(400, "Invalid dates."), HttpStatus.BAD_REQUEST);
-		}
-		
-		if (startDate < oldPM.getEndDate()) {
-			LocalDate ld = Instant.ofEpochMilli(endDate).atZone(ZoneId.systemDefault()).toLocalDate();
-			ld.plusDays(1);
-			DateTimeFormatter formmat1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String formatter = formmat1.format(ld);
-			return new ResponseEntity<ResponseObject>(
-					new ResponseObject(400, "Start date of the new price period cannot be before last end date. First available start date: " + formatter), 
-					HttpStatus.CONFLICT);
-		}
-		
-		PharmacyMedicines pm = new PharmacyMedicines(oldPM.getPharmacy(), oldPM.getMedicine(), price, oldPM.getQuantity(), startDate, endDate);
-		pmService.save(pm);
-		
-		return new ResponseEntity<ResponseObject>(new ResponseObject(new PharmacyMedicinesDTO(pm), 200, "Ok"), HttpStatus.OK);
+		return new ResponseEntity<ResponseObject>(response, status);
 	}
 	
 	@GetMapping("/get-profits/{startDate}/{endDate}")

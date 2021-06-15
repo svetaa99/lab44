@@ -3,6 +3,7 @@ package backend.controllers;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,10 +72,10 @@ public class ReservationController {
 	private IMedicineService medicineService;
 	
 	@Autowired
-	private UserService userService;
+	private IPharmacyMedicinesService pmService;
 	
 	@Autowired
-	private IPharmacyMedicinesService pmService;
+	private UserService userService;
 	
 	@Autowired
 	private PharmacistService pharmacistService;
@@ -162,21 +163,48 @@ public class ReservationController {
 			System.out.println("Must login");
 		}
 		
-		List<Reservation> reservations = reservationService.findMy(u.getId());
+		LocalDateTime vreme = LocalDateTime.now();
 		
-		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
+		List<Reservation> reservations = reservationService.findMy(u.getId());
+		List<Reservation> res = new ArrayList<Reservation>();
+		for (Reservation reservation : reservations) {
+			LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(reservation.getDate()), ZoneId.systemDefault());
+			if(vreme.isBefore(dateTime)) {
+				if (reservation.getStatus().equals(Status.RESERVED)) {
+					res.add(reservation);
+				}
+			}
+		}
+		
+		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(res), HttpStatus.OK);
 	}
 	
 	@GetMapping("cancel-reservation/{id}")
 	public ResponseEntity<List<ReservationDTO>> cancelReservation(@PathVariable Long id) {
-
+		
+		LocalDateTime vreme = LocalDateTime.now();	// sadasnji datum
+		long date = reservationService.findById(id).getDate(); // datum rezervacije leka
+		LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault());
+		if(vreme.isAfter(dateTime.minusHours(24))) {
+			return new ResponseEntity<List<ReservationDTO>>(HttpStatus.BAD_REQUEST);
+		}
+		
 		reservationService.cancelReservationPatient(id);
 		
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = us.findUserByEmail(token);
-		List<Reservation> reservations = reservationService.findMy(u.getId());
 		
-		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(reservations), HttpStatus.OK);
+		List<Reservation> reservations = reservationService.findMy(u.getId());
+		List<Reservation> res = new ArrayList<Reservation>();
+		for (Reservation reservation : reservations) {
+			if(vreme.isBefore(LocalDateTime.ofInstant(Instant.ofEpochMilli(reservation.getDate()), ZoneId.systemDefault()))) {
+				if (reservation.getStatus().equals(Status.RESERVED)) {
+					res.add(reservation);
+				}
+			}
+		}
+		
+		return new ResponseEntity<List<ReservationDTO>>(createReservationDTOList(res), HttpStatus.OK);
 	}
 	
 	@Scheduled(cron = "0 */15 * * * *")
@@ -238,15 +266,12 @@ public class ReservationController {
 		
 		reservation = reservationService.save(reservation);
 		
-		PharmacyMedicines pm = pmService.findByPharmacyIdAndMedicineIdAndTodaysDate(pharmacy.getId(), medicine.getId(), new Date().getTime());
-		int oldQuantity = pm.getQuantity();
-		if (oldQuantity < quantity) {
+		notifyPatientViaEmail2(reservation);
+		
+		PharmacyMedicines pm = pmService.updateAfterReservation(reservation, quantity);
+		if (pm == null) {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);
 		}
-		
-		int newQuantity = oldQuantity - quantity; //transactional
-		pm.setQuantity(newQuantity);
-		pmService.save(pm);
 		
 		ReservationDTO rDTO = new ReservationDTO(reservation);
 		return new ResponseEntity<ReservationDTO>(rDTO, HttpStatus.OK);
@@ -299,6 +324,55 @@ public class ReservationController {
 			  double PRICE = r.getTotalPrice();
 			  
 		      msg.setText("Dear " + NAME + ",\nConfirmation that pharmacist " + DOCTORS_NAME + " issued you medicine " 
+		      + MEDICINE_NAME + " at " + DATE_TIME + " for a price of " + PRICE + ".\nSincerely yours,\nLABONI44.");
+		      msg.setSentDate(new Date());
+		      Transport.send(msg);
+		      System.out.println("Message sent.");
+		    }catch (MessagingException e){ 
+		    	e.printStackTrace();
+		    }
+	}
+	private void notifyPatientViaEmail2(Reservation r) {
+		final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+		 // Get a Properties object
+		    Properties props = System.getProperties();
+		    props.setProperty("mail.smtp.host", "smtp.gmail.com");
+		    props.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
+		    props.setProperty("mail.smtp.socketFactory.fallback", "false");
+		    props.setProperty("mail.smtp.port", "465");
+		    props.setProperty("mail.smtp.socketFactory.port", "465");
+		    props.put("mail.smtp.auth", "true");
+		    props.put("mail.debug", "true");
+		    props.put("mail.store.protocol", "pop3");
+		    props.put("mail.transport.protocol", "smtp");
+		    final String username = "labonibato44@gmail.com";//
+		    final String password = "filipsvetauki1";
+		    try{
+		      Session session = Session.getDefaultInstance(props, 
+		                          new Authenticator(){
+		                             protected PasswordAuthentication getPasswordAuthentication() {
+		                                return new PasswordAuthentication(username, password);
+		                             }});
+
+		   // -- Create a new message --
+		      Message msg = new MimeMessage(session);
+		      String patientsEmail = r.getPatient().getEmail();
+		   // -- Set the FROM and TO fields --
+		      msg.setFrom(new InternetAddress("labonibato44@gmail.com"));
+		      msg.setRecipients(Message.RecipientType.TO, 
+		                        InternetAddress.parse(patientsEmail, false));
+		      msg.setSubject("Issued medicine");
+		      
+			  String NAME = r.getPatient().getName();
+			  
+			  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+			  String DATE_TIME = LocalDateTime.now().format(formatter);
+			  
+			  String MEDICINE_NAME = r.getMedicine().getName();
+			  
+			  double PRICE = r.getTotalPrice();
+			  
+		      msg.setText("Dear " + NAME + ",\nConfirmation that you have reserved medicine " 
 		      + MEDICINE_NAME + " at " + DATE_TIME + " for a price of " + PRICE + ".\nSincerely yours,\nLABONI44.");
 		      msg.setSentDate(new Date());
 		      Transport.send(msg);

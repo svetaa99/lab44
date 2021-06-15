@@ -133,8 +133,12 @@ public class VisitController {
 		if (penaltyService.countPenaltiesByPatientId(u.getId()) >= 3) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
-		if(visitService.makePharmacistAppointmentPatient(newReservation, patientId) == null)//transactional method
+		if(visitService.makePharmacistAppointmentPatient(newReservation, patientId) == null) {//transactional method
+			System.out.println("FAIL");
 			return new ResponseEntity<String>("FAIL", HttpStatus.OK);//obradi na frontu!
+		}
+		
+		notifyPatientViaEmail(u.getEmail(), newReservation.getDoctorId(), newReservation.getStart(), u.getName());
 		
 		System.out.println(newReservation);
 		return new ResponseEntity<String>("OK", HttpStatus.OK);
@@ -156,14 +160,18 @@ public class VisitController {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
 		
+		LocalDateTime dateNow = LocalDateTime.now();
+		
 		List<Visit> appointments = visitService.findByPatientIdEquals(u.getId());
 		List<Visit> myAppointments = new ArrayList<Visit>();
 		
 		for (Visit appointment : appointments) {
 			if (appointment.getStatus().equals(Status.RESERVED)) {
-				Doctor d = doctorService.findById(appointment.getDoctorId());
-				if (d instanceof Dermatologist) {
-					myAppointments.add(appointment);
+				if(!dateNow.isAfter(appointment.getStart())) {
+					Doctor d = doctorService.findById(appointment.getDoctorId());
+					if (d instanceof Dermatologist) {
+						myAppointments.add(appointment);
+					}
 				}
 			}
 		}
@@ -259,6 +267,12 @@ public class VisitController {
 	public ResponseEntity<List<VisitDTO>> cancelAppointment(@PathVariable Long id) {
 		Visit visit = visitService.findById(id);
 		
+		LocalDateTime vremeSada = LocalDateTime.now();
+		LocalDateTime vremePregleda = visit.getStart();
+		if(vremeSada.isAfter(vremePregleda.minusHours(24))) {
+			return new ResponseEntity<List<VisitDTO>>(HttpStatus.BAD_REQUEST);
+		}
+		
 		visit.setStatus(Status.CANCELED);
 		
 		visitService.save(visit);
@@ -271,9 +285,11 @@ public class VisitController {
 		
 		for (Visit appointment : appointments) {
 			if (appointment.getStatus().equals(Status.RESERVED)) {
-				Doctor d = doctorService.findById(appointment.getDoctorId());
-				if (d instanceof Dermatologist) {
-					myAppointments.add(appointment);
+				if(!vremeSada.isAfter(appointment.getStart())) {
+					Doctor d = doctorService.findById(appointment.getDoctorId());
+					if (d instanceof Dermatologist) {
+						myAppointments.add(appointment);
+					}
 				}
 			}
 		}

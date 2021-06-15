@@ -5,8 +5,8 @@
       <div class="col-lg-8">
         <PharmacyMainComponent :pharmacy="pharmacy" :admin="admin" />
       </div>
-      <div class="col-md-4">
-        <div class="card my-4">
+      <div class="col-md-4" v-if="userRoles.length !== 0">
+        <div class="card my-4" >
           <h5 class="card-header">Rate this pharmacy</h5>
           <div class="card-body">
             <div class="input-group">
@@ -59,7 +59,8 @@ export default {
     return {
       rating: 0,
       mark: 0,
-      message: ""
+      message: "",
+      userRoles: []
     };
   },
   mounted() {
@@ -70,6 +71,10 @@ export default {
         .then((response) => {
           this.rating = response.data;
         });
+    const tokenItem = JSON.parse(localStorage.getItem('jwt'));
+    tokenItem.token.roles.map(el => {
+      this.userRoles.push(el.id);
+    });
   },
   methods: {
     ratePharmacy() {
@@ -78,13 +83,18 @@ export default {
       axios
         .get(`${API_URL}/ratings/rate-pharmacy/${id}/${this.mark}`)
         .then((response) => {
-          console.log(response.data);
+          Swal.fire({
+            title: response.data,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         })
         .catch((error) => {
           console.log(this.message);
           Swal.fire({
             title: "Rate error",
-            text: "",
+            text: error.response.data,
             icon: "error",
             confirmButtonText: "Ok",
           });

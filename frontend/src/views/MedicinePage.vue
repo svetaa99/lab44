@@ -218,13 +218,18 @@ export default {
       axios
         .get(`${API_URL}/ratings/rate-medicine/${id}/${this.mark}`)
         .then((response) => {
-          console.log(response.data);
+          Swal.fire({
+            title: response.data,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         })
-        .catch(() => {
+        .catch((error) => {
           console.log(this.message);
           Swal.fire({
             title: "Rate error",
-            text: "",
+            text: error.response.data,
             icon: "error",
             showConfirmButton: false,
             timer: 1500,

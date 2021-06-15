@@ -15,6 +15,9 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		 <sonar.projectKey>svetaa99_lab44</sonar.projectKey>
+		 <sonar.organization>svetaa99</sonar.organization>
+		 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 		
@@ -73,6 +76,8 @@
 	        <groupId>org.mockito</groupId>
 	        <artifactId>mockito-core</artifactId>
 	    </dependency>
+	    
+
 	</dependencies>
 
 	<build>

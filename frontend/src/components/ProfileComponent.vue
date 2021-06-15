@@ -137,18 +137,18 @@
           </div>
           <div class="card mb-3" v-if="userRoles.includes(1)">
             <div class="card-body">
-              <h3>Alergije</h3>
+              <h3>Allergies</h3>
               <br />
               <div class="input-group mb-3">
                 <!-- string value -->
-                <model-select
-                  :options="options"
+                <select
                   v-model="item2"
                   placeholder="Select medicine"
                   class="form-control"
-                  style="width: 90%;"
+                  style="width: 90%"
                 >
-                </model-select>
+                 <option v-for="option in options" :key="option.id" v-bind:value="option.id">{{ option.name }}</option>
+                </select>
                 <!-- <input
                   type="text"
                   class="form-control"
@@ -157,30 +157,27 @@
                   aria-describedby="basic-addon2"
                 /> -->
                 <div class="input-group-append">
-                  <button class="btn btn-outline-primary" type="button">
+                  <button class="btn btn-outline-primary" type="button" @click="addAllergies(item2)">
                     Add
                   </button>
                 </div>
               </div>
-              <table class="table table-sm">
+              <table
+                id="dtBasicExample"
+                class="table table-striped table-bordered table-sm"
+                cellspacing="0"
+                width="100%"
+              >
+                <thead>
+                  <tr>
+                    <th class="th-sm">Medicine</th>
+                    <th class="th-sm"></th>
+                  </tr>
+                </thead>
                 <tbody>
-                  <tr>
-                    <td>Lek1</td>
-                    <td>
-                      <button class="btn btn-outline-danger">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Lek2</td>
-                    <td>
-                      <button class="btn btn-outline-danger">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Lek3</td>
-                    <td>
-                      <button class="btn btn-outline-danger">Delete</button>
-                    </td>
+                  <tr v-for="al in this.allergies" :key="al.id">
+                    <td>{{ al.name }}</td>
+                    <td><button class="btn btn-outline-danger" @click="deleteAllergies(al.id)">Delete</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -213,20 +210,26 @@ export default {
       penalty: 0,
       userRoles: [],
       options: [],
-      item2: ''
+      item2: "",
+      allergies: [],
     };
   },
   mounted() {
     axios.get(`${API_URL}/users/user`).then((response) => {
       this.user = response.data;
-      console.log(response.data);
     });
     axios.get(`${API_URL}/penalty/my`).then((response) => {
       this.penalty = response.data;
     });
     axios.get(`${API_URL}/medicines/all`).then((response) => {
       this.options = response.data;
+      // response.data.forEach(med => {
+      //   this.options.push(med.id);
+      // })
       console.log(this.options);
+    });
+    axios.get(`${API_URL}/patients/print-allergies`).then((response) => {
+      this.allergies = response.data;
     });
 
     const tokenItem = JSON.parse(localStorage.getItem("jwt"));
@@ -236,10 +239,42 @@ export default {
     });
   },
   methods: {
-    reset2 () {
-        this.item2 = ''
-      },
-  }
+    reset2() {
+      this.item2 = "";
+    },
+    prikazi(item) {
+      console.log(item2);
+    },
+    addAllergies() {
+      axios.get(`${API_URL}/patients/add-allergies/${this.item2}`).then(response => {
+        Swal.fire({
+          title: "Successfully added medicine to allergies.",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        location.reload();
+      })
+      .catch(error => {
+        Swal.fire({
+          title: "Error",
+          text: error.response.data,
+          icon: "error",
+        });
+      });
+    },
+    deleteAllergies(id) {
+      axios.get(`${API_URL}/patients/delete-allergie/${id}`).then(response => {
+        Swal.fire({
+          title: "Successfully deleted medicine from allergies.",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        location.reload();
+      })
+    }
+  },
 };
 </script>
 

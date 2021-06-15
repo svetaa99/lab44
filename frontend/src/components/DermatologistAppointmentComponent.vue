@@ -28,7 +28,7 @@
           <td>{{ dt.dermatologistName }} {{ dt.dermatologistSurname }}</td>
           <td>{{ dt.pharmacy.name }}</td>
           <td>{{ dt.pharmacy.pharmacistPrice }}</td>
-          <td>{{ dt.date }}</td>
+          <td>{{ dt.date | date }}</td>
           <td>
             <button class="btn btn-primary" v-on:click="reserve(dt.id)">
               Choose

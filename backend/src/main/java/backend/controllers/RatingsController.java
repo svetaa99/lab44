@@ -69,8 +69,12 @@ public class RatingsController {
 		User u = userService.findUserByEmail(token);
 		int type = 1;
 		if(!ratingService.findByPatientAndObjAndType(u.getId(), pharmacyId, type).isEmpty()) {
-			System.out.println("Vec je ocenio");
-			return new ResponseEntity<String>("You already rated this pharmacy.", HttpStatus.BAD_REQUEST);
+			List<Ratings> rate = ratingService.findByPatientAndObjAndType(u.getId(), pharmacyId, type);
+			for (Ratings rat : rate) {
+				rat.setMark(mark);
+				ratingService.save(rat);
+			}
+			return new ResponseEntity<String>("Successfully updated rating.", HttpStatus.OK);
 		}
 		
 		if (!reservationService.findByPatientAndPharmacyReserved(pharmacyId, u.getId()).isEmpty() || !visitService.findByPatientAndPharmacy(u.getId(), pharmacyId).isEmpty()) {
@@ -82,7 +86,7 @@ public class RatingsController {
 			
 			ratingService.save(rating);
 			
-			return new ResponseEntity<String>(HttpStatus.OK);
+			return new ResponseEntity<String>("Successfully rated", HttpStatus.OK);
 		} else {
 			String msg = "You need to have finished appointment in this pharmacy or reserved medicine";
 			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
@@ -96,11 +100,16 @@ public class RatingsController {
 		User u = userService.findUserByEmail(token);
 		
 		if(!ratingService.findByPatientAndObjAndType(u.getId(), medicineId, 4).isEmpty()) {
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			List<Ratings> rate = ratingService.findByPatientAndObjAndType(u.getId(), medicineId, 4);
+			for (Ratings rat : rate) {
+				rat.setMark(mark);
+				ratingService.save(rat);
+			}
+			return new ResponseEntity<String>("Successfully updated rating.", HttpStatus.OK);
 		}
 		
 		if (reservationService.findByPatientAndMedicineReserved(u.getId(), medicineId).isEmpty()) {
-			return new ResponseEntity<String>("Nema pravo", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("You need to have some experience with this medicine.", HttpStatus.BAD_REQUEST);
 		}
 		
 		Ratings rating = new Ratings();
@@ -111,10 +120,10 @@ public class RatingsController {
 		
 		ratingService.save(rating);
 		
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("Successfully rated", HttpStatus.OK);
 	}
 	
-	@GetMapping("/rate-docotr/{doctorId}/{mark}")
+	@GetMapping("/rate-doctor/{doctorId}/{mark}")
 	public ResponseEntity<String> rateDoctor(@PathVariable Long doctorId, @PathVariable int mark) {
 		String token = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userService.findUserByEmail(token);
@@ -123,16 +132,26 @@ public class RatingsController {
 		
 		if (doc instanceof Dermatologist) {
 			if(!ratingService.findByPatientAndObjAndType(u.getId(), doctorId, 2).isEmpty()) {
-				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+				List<Ratings> rate = ratingService.findByPatientAndObjAndType(u.getId(), doctorId, 2);
+				for (Ratings rat : rate) {
+					rat.setMark(mark);
+					ratingService.save(rat);
+				}
+				return new ResponseEntity<String>("Successfully updated rating.", HttpStatus.OK);
 			}
 		} else {
 			if(!ratingService.findByPatientAndObjAndType(u.getId(), doctorId, 3).isEmpty()) {
-				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+				List<Ratings> rate = ratingService.findByPatientAndObjAndType(u.getId(), doctorId, 3);
+				for (Ratings rat : rate) {
+					rat.setMark(mark);
+					ratingService.save(rat);
+				}
+				return new ResponseEntity<String>("Successfully updated rating.", HttpStatus.OK);
 			}
 		}
 		
 		if (visitService.findByDoctorAndPatient(doctorId, u.getId()).isEmpty()) {
-			return new ResponseEntity<String>("Nema pravo", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("You need to visit this doctor before you can rate him.", HttpStatus.BAD_REQUEST);
 		}
 		
 		Ratings rating = new Ratings();
@@ -149,7 +168,7 @@ public class RatingsController {
 		
 		ratingService.save(rating);
 		
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("Successfully rated", HttpStatus.OK);
 	}
 	
 	@GetMapping("/get-rating/{objId}/{type}")

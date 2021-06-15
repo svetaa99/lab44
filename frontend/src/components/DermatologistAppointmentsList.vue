@@ -16,8 +16,8 @@
       <tbody>
         <tr v-for="dt in this.dermatologistAppointments" :key="dt.id">
           <td>{{ dt.doctor.name }} {{ dt.doctor.surname }}</td>
-          <td>{{ dt.start }}</td>
-          <td>{{ dt.finish }}</td>
+          <td>{{ dt.start | date }}</td>
+          <td>{{ dt.finish | date }}</td>
           <td>
             <button class="btn btn-primary" v-on:click="cancel(dt.id)">
               Cancel

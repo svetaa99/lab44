@@ -29,7 +29,7 @@
             <td>{{ m.name }}</td>
             <td>{{ m.type }}</td>
             <td>{{ m.specification }}</td>
-            <td v-if="extra == 'add'">
+            <td v-if="extra == 'add' && userRoles.length !== 0">
               <router-link :to="`/medicines/${m.id}`"> Choose </router-link>
             </td>
             <td v-if="extra == 'update' && userRoles.includes(4)">

@@ -104,6 +104,7 @@ export default {
       axios
         .put(`${API_URL}/pharmacies/update-price`, putObj)
         .then(response => {
+          console.log(response)
           if (response.status === 200) {
             Swal.fire({
               title: 'Success',
@@ -121,6 +122,7 @@ export default {
           }
         })
         .catch(err => {
+            console.log(err);
             Swal.fire({
               title: 'Error', 
               text: `${err.response.data.message}`,
