@@ -131,6 +131,13 @@ export default {
           icon: 'error',
           confirmButtonText: 'Back'
         })
+      } else if (this.date < new Date()) {
+        Swal.fire({
+          title: 'Error',
+          text: 'Date cannot be in the past!',
+          icon: 'error',
+          confirmButtonText: 'Back'
+        })
       } else {
           const postObj = {
             id: 1,

@@ -32,7 +32,7 @@
       </div>
 
       <div class="align-items-cente">
-        <label for="discount">Discount: </label>
+        <label for="discount">Discount (%): </label>
         <input type="number" v-model="promotion.discount" min=1 max=100>
       </div>
     </div>

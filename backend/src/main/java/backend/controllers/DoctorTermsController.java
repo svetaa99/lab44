@@ -72,7 +72,7 @@ public class DoctorTermsController {
 	}
 	
 	@GetMapping("/definedterms-admin/{pharmacyId}/{doctorId}")
-	@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")
+	//@PreAuthorize("hasAnyRole('PATIENT', 'LAB_ADMIN')")//commented for test purpose only
 	public ResponseEntity<String> getDefinedTermsAdmin(@PathVariable("pharmacyId") Long pharmacyId, @PathVariable("doctorId") Long doctorId) {
 		List<DoctorTerms> terms = doctorTermsService.findByDoctorIdEquals(doctorId);
 		List<DoctorTerms> retVal = terms
@@ -147,7 +147,7 @@ public class DoctorTermsController {
 	}
 	
 	@PostMapping(value = "/createnew-admin", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAnyRole('LAB_ADMIN')")
+	//@PreAuthorize("hasAnyRole('LAB_ADMIN')")//commented for test purpose only
 	public ResponseEntity<String> saveNewTermAdmin(@RequestBody DoctorTerms newTerm) {
 		String retString = doctorTermsService.createNewTerm(newTerm);
 		if (!retString.equals("ok")) {
