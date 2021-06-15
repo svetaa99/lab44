@@ -15,3 +15,9 @@
         npm run serve
 
 Pokrenuti backend server se nalazi na portu 8000, a frontend server se nalazi na portu 8080 i može mu se pristupiti na adresi: http://localhost:8080
+
+Baza koja je korišćena je Postgres, tako da je potrebno ući u application.properties i postaviti spring.datasource.password na svoju šifru za Postgres.
+
+Putanja do application.properties
+
+        backend -> src -> main -> resources
