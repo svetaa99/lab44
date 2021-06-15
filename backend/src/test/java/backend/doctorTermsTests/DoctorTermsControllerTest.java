@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.nio.charset.Charset;
+
 @ExtendWith(SpringExtension.class) //This is not mandatory
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false) // Secure false is required to by pass security for Test Cases
@@ -39,9 +41,6 @@ public class DoctorTermsControllerTest {
 	
 	private static final String URL_PREFIX = "/doctorterms";
 	
-	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-			MediaType.APPLICATION_JSON.getSubtype());
-
 	@Autowired
 	private MockMvc mockMvc;
 	
@@ -52,42 +51,38 @@ public class DoctorTermsControllerTest {
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
+
+	@Test
+	public void testGetDefinedForAdmin() throws Exception {
+		mockMvc.perform(get(URL_PREFIX + "/definedterms-admin/1/1")).andExpect(status().isOk())
+		.andExpect(jsonPath("$", hasSize(2)))
+		.andExpect(jsonPath("$.[*].id").value(hasItem(1)))
+		.andExpect(jsonPath("$.[*].doctorId").value(hasItem(1)))
+		.andExpect(jsonPath("$.[*].pharmacyId").value(hasItem(1)));
+	}
 	
-//	@Test
-//	public void testGetDefinedForAdmin() throws Exception {
-//		mockMvc.perform(get(URL_PREFIX + "/definedterms-admin/1/1")).andExpect(status().isOk())
-//		.andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(2)))
-//		.andExpect(jsonPath("$.[*].id").value(hasItem(1)))
-//		.andExpect(jsonPath("$.[*].doctorId").value(hasItem(1)))
-//		.andExpect(jsonPath("$.[*].pharmacyId").value(hasItem(1)))
-//		.andExpect(jsonPath("$.[*].start").value(hasItem("2021-06-05T16:00:00")))
-//		.andExpect(jsonPath("$.[*].finish").value(hasItem("2021-06-05T17:00:00")));
-//	}
-//	
-//	@Test
-//	@Transactional
-//	@Rollback(true)
-//	public void testGoodCreateForAdmin() throws Exception {
-//		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-06-05T18:00:00\", \"finish\": \"2021-06-05T19:00:00\" } ";
-//		mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk())
-//		.andExpect(content().contentType(contentType))
-//		.andExpect(jsonPath("$.[*].id").value(hasItem(6)))
-//		.andExpect(jsonPath("$.[*].doctorId").value(hasItem(1)))
-//		.andExpect(jsonPath("$.[*].pharmacyId").value(hasItem(3)));
-//	}
-//	
-//	@Test
-//	public void testTakenCreateForAdmin() throws Exception {
-//		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-06-05T18:00:00\", \"finish\": \"2021-06-05T19:00:00\" } ";
-//		MvcResult res = mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk()).andReturn();
-//		assertEquals("Taken term", res.getResponse().getContentAsString());
-//	}
-//	
-//	@Test
-//	public void testBadWHCreateForAdmin() throws Exception {
-//		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-06-05T01:00:00\", \"finish\": \"2021-06-05T02:00:00\" } ";
-//		MvcResult res = mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk()).andReturn();
-//		assertEquals("Not in your working hours", res.getResponse().getContentAsString());
-//	}
+	@Test
+	@Transactional
+	@Rollback(true)
+	public void testGoodCreateForAdmin() throws Exception {
+		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-07-25T18:00:00\", \"finish\": \"2021-07-25T19:00:00\" } ";
+		mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk())
+		.andExpect(jsonPath("$.[*].id").value(hasItem(6)))
+		.andExpect(jsonPath("$.[*].doctorId").value(hasItem(1)))
+		.andExpect(jsonPath("$.[*].pharmacyId").value(hasItem(3)));
+	}
+	
+	@Test
+	public void testTakenCreateForAdmin() throws Exception {
+		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-06-25T15:50:00\", \"finish\": \"2021-06-25 17:00:00\" } ";
+		mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void testBadWHCreateForAdmin() throws Exception {
+		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-07-25T01:00:00\", \"finish\": \"2021-07-25T02:00:00\" } ";
+		MvcResult res = mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk()).andReturn();
+		assertEquals("Not in doctors working hours", res.getResponse().getContentAsString());
+	}
 
 }
