@@ -91,7 +91,7 @@ insert into patients_allergies (patient_id, medicine_id) values (10, 2);
 insert into patients_allergies (patient_id, medicine_id) values (12, 1);
 insert into patients_allergies (patient_id, medicine_id) values (12, 2);
 
-insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1588456800000, 2, 200, 0);
+insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 1, 1623762000000, 2, 200, 0);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 2, 3, 1587852000000, 1, 70, 0);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (10, 1, 3, 1621029600000, 10, 70, 2);
 insert into reservations (patient_id, pharmacy_id, medicine_id, date, quantity, total_price, status) values (11, 1, 2, 1587852000000, 4, 480, 2);
@@ -165,8 +165,6 @@ insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, 
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (12, 1, '2021-05-19 13:30:00', '2021-05-19 19:00:00', 3, 0);
 insert into visit (patient_id, doctor_id, start_time, finish_time, pharmacy_id, status) values (10, 1, '2021-05-26 8:30:00', '2021-05-26 10:30:00', 1, 0);
 
-insert into penalty (date, patient_id) values ('2021-05-23', 10);
-insert into penalty (date, patient_id) values ('2021-05-17', 10);
 insert into penalty (date, patient_id) values ('2021-05-10', 11);
 
 insert into ratings (mark, obj_id, patient_id, type) values (5, 1, 10, 1);

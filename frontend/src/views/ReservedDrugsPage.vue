@@ -1,6 +1,9 @@
 <template>
   <div>
-    <ReservedDrugsComponent v-bind:reservedDrugs="this.reservedDrugs" @clicked="handleCancelClick"/>
+    <ReservedDrugsComponent
+      v-bind:reservedDrugs="this.reservedDrugs"
+      @clicked="handleCancelClick"
+    />
   </div>
 </template>
 
@@ -31,9 +34,22 @@ export default {
         .get(`${API_URL}/reservations/cancel-reservation/${reservationId}`)
         .then((response) => {
           this.reservedDrugs = response.data;
+          Swal.fire({
+            title: "Reservation canceled successfully.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: "Error",
+            text: "You can't cancel reservation 24 hours before choosen date.",
+            icon: "error",
+          });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

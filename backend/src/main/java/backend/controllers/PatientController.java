@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 
 import backend.dto.PatientDTO;
+import backend.models.Medicine;
 import backend.models.Patient;
 import backend.models.Penalty;
 import backend.models.User;
 import backend.models.Visit;
+import backend.services.impl.MedicineService;
 import backend.services.impl.PatientService;
 import backend.services.impl.PenaltyService;
 import backend.services.impl.UserService;
@@ -46,6 +48,9 @@ public class PatientController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MedicineService medicineService;
 	
 	private static Gson g = new Gson();
 	
@@ -94,13 +99,46 @@ public class PatientController {
 				.stream().filter(p -> p.getName().equalsIgnoreCase(searchParam)).collect(Collectors.toList())), HttpStatus.OK);
 	}
 	
-	@GetMapping("/print-allergies/{id}")
-	public ResponseEntity<PatientDTO> getAllergies(@PathVariable Long id) {
-		Patient p = patientService.findById(id);
+	@GetMapping("/print-allergies")
+	public ResponseEntity<List<Medicine>> getAllergies() {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		Patient p = patientService.findByEmail(token);
 		
-		System.out.println("ALEEEEERG" + p.getAllergies());
+		return new ResponseEntity<List<Medicine>>(p.getAllergies(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/add-allergies/{id}")
+	public ResponseEntity<String> addAllergie(@PathVariable Long id) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		Patient p = patientService.findByEmail(token);
 		
-		return null;
+		List<Medicine> allergies = p.getAllergies();
+		Medicine newAllergie = medicineService.findById(id);
+		if(allergies.contains(newAllergie)) {
+			return new ResponseEntity<String>("Allready has allergies", HttpStatus.BAD_REQUEST);
+		}
+		
+		allergies.add(newAllergie);
+		p.setAllergies(allergies);
+		
+		patientService.save(p);
+		
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/delete-allergie/{id}")
+	public ResponseEntity<String> deleteAllergie(@PathVariable Long id) {
+		String token = SecurityContextHolder.getContext().getAuthentication().getName();
+		Patient p = patientService.findByEmail(token);
+		
+		Medicine med = medicineService.findById(id);
+		
+		if (p.getAllergies().contains(med)) {
+			p.getAllergies().remove(med);
+		}
+		
+		patientService.save(p);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/penalty/{visitId}")

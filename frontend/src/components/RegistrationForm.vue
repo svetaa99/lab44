@@ -116,23 +116,27 @@ export default {
     };
   },
   mounted() {
-    if(this.edit) {
-      this.name = this.user.name;
-      this.surname = this.user.surname;
-      this.password = this.user.password;
-      this.phoneNum = this.user.phoneNum;
-    }
+    //alert("MOUNTUJE REG FORM")
+    console.log("MOUNTED USER REG")
+    console.log(this.user)
+    this.name = this.user.name;
+    this.surname = this.user.surname;
+    this.password = this.user.password;
+    this.phoneNum = this.user.phoneNum;
+    //console.log("MOUNTED" + this.surname);
+    
   },
   methods: {
     update() {
       axios
       .post(`${API_URL}/users/update-user`, this.user)
-      .then(response => {this.user = response.data; this.name = this.user.name; console.log(this.user); 
+      .then(response => {this.user = response.data; this.name = this.user.name; this.phoneNum = this.user.phoneNum; console.log(this.user); 
         if(this.user.password == 'chang3m3')
           localStorage.setItem('pw', this.user.password);
         else
           localStorage.setItem('pw', '');
        })
+      //location.reload();
     }
   }
 };
