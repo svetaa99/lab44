@@ -173,7 +173,7 @@ export default {
           icon: 'error',
           confirmButtonText: 'Ok'
         })
-      : respData == "Not in your working hours" ? 
+      : respData == "Not in doctors working hours" ? 
         Swal.fire({
           title: 'Not in your working hours',
           icon: 'error',

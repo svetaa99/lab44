@@ -216,15 +216,6 @@ public class PharmacistController {
 			return new ResponseEntity<String>("Start time must be before finish time.", HttpStatus.BAD_REQUEST);
 		}
 		
-		List<WorkHours> allDoctorsWH = whService.findAllWorkHoursForDoctor(doctorId);
-		
-		for (WorkHours workHours : allDoctorsWH) {
-			if ((workHours.getStartTime().isBefore(startTime) && startTime.isBefore(workHours.getFinishTime())) || 
-					(workHours.getStartTime().isBefore(finishTime) && finishTime.isBefore(workHours.getFinishTime()))) {
-				return new ResponseEntity<String>("Doctor works in another pharmacy at this time", HttpStatus.BAD_REQUEST);
-			}
-		}
-		
 		List<WorkHours> whList = whService.findWorkingHoursForDoctorByIdAndPharmacyId(doctorId, p.getPharmacy().getId());
 		WorkHours wh = null;
 		

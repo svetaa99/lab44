@@ -74,9 +74,10 @@ export default {
             })
           })
           .catch(err => {
+            console.log(err.response)
             Swal.fire({
               title: 'Error',
-              text: `${err.response.data.message}`,
+              text: `${err.response.data}`,
               icon: 'error'
             })
           })

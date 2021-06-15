@@ -15,7 +15,7 @@
           <th v-if="doctorRole == 3">Pharmacy name</th>
           <th v-if="doctorRole == 3">Rating</th>
           <th v-if="doctorRole == 2">Pharmacies</th>
-          <th>Rate</th>
+          <th v-if="userRoles.includes(1)">Rate</th>
         </tr>
       </thead>
       <tbody>
@@ -90,6 +90,7 @@ import axios from "axios";
 import { config } from "@/config.js";
 import UpdateDoctorWorkTimeModal from "./UpdateDoctorWorkTimeModal.vue";
 import RateModalComponent from "./RateModalComponent.vue";
+import Swal from 'sweetalert2';
 
 const API_URL = config.API_URL;
 

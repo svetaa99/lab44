@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <DoctorSearchComponent :doctorRole="3" @clicked="handleSearchClick" />
-    <DoctorFilterComponent :doctorRole="3" @clicked="handleFilterClick" />
+    <DoctorFilterComponent v-if="userRoles.includes(1)" :doctorRole="3" @clicked="handleFilterClick" />
     <div class="row justify-content-md-center">
       <div class="col align-self-center">
         <button type="button" class="btn btn-primary" @click="handleResetClick">Reset data</button>

@@ -11,6 +11,11 @@
                 v-if="Object.keys(selectedPM).length !== 0"
                 >Cena: {{ selectedPM.price }}</span
               >
+              <span
+                class="badge bg-danger rounded-pill"
+                v-if="discountedPrice"
+                >Popust: {{discountRate}}%</span
+              >
             </h4>
             <ul class="list-group mb-3">
               <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -146,6 +151,8 @@ export default {
       options: [],
       selectedPM: {},
       medicine: {},
+      discountedPrice: false,
+      discountRate: 0,
       reservation: {
         pharmacy: {},
         patient: {},
@@ -158,7 +165,6 @@ export default {
   },
   methods: {
     reserve() {
-      console.log(this.selectedPM.value)
       if (
         Object.keys(this.selectedPM).length === 0 ||
         this.reservation.pharmacy == "" ||
@@ -205,7 +211,7 @@ export default {
               if (response.status === 200) {
                 Swal.fire({
                   title: "Success",
-                  text: "Posted reservation!",
+                  text: `Posted reservation! Total price: ${this.reservation.totalPrice}, amount: ${this.reservation.quantity}`,
                   icon: "success",
                 });
               }
