@@ -198,7 +198,7 @@ export default {
           this.reservation.medicine = this.selectedPM.medicine;
           this.reservation.totalPrice = price * this.reservation.quantity;
           this.reservation.date = this.reservation.date.getTime();
-
+          console.log(this.reservation);
           axios
             .post(`${API_URL}/reservations/`, this.reservation)
             .then((response) => {

@@ -244,7 +244,7 @@ public class ReservationController {
 			return new ResponseEntity<ReservationDTO>(HttpStatus.BAD_REQUEST);
 		}
 		
-		int newQuantity = oldQuantity - quantity;
+		int newQuantity = oldQuantity - quantity; //transactional
 		pm.setQuantity(newQuantity);
 		pmService.save(pm);
 		

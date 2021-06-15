@@ -88,17 +88,10 @@ public class VisitService implements IService<Visit>{
 		newReservation.setPatientId(patientId);
 		newReservation.setFinish(newReservation.getStart().plusHours(1));
 		
-		if(!checkTermTaken(newReservation))
-			return null;
-		if(checkTermDerm(newReservation, newReservation.getDoctorId()))
-			return null;
-		if(checkIfInWorkingHours(newReservation))
-			return null;
-		
 		newReservation.setStatus(Status.RESERVED);
 	
-		save(newReservation);
-		return newReservation;
+		Visit retVal = save(newReservation);
+		return retVal;
 	}
 	
 	public List<Visit> findByDoctorAndPatient(Long doctorId, Long patientId) {

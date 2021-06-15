@@ -16,11 +16,9 @@
           />
           <div class="container">
             <div class="carousel-caption text-left">
-              <h1>Example headline.</h1>
+              <h1>Welcome to Laboni</h1>
               <p>
-                Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-                Donec id elit non mi porta gravida at eget metus. Nullam id
-                dolor id nibh ultricies vehicula ut id elit.
+                Place where you can receive medical attention within few clicks.
               </p>
               <p>
                 <a class="btn btn-lg btn-primary" href="#" role="button"
@@ -38,11 +36,9 @@
           />
           <div class="container">
             <div class="carousel-caption">
-              <h1>Another example headline.</h1>
+              <h1>Laboni offers online medicine reservation.</h1>
               <p>
-                Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-                Donec id elit non mi porta gravida at eget metus. Nullam id
-                dolor id nibh ultricies vehicula ut id elit.
+                Select your favourite nearest pharmacy and avoid waiting in line. Just come at scheduled time and medicine will be in your hands within minutes.
               </p>
               <p>
                 <a class="btn btn-lg btn-primary" href="#" role="button"
@@ -62,9 +58,7 @@
             <div class="carousel-caption text-right">
               <h1>One more for good measure.</h1>
               <p>
-                Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-                Donec id elit non mi porta gravida at eget metus. Nullam id
-                dolor id nibh ultricies vehicula ut id elit.
+                Hate calling to schedule appointment? Create account and choose your doctor, location and time however you prefer.
               </p>
               <p>
                 <a class="btn btn-lg btn-primary" href="#" role="button"
