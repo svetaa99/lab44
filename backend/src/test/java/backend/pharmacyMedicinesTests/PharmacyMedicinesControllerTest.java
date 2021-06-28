@@ -44,7 +44,7 @@ public class PharmacyMedicinesControllerTest {
 	public void testGetAll() throws Exception {
 				
 		mockMvc.perform(get(URL_PREFIX + "/all")).andExpect(status().isOk())
-		.andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(6)))
+		.andExpect(content().contentType(contentType)).andExpect(jsonPath("$", hasSize(11)))
 		.andExpect(jsonPath("$.[*].id").value(hasItem(1)))
 		.andExpect(jsonPath("$.[*].pharmacy.id").value(hasItem(1)))
 		.andExpect(jsonPath("$.[*].medicine.id").value(hasItem(1)))

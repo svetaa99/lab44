@@ -65,11 +65,11 @@ public class DoctorTermsControllerTest {
 	@Transactional
 	@Rollback(true)
 	public void testGoodCreateForAdmin() throws Exception {
-		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"3\", \"start\": \"2021-07-25T18:00:00\", \"finish\": \"2021-07-25T19:00:00\" } ";
+		String jsonString="{\"doctorId\": \"1\", \"pharmacyId\": \"1\", \"start\": \"2021-07-23T18:00:00\", \"finish\": \"2021-07-23T19:00:00\" } ";
 		mockMvc.perform(post(URL_PREFIX + "/createnew-admin").contentType(MediaType.APPLICATION_JSON).content(jsonString)).andExpect(status().isOk())
 		.andExpect(jsonPath("$.[*].id").value(hasItem(6)))
 		.andExpect(jsonPath("$.[*].doctorId").value(hasItem(1)))
-		.andExpect(jsonPath("$.[*].pharmacyId").value(hasItem(3)));
+		.andExpect(jsonPath("$.[*].pharmacyId").value(hasItem(1)));
 	}
 	
 	@Test
